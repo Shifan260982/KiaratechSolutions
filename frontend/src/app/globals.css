@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #ffffff;
+  --color-mist: #f5f5f5;
+  --color-ink: #171717;
+  --color-muted: #737373;
+  /* #737373 fails 4.5:1 on #F5F5F5 for small text; this step is used for body copy on mist sections */
+  --color-muted-strong: #5c5c5c;
+  --color-line: #e5e5e5;
+  --color-line-strong: #c4c4c4;
+  --color-danger: #b42318;
+
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+
+  --text-display: clamp(2.125rem, 1.6rem + 2.2vw, 3.25rem);
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.025em;
+  --text-title: clamp(1.625rem, 1.35rem + 1.1vw, 2.25rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
+  --text-heading: 1.25rem;
+  --text-heading--line-height: 1.35;
+  --text-heading--letter-spacing: -0.01em;
+
+  --container-site: 76rem;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem; /* keeps focused fields clear of the sticky header */
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01";
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .prose-legal h2 {
+    font-size: var(--text-heading);
+    font-weight: 600;
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-legal p,
+  .prose-legal ul {
+    color: var(--color-muted-strong);
+    margin-bottom: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .prose-legal ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .prose-legal a {
+    color: var(--color-ink);
+    text-decoration: underline;
+  }
+}
