@@ -2,16 +2,24 @@
 
 @theme {
   --color-paper: #ffffff;
-  --color-mist: #f5f5f5;
-  --color-ink: #171717;
-  --color-muted: #737373;
-  /* #737373 fails 4.5:1 on #F5F5F5 for small text; this step is used for body copy on mist sections */
-  --color-muted-strong: #5c5c5c;
-  --color-line: #e5e5e5;
-  --color-line-strong: #c4c4c4;
+  --color-mist: #f5f8fc;
+  --color-sky: #eaf2ff;
+  --color-blue: #155eef;
+  --color-blue-deep: #0f4bc4;
+  --color-navy: #102a56;
+  /* Accent text on navy and photography; 7:1 on navy */
+  --color-blue-soft: #8db4ff;
+  --color-ink: #172033;
+  --color-muted: #64748b;
+  /* Body copy step: passes 4.5:1 on paper, mist and sky alike */
+  --color-muted-strong: #475569;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
   --color-danger: #b42318;
 
-  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  /* Primary: Inter (self-hosted via next/font). Secondary: Helvetica, a licensed system font, so it falls back where not installed. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-secondary: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --text-display: clamp(2.125rem, 1.6rem + 2.2vw, 3.25rem);
   --text-display--line-height: 1.08;
@@ -37,16 +45,15 @@
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01";
   }
 
   ::selection {
-    background: var(--color-ink);
+    background: var(--color-blue);
     color: var(--color-paper);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--color-blue);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -77,12 +84,40 @@
     *::before,
     *::after {
       transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }
 }
 
 @layer components {
+  /* Divider rows that fade out at both ends; the hovered row's top and bottom lines turn blue. */
+  .industry-row {
+    --row-line: linear-gradient(to right, transparent, var(--color-line-strong) 15%, var(--color-line-strong) 85%, transparent);
+    position: relative;
+    margin-top: -1px;
+    background: var(--row-line) top / 100% 1px no-repeat, var(--row-line) bottom / 100% 1px no-repeat;
+  }
+
+  .industry-row::before {
+    --row-line: linear-gradient(to right, transparent, var(--color-blue) 15%, var(--color-blue) 85%, transparent);
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--row-line) top / 100% 1px no-repeat, var(--row-line) bottom / 100% 1px no-repeat;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+
+  .industry-row:hover {
+    z-index: 1;
+  }
+
+  .industry-row:hover::before {
+    opacity: 1;
+  }
+
   .prose-legal h2 {
     font-size: var(--text-heading);
     font-weight: 600;
@@ -103,7 +138,7 @@
   }
 
   .prose-legal a {
-    color: var(--color-ink);
+    color: var(--color-blue-deep);
     text-decoration: underline;
   }
 }

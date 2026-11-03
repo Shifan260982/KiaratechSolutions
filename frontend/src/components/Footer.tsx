@@ -8,7 +8,7 @@ import { Container } from "./ui";
 const company = [
   { href: "/about", label: "About" },
   { href: "/industries", label: "Industries" },
-  { href: "/case-studies", label: "Case Studies" },
+  { href: "/case-studies", label: "Projects" },
   { href: "/insights", label: "Insights" },
   { href: "/careers", label: "Careers" },
   { href: "/contact", label: "Contact" },
@@ -21,16 +21,16 @@ const legal = [
 ];
 
 function FooterHeading({ children }: { children: ReactNode }) {
-  return <h2 className="mb-3 text-sm font-semibold text-ink">{children}</h2>;
+  return <h2 className="mb-3 text-sm font-semibold text-navy">{children}</h2>;
 }
 
-const linkClass = "text-muted-strong transition-colors hover:text-ink";
+const linkClass = "text-muted-strong transition-colors hover:text-blue";
 
 export function Footer() {
   const whatsapp = whatsappHref();
 
   return (
-    <footer className="border-t border-line bg-paper text-[0.9375rem]">
+    <footer className="border-t border-line bg-paper font-secondary text-[0.9375rem]">
       <Container className="grid gap-10 py-12 md:grid-cols-12 md:py-14">
         <div className="md:col-span-4">
           <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={480} height={172} className="h-14 w-auto" />
@@ -109,7 +109,7 @@ export function Footer() {
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {legal.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="transition-colors hover:text-ink">
+                <Link href={l.href} className="transition-colors hover:text-blue">
                   {l.label}
                 </Link>
               </li>

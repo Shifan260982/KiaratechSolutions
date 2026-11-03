@@ -1,5 +1,6 @@
-// Service scope follows section 2 of the requirements document. Order = promotion priority.
+// Service list supplied by the Kiaratech team (Oct 2026 brief), replacing the earlier categorisation.
 // Use cases describe the kind of work each service covers; they are not claims about past clients.
+// Images: Pexels licence, see README "Image credits".
 
 export type Service = {
   slug: string;
@@ -7,186 +8,254 @@ export type Service = {
   summary: string;
   metaDescription: string;
   intro: string;
+  image: { src: string; alt: string };
   capabilities: { title: string; detail: string }[];
   problems: string[];
   useCases: { title: string; detail: string }[];
   technologies?: string[];
   caseStudySlugs: string[];
-  secondary?: boolean;
 };
 
 export const services: Service[] = [
   {
-    slug: "ai-solutions",
-    name: "AI & Intelligent Automation",
-    summary: "GenAI solutions, copilots, AI agents, machine learning and document intelligence, designed around measurable outcomes.",
-    metaDescription:
-      "AI consulting, GenAI solutions, copilots, AI agents, machine learning, document intelligence and predictive analytics from Kiaratech Solutions.",
-    intro:
-      "We help organisations move AI from experiment to production. Every engagement starts with a defined business goal, the data available to support it and the success criteria it must meet.",
-    capabilities: [
-      { title: "AI strategy and discovery sprints", detail: "Assess use cases, data readiness and risk, then prioritise the opportunities worth building." },
-      { title: "Generative AI ", detail: "Assistants grounded in your own documents and systems, with access controls and evaluation built in." },
-      { title: "AI agents", detail: "Agents that complete multi-step tasks across your tools, with human approval where it matters." },
-      { title: "Machine learning and predictive analytics", detail: "Forecasting, classification and anomaly detection models, deployed and monitored." },
-      { title: "Document intelligence", detail: "Extract, classify and validate data from invoices, forms, contracts and operational documents." },
-      { title: "RPA and intelligent automation", detail: "Combine rules-based automation with AI to handle high-volume, repetitive work." },
-    ],
-    problems: [
-      "AI pilots that never reach production or show a return",
-      "Knowledge spread across documents and systems that teams cannot find quickly",
-      "Manual review of high volumes of documents and data",
-      "Decisions made on lagging reports instead of forward-looking signals",
-    ],
-    useCases: [
-      { title: "Operations copilot", detail: "Answer staff questions from procedures, product data and system records." },
-      { title: "Document processing", detail: "Capture data from purchase orders, delivery notes and invoices into core systems." },
-      { title: "Demand and inventory forecasting", detail: "Predict stock and production needs for logistics, FMCG and manufacturing teams." },
-      { title: "Service desk agents", detail: "Triage, route and resolve routine requests across IT and business functions." },
-    ],
-    technologies: ["Python", "Azure", "AWS", "Google Cloud", "APIs"],
-    caseStudySlugs: [],
-  },
-  {
     slug: "software-development",
-    name: "Software Engineering",
-    summary: "Web, mobile and enterprise applications, APIs, integration, testing and QA.",
-    metaDescription:
-      "Custom software development and product engineering: web, mobile and enterprise applications, APIs, system integration, testing and QA.",
+    name: "Software Development",
+    summary: "Web, mobile and enterprise applications built for performance, security and long-term maintainability.",
+    metaDescription: "Custom software development: web, mobile and enterprise applications, APIs and integrations from Kiaratech Solutions.",
     intro:
-      "We design, build and maintain business-critical software. Delivery runs in short, visible milestones, with automated testing and documentation as standard.",
+      "We design, build and maintain business-critical software. Delivery runs in short, visible milestones, with code review, automated testing and documentation as standard.",
+    image: { src: "/images/services/software-development.webp", alt: "Source code with syntax highlighting on a monitor" },
     capabilities: [
       { title: "Enterprise applications", detail: "Line-of-business systems for operations, finance and production teams." },
-      { title: "Web and mobile applications", detail: "Customer and staff-facing products built for performance and accessibility." },
-      { title: "APIs and system integration", detail: "Connect ERP, warehouse, CRM and third-party platforms reliably." },
-      { title: "Testing and QA", detail: "Automated and end-to-end testing that keeps releases predictable." },
-      { title: "Product engineering teams", detail: "Dedicated cross-functional teams that own a product roadmap with you." },
-      { title: "Managed support", detail: "Ongoing maintenance, enhancements and continuous improvement." },
+      { title: "Web and mobile applications", detail: "Customer and staff-facing products built for speed and accessibility." },
+      { title: "APIs and integration", detail: "Connect ERP, CRM, warehouse and third-party platforms reliably." },
+      { title: "AI-enabled features", detail: "Document intelligence, assistants and automation built into your products." },
     ],
     problems: [
       "Legacy systems that slow down change and are costly to maintain",
       "Disconnected systems that force manual re-keying of data",
-      "Releases that break existing functionality",
       "Product roadmaps that outpace in-house engineering capacity",
     ],
     useCases: [
-      { title: "Warehouse and production platforms", detail: "Inventory, production planning and integrations in one system." },
-      { title: "Customer and partner portals", detail: "Self-service access to orders, documents and account information." },
-      { title: "Integration layers", detail: "APIs that synchronise data between core business systems." },
-      { title: "Modernising legacy applications", detail: "Incremental re-platforming without disrupting operations." },
+      { title: "Operations platforms", detail: "Inventory, planning and workflow systems in one application." },
+      { title: "Customer and partner portals", detail: "Self-service access to orders, documents and account data." },
+      { title: "Legacy modernisation", detail: "Incremental re-platforming without disrupting operations." },
     ],
     technologies: [".NET / C#", "Java", "Node.js", "Python", "React", "Angular", "Vue.js"],
-    caseStudySlugs: ["warehouse-production-platform"],
+    caseStudySlugs: ["arecon-ai", "digital-twin", "smart-hr"],
   },
   {
-    slug: "cloud-data",
-    name: "Cloud & Data",
-    summary: "Azure, AWS and Google Cloud, DevOps, data engineering, analytics and modernisation.",
-    metaDescription:
-      "Cloud and data services: Azure, AWS and Google Cloud, DevOps, data engineering, Power BI, Tableau and Looker analytics, and modernisation.",
+    slug: "database-administration",
+    name: "Database Administration",
+    summary: "Design, tuning, backup and monitoring that keep business data fast, secure and available.",
+    metaDescription: "Database administration (DBA) services: performance tuning, backup and recovery, security, monitoring and migration.",
     intro:
-      "We build the cloud and data foundations that AI and modern applications depend on: secure, observable and cost-aware.",
+      "We look after the databases your applications depend on, from schema design and performance tuning to backup, recovery and security.",
+    image: { src: "/images/services/database-administration.webp", alt: "Rack of storage drives in a blue-lit data centre" },
     capabilities: [
-      { title: "Cloud architecture and migration", detail: "Azure, AWS and Google Cloud platforms designed for security and cost control." },
-      { title: "DevOps and automation", detail: "CI/CD pipelines, infrastructure as code and environment management." },
-      { title: "Data engineering", detail: "Pipelines and models that bring operational data into one trusted source." },
-      { title: "Analytics and reporting", detail: "Power BI, Tableau and Looker dashboards built on governed data." },
-      { title: "Application modernisation", detail: "Move workloads from on-premises and legacy hosting to managed services." },
+      { title: "Performance tuning", detail: "Query, index and configuration optimisation for faster applications." },
+      { title: "Backup and recovery", detail: "Tested backup routines and recovery plans that meet your targets." },
+      { title: "Security and access", detail: "Least-privilege access, auditing and encryption of sensitive data." },
+      { title: "Migration and upgrades", detail: "Move databases to new versions or cloud platforms with minimal downtime." },
     ],
     problems: [
-      "Reporting that relies on spreadsheets and manual extracts",
-      "Rising cloud costs without clear ownership",
-      "Slow, manual deployments",
-      "Data that is not ready for AI use",
+      "Slow queries that degrade application performance",
+      "Untested backups and unclear recovery times",
+      "Database access that is broader than it needs to be",
     ],
     useCases: [
-      { title: "Operational dashboards", detail: "Single view of orders, stock and production performance." },
-      { title: "Data platform for AI", detail: "Clean, governed data ready for analytics and machine learning." },
-      { title: "Release automation", detail: "Repeatable deployments with automated testing gates." },
-    ],
-    technologies: ["Azure", "AWS", "Google Cloud", "Power BI", "Tableau", "Looker"],
-    caseStudySlugs: [],
-  },
-  {
-    slug: "automation",
-    name: "Automation",
-    summary: "Process, workflow and test automation that removes repetitive work and manual hand-offs.",
-    metaDescription:
-      "Business process automation, RPA, workflow integration and automated testing from Kiaratech Solutions.",
-    intro:
-      "We automate the repetitive work that slows teams down, from back-office processes to software testing, and combine it with AI where judgement is needed.",
-    capabilities: [
-      { title: "Robotic process automation", detail: "Automate rules-based tasks across existing applications." },
-      { title: "Workflow and integration automation", detail: "Remove manual hand-offs between systems and teams." },
-      { title: "Intelligent document workflows", detail: "Route, validate and approve documents with AI-assisted checks." },
-      { title: "Test automation", detail: "Automated regression and end-to-end testing for faster, safer releases." },
-    ],
-    problems: [
-      "Teams spending hours on copy-and-paste between systems",
-      "Error-prone manual processes in finance and operations",
-      "Long manual regression cycles before each release",
-    ],
-    useCases: [
-      { title: "Finance operations", detail: "Invoice matching, reconciliations and reporting." },
-      { title: "Order and fulfilment workflows", detail: "Order capture and status updates across logistics systems." },
-      { title: "Regression testing", detail: "Automated test suites run on every release." },
-    ],
-    caseStudySlugs: ["warehouse-production-platform"],
-  },
-  {
-    slug: "cybersecurity",
-    name: "Cybersecurity",
-    summary: "Zero Trust, identity and access management, risk and compliance.",
-    metaDescription:
-      "Cybersecurity and advisory services: Zero Trust architecture, identity and access management, risk and compliance.",
-    intro:
-      "We help organisations reduce risk across applications, cloud platforms and identities, and build security into delivery rather than adding it at the end.",
-    capabilities: [
-      { title: "Zero Trust architecture", detail: "Verify every user, device and service before granting access." },
-      { title: "Identity and access management", detail: "Single sign-on, role-based access and privileged access controls." },
-      { title: "Risk and compliance", detail: "Assess controls against regulatory and contractual requirements." },
-      { title: "Secure engineering", detail: "Security reviews and tooling embedded in the software lifecycle." },
-    ],
-    problems: [
-      "Inconsistent access controls across cloud and on-premises systems",
-      "Security reviews that delay releases",
-      "Unclear exposure to regulatory and client security requirements",
-    ],
-    useCases: [
-      { title: "Identity consolidation", detail: "Move users to a single, governed identity platform." },
-      { title: "Security assessment", detail: "Review applications and infrastructure against agreed controls." },
-      { title: "AI governance", detail: "Controls for data access and model use in AI solutions." },
+      { title: "Health checks", detail: "Assess performance, capacity and risk across your estate." },
+      { title: "Managed DBA support", detail: "Ongoing monitoring, patching and maintenance." },
+      { title: "Cloud database migration", detail: "Move on-premises databases to managed cloud services." },
     ],
     caseStudySlugs: [],
   },
   {
-    slug: "talent-solutions",
-    name: "Talent Solutions",
-    summary: "Contract and permanent technology specialists to extend your team.",
-    metaDescription:
-      "Contract and permanent technology specialists: software engineers, business analysts, Scrum Masters, test engineers, cloud, data and AI roles.",
+    slug: "software-testing-qa",
+    name: "Software Testing & Quality Assurance",
+    summary: "Functional, regression and end-to-end testing that keeps every release predictable.",
+    metaDescription: "Software testing and quality assurance: functional, regression, integration and end-to-end testing.",
     intro:
-      "When you need to add capacity to an existing team, we provide contract and permanent specialists drawn from the same disciplines we deliver in.",
+      "We build quality into delivery with structured test planning, functional and regression testing, and clear reporting on release readiness.",
+    image: { src: "/images/services/software-testing-qa.webp", alt: "Code editor showing a project's unit test files" },
     capabilities: [
-      { title: "Staff augmentation", detail: "Specialists who join your team under your delivery leadership." },
-      { title: "Permanent placement", detail: "Technology hires for long-term roles." },
-      { title: "Dedicated teams", detail: "Cross-functional teams managed by Kiaratech, aligned to your goals." },
+      { title: "Test strategy and planning", detail: "Risk-based test plans aligned to business priorities." },
+      { title: "Functional and regression testing", detail: "Confirm new features work and existing ones still do." },
+      { title: "Integration and end-to-end testing", detail: "Validate complete workflows across connected systems." },
+      { title: "Release readiness reporting", detail: "Clear defect and coverage reporting for go/no-go decisions." },
     ],
     problems: [
-      "Hiring timelines that delay delivery",
-      "Short-term demand for specialist skills",
+      "Releases that break existing functionality",
+      "Defects found by users instead of testers",
+      "No clear view of whether a release is ready",
     ],
     useCases: [
-      { title: "Engineering capacity", detail: "Software, full-stack and frontend developers." },
-      { title: "Delivery roles", detail: "Business analysts and Scrum Masters." },
-      { title: "Specialist skills", detail: "Automation test engineers, cloud, data and AI specialists." },
+      { title: "Independent QA", detail: "A dedicated test team alongside your developers." },
+      { title: "User acceptance support", detail: "Plan and run UAT with business users." },
+      { title: "Test process improvement", detail: "Introduce standards, tooling and metrics." },
     ],
     caseStudySlugs: [],
-    secondary: true,
+  },
+  {
+    slug: "technical-support",
+    name: "Technical Support & Maintenance",
+    summary: "Monitoring, incident resolution and continuous improvement for systems already in production.",
+    metaDescription: "Technical support and application maintenance: monitoring, incident management, fixes and enhancements.",
+    intro:
+      "We keep production systems healthy after launch with monitoring, incident handling, fixes and planned enhancements.",
+    image: { src: "/images/services/technical-support.webp", alt: "IT technician working at a computer in a server room" },
+    capabilities: [
+      { title: "Application support", detail: "Incident triage, diagnosis and resolution against agreed service levels." },
+      { title: "Monitoring and alerting", detail: "Detect issues before users report them." },
+      { title: "Maintenance and patching", detail: "Keep frameworks, dependencies and platforms current and secure." },
+      { title: "Enhancements", detail: "Small improvements delivered continuously from a managed backlog." },
+    ],
+    problems: [
+      "Recurring incidents with no root-cause fix",
+      "Systems running on outdated, unsupported components",
+      "Support knowledge held by one or two people",
+    ],
+    useCases: [
+      { title: "Managed application support", detail: "Ongoing support for business-critical systems." },
+      { title: "Support handover", detail: "Take over systems from an outgoing supplier." },
+      { title: "Stabilisation", detail: "Reduce incident volume on a troubled system." },
+    ],
+    caseStudySlugs: [],
+  },
+  {
+    slug: "business-analysis",
+    name: "Business Analysis",
+    summary: "Requirements, process mapping and analysis that turn business goals into buildable plans.",
+    metaDescription: "Business analysis services: requirements gathering, process mapping, user stories and solution analysis.",
+    intro:
+      "Our business analysts work with your stakeholders to understand the problem, map current processes and define requirements your delivery team can build from.",
+    image: { src: "/images/services/business-analysis.webp", alt: "Colleagues discussing charts on a whiteboard in a meeting" },
+    capabilities: [
+      { title: "Requirements gathering", detail: "Workshops and interviews that capture what the business needs." },
+      { title: "Process mapping", detail: "Document current and future-state workflows." },
+      { title: "User stories and acceptance criteria", detail: "Clear, testable requirements for agile teams." },
+      { title: "Data and reporting analysis", detail: "Define the information each team needs to make decisions." },
+    ],
+    problems: [
+      "Projects that start before the problem is understood",
+      "Requirements that change late and drive rework",
+      "Stakeholders with different views of the goal",
+    ],
+    useCases: [
+      { title: "Discovery phases", detail: "Define scope, options and priorities before build." },
+      { title: "Process improvement", detail: "Identify delays and manual steps to remove." },
+      { title: "System selection", detail: "Compare options against documented requirements." },
+    ],
+    caseStudySlugs: [],
+  },
+  {
+    slug: "scrum-project-management",
+    name: "Scrum & Project Management",
+    summary: "Scrum Masters and project managers who keep delivery visible, on scope and on time.",
+    metaDescription: "Scrum Masters and project management: agile delivery, sprint planning, risk management and reporting.",
+    intro:
+      "We provide Scrum Masters and project managers who run predictable delivery: clear priorities, regular releases and transparent reporting.",
+    image: { src: "/images/services/scrum-project-management.webp", alt: "Task board with sticky notes in columns from backlog to complete" },
+    capabilities: [
+      { title: "Scrum facilitation", detail: "Sprint planning, stand-ups, reviews and retrospectives." },
+      { title: "Project and programme management", detail: "Plans, milestones, dependencies and budgets." },
+      { title: "Risk and issue management", detail: "Identify, track and resolve delivery risks early." },
+      { title: "Stakeholder reporting", detail: "Concise progress reporting for leadership." },
+    ],
+    problems: [
+      "Delivery dates that slip without warning",
+      "Teams working on competing priorities",
+      "Little visibility of progress for leadership",
+    ],
+    useCases: [
+      { title: "Agile adoption", detail: "Introduce Scrum practices to an existing team." },
+      { title: "Delivery recovery", detail: "Reset scope, plan and cadence on a struggling project." },
+      { title: "Programme coordination", detail: "Align multiple teams and suppliers." },
+    ],
+    caseStudySlugs: [],
+  },
+  {
+    slug: "automation-testing",
+    name: "Automation Testing",
+    summary: "Automated UI, API and regression suites that run on every build.",
+    metaDescription: "Test automation services: automated UI, API and regression testing integrated into CI/CD pipelines.",
+    intro:
+      "We design and maintain automated test suites that run on every change, shortening regression cycles and catching defects early.",
+    image: { src: "/images/services/automation-testing.webp", alt: "Code editor showing automated test cases and debugging tools" },
+    capabilities: [
+      { title: "Automation framework setup", detail: "Maintainable frameworks suited to your stack." },
+      { title: "UI and API automation", detail: "Automated checks for user journeys and service contracts." },
+      { title: "CI/CD integration", detail: "Tests that run automatically on every build and release." },
+      { title: "Suite maintenance", detail: "Keep tests reliable as the application changes." },
+    ],
+    problems: [
+      "Manual regression cycles that delay every release",
+      "Flaky tests that teams no longer trust",
+      "Defects found late, when they cost most to fix",
+    ],
+    useCases: [
+      { title: "Regression automation", detail: "Automate the repetitive checks run before each release." },
+      { title: "API contract testing", detail: "Catch breaking changes between services." },
+      { title: "Pipeline quality gates", detail: "Block releases that fail agreed checks." },
+    ],
+    caseStudySlugs: [],
+  },
+  {
+    slug: "azure-devops",
+    name: "Azure DevOps",
+    summary: "CI/CD pipelines, infrastructure as code and cloud environments on Microsoft Azure.",
+    metaDescription: "Azure DevOps services: CI/CD pipelines, infrastructure as code, release management and Azure cloud environments.",
+    intro:
+      "We automate how software is built, tested and released, using Azure DevOps and Azure cloud services to make deployments repeatable and safe.",
+    image: { src: "/images/services/azure-devops.webp", alt: "Engineer working on a laptop in a data centre" },
+    capabilities: [
+      { title: "CI/CD pipelines", detail: "Automated build, test and release pipelines." },
+      { title: "Infrastructure as code", detail: "Version-controlled, repeatable cloud environments." },
+      { title: "Release management", detail: "Approvals, environments and rollback built into delivery." },
+      { title: "Boards and repos", detail: "Set up Azure Boards and Repos around your delivery process." },
+    ],
+    problems: [
+      "Slow, manual deployments that depend on individuals",
+      "Environments that drift and behave differently",
+      "No easy way to roll back a bad release",
+    ],
+    useCases: [
+      { title: "Pipeline modernisation", detail: "Replace manual or legacy release processes." },
+      { title: "Cloud environment setup", detail: "Provision development, test and production on Azure." },
+      { title: "DevOps practices", detail: "Introduce branching, review and release standards." },
+    ],
+    technologies: ["Azure DevOps", "Azure", "Git", "Infrastructure as code"],
+    caseStudySlugs: [],
+  },
+  {
+    slug: "system-architecture",
+    name: "System Architecture",
+    summary: "Architecture design and review for scalable, secure and maintainable systems.",
+    metaDescription: "System architecture services: solution design, architecture review, integration and cloud architecture.",
+    intro:
+      "We design architectures that meet today's needs and scale with the business, and review existing systems to reduce risk and technical debt.",
+    image: { src: "/images/services/system-architecture.webp", alt: "Hand drawing a system flow diagram on a whiteboard" },
+    capabilities: [
+      { title: "Solution architecture", detail: "Design systems around business, security and performance needs." },
+      { title: "Architecture review", detail: "Assess existing systems for risk, scalability and technical debt." },
+      { title: "Integration architecture", detail: "APIs and messaging that connect systems reliably." },
+      { title: "Cloud architecture", detail: "Secure, cost-aware designs on Azure, AWS and Google Cloud." },
+    ],
+    problems: [
+      "Systems that struggle as usage grows",
+      "Tightly coupled components that make change risky",
+      "Architecture decisions that are undocumented",
+    ],
+    useCases: [
+      { title: "New platform design", detail: "Define the architecture before build starts." },
+      { title: "Technical due diligence", detail: "Independent review of an existing system." },
+      { title: "Modernisation roadmap", detail: "Plan the path from legacy to target architecture." },
+    ],
+    technologies: ["Azure", "AWS", "Google Cloud", "APIs"],
+    caseStudySlugs: [],
   },
 ];
 
-export const coreServices = services.filter((s) => !s.secondary);
 export const getService = (slug: string) => services.find((s) => s.slug === slug);
 
 export const engagementModels = [

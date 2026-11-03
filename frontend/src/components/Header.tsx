@@ -3,20 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { ctas } from "@/content/site";
-import { coreServices, services } from "@/content/services";
+import { services } from "@/content/services";
 import { ArrowIcon, buttonClass, Container } from "./ui";
 
-const navLinks = [
-  { href: "/industries", label: "Industries" },
-  { href: "/case-studies", label: "Case Studies" },
+// Services sits second, after About, as a dropdown.
+const [aboutLink, ...navLinks] = [
   { href: "/about", label: "About" },
-  { href: "/insights", label: "Insights" },
+  { href: "/case-studies", label: "Projects" },
+  { href: "/industries", label: "Industries" },
   { href: "/careers", label: "Careers" },
 ];
-
-const talent = services.find((s) => s.secondary)!;
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -32,6 +30,24 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const servicesButtonRef = useRef<HTMLButtonElement>(null);
+  const closeTimer = useRef<number | undefined>(undefined);
+  const lastPointer = useRef("");
+
+  // Mouse users open the menu by hovering; a short close delay forgives brief exits.
+  const onServicesEnter = (e: ReactPointerEvent) => {
+    lastPointer.current = e.pointerType;
+    if (e.pointerType !== "mouse") return;
+    window.clearTimeout(closeTimer.current);
+    setServicesOpen(true);
+  };
+  const onServicesLeave = (e: ReactPointerEvent) => {
+    if (e.pointerType !== "mouse") return;
+    closeTimer.current = window.setTimeout(() => setServicesOpen(false), 150);
+  };
+  // A mouse click keeps the hover-opened menu open; keyboard and touch toggle it.
+  const onServicesClick = (e: ReactMouseEvent) =>
+    e.detail > 0 && lastPointer.current === "mouse" ? setServicesOpen(true) : setServicesOpen((o) => !o);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   // Close menus after navigation (state adjusted during render, per React guidance).
   const [lastPath, setLastPath] = useState(pathname);
@@ -83,51 +99,58 @@ export function Header() {
           <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={480} height={172} priority className="h-12 w-auto" />
         </Link>
 
-        <nav aria-label="Main" className="hidden lg:block">
+        <nav aria-label="Main" className="hidden font-secondary lg:block">
           <ul className="flex items-center gap-1 text-[0.9375rem]">
             <li>
-              <div ref={servicesRef} className="relative">
+              <Link
+                href={aboutLink.href}
+                aria-current={isActive(aboutLink.href) ? "page" : undefined}
+                className={`rounded-sm px-3 py-2 transition-colors hover:text-blue ${isActive(aboutLink.href) ? "text-blue" : "text-ink"}`}
+              >
+                {aboutLink.label}
+              </Link>
+            </li>
+            <li>
+              <div ref={servicesRef} className="relative" onPointerEnter={onServicesEnter} onPointerLeave={onServicesLeave}>
                 <button
                   ref={servicesButtonRef}
                   type="button"
                   aria-expanded={servicesOpen}
                   aria-controls="services-menu"
-                  onClick={() => setServicesOpen((o) => !o)}
-                  className={`flex items-center gap-1.5 rounded-sm px-3 py-2 transition-colors hover:text-ink ${
-                    servicesActive || servicesOpen ? "text-ink" : "text-muted-strong"
+                  onClick={onServicesClick}
+                  className={`flex items-center gap-1.5 rounded-sm px-3 py-2 transition-colors hover:text-blue ${
+                    servicesActive || servicesOpen ? "text-blue" : "text-ink"
                   }`}
                 >
                   Services
                   <Chevron open={servicesOpen} />
                 </button>
                 {servicesOpen && (
-                  <div
-                    id="services-menu"
-                    className="absolute left-0 top-full mt-3 w-[34rem] rounded-sm border border-line bg-paper shadow-[0_12px_32px_-12px_rgb(0_0_0/0.18)]"
-                  >
-                    <ul className="grid grid-cols-2 gap-px bg-line p-px">
-                      {coreServices.map((s) => (
-                        <li key={s.slug} className="bg-paper last:odd:col-span-2">
-                          <Link
-                            href={`/services/${s.slug}`}
-                            aria-current={isActive(`/services/${s.slug}`) ? "page" : undefined}
-                            className="block h-full px-4 py-3.5 transition-colors hover:bg-mist aria-[current=page]:bg-mist"
-                          >
-                            <span className="block font-medium text-ink">{s.name}</span>
-                            <span className="mt-1 line-clamp-2 text-sm leading-snug text-muted-strong">{s.summary}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      href={`/services/${talent.slug}`}
-                      className="flex items-center justify-between border-t border-line px-4 py-3 text-sm text-muted-strong transition-colors hover:bg-mist hover:text-ink"
-                    >
-                      <span>
-                        Need specialists for your team? <span className="font-medium text-ink">{talent.name}</span>
-                      </span>
-                      <ArrowIcon />
-                    </Link>
+                  // Top padding instead of margin keeps the hover area continuous from button to panel.
+                  <div id="services-menu" className="absolute -left-4 top-full w-[46rem] pt-3">
+                    <div className="overflow-hidden rounded-xl border border-line bg-paper shadow-[0_24px_48px_-24px_rgb(16_42_86/0.35)]">
+                      <ul className="grid grid-cols-3 gap-1 p-2">
+                        {services.map((s) => (
+                          <li key={s.slug}>
+                            <Link
+                              href={`/services/${s.slug}`}
+                              aria-current={isActive(`/services/${s.slug}`) ? "page" : undefined}
+                              className="block h-full rounded-lg px-3 py-3 transition-colors hover:bg-sky aria-[current=page]:bg-sky"
+                            >
+                              <span className="block font-semibold text-navy">{s.name}</span>
+                              <span className="mt-1 line-clamp-2 text-sm leading-snug text-muted-strong">{s.summary}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link
+                        href="/services"
+                        className="flex items-center justify-between border-t border-line bg-mist px-5 py-3 text-sm font-semibold text-blue transition-colors hover:text-blue-deep"
+                      >
+                        <span>View all services</span>
+                        <ArrowIcon />
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
@@ -137,8 +160,8 @@ export function Header() {
                 <Link
                   href={l.href}
                   aria-current={isActive(l.href) ? "page" : undefined}
-                  className={`rounded-sm px-3 py-2 transition-colors hover:text-ink ${
-                    isActive(l.href) ? "text-ink underline decoration-1 underline-offset-[6px]" : "text-muted-strong"
+                  className={`rounded-sm px-3 py-2 transition-colors hover:text-blue ${
+                    isActive(l.href) ? "text-blue" : "text-ink"
                   }`}
                 >
                   {l.label}
@@ -172,16 +195,19 @@ export function Header() {
       </Container>
 
       {mobileOpen && (
-        <nav id="mobile-menu" aria-label="Main" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper lg:hidden">
+        <nav id="mobile-menu" aria-label="Main" className="font-secondary max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper lg:hidden">
           <Container className="py-4">
-            <p className="pb-2 pt-1 text-sm font-semibold text-muted-strong">Services</p>
+            <Link href={aboutLink.href} aria-current={isActive(aboutLink.href) ? "page" : undefined} className="block border-b border-line py-2.5 text-ink">
+              {aboutLink.label}
+            </Link>
+            <p className="pb-2 pt-3 text-sm font-semibold text-muted-strong">Services</p>
             <ul className="border-b border-line pb-3">
               {services.map((s) => (
                 <li key={s.slug}>
                   <Link
                     href={`/services/${s.slug}`}
                     aria-current={isActive(`/services/${s.slug}`) ? "page" : undefined}
-                    className={`block py-2.5 ${s.secondary ? "text-muted-strong" : "text-ink"}`}
+                    className="block py-2.5 text-ink"
                   >
                     {s.name}
                   </Link>

@@ -18,10 +18,10 @@ export default function IndustriesPage() {
         intro="We work with mid-market and enterprise organisations across the UK, Europe, North America and India, where operations, data and software meet."
       />
       <Section aria-label="Industries we serve">
-        <dl className="border-t border-line">
+        <dl>
           {industries.map((industry) => (
-            <div key={industry.name} className="grid gap-1 border-b border-line py-5 md:grid-cols-12 md:gap-8">
-              <dt className="text-heading font-semibold md:col-span-5">{industry.name}</dt>
+            <div key={industry.name} className="industry-row group grid gap-1 py-5 md:grid-cols-12 md:gap-8">
+              <dt className="text-heading font-semibold transition-colors duration-200 group-hover:text-blue md:col-span-5">{industry.name}</dt>
               <dd className="leading-relaxed text-muted-strong md:col-span-7">{industry.focus}</dd>
             </div>
           ))}

@@ -20,7 +20,7 @@ export const site = {
 export const ctas = {
   discovery: { label: "Book an AI & Software Discovery Call", short: "Book a Discovery Call", href: "/contact?type=discovery" },
   proposal: { label: "Request a Proposal", href: "/contact?type=proposal" },
-  aiCapabilities: { label: "Explore Our AI Capabilities", href: "/services/ai-solutions" },
+  services: { label: "Explore Our Services", href: "/services" },
   talent: { label: "Hire Specialist Talent", href: "/contact?type=talent" },
 } as const;
 

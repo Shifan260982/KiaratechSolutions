@@ -33,7 +33,7 @@ export function SectionHeading({
   return (
     <div className="mb-8 flex flex-col gap-4 md:mb-10 md:flex-row md:items-end md:justify-between">
       <div className="max-w-2xl">
-        <h2 id={id} className="text-title font-semibold">
+        <h2 id={id} className="text-title font-semibold text-navy">
           {title}
         </h2>
         {intro && <p className="mt-3 text-base leading-relaxed text-muted-strong md:text-lg">{intro}</p>}
@@ -46,14 +46,14 @@ export function SectionHeading({
 type ButtonVariant = "primary" | "secondary" | "inverse" | "inverse-outline";
 
 const buttonStyles: Record<ButtonVariant, string> = {
-  primary: "bg-ink text-paper hover:bg-neutral-700 border border-ink hover:border-neutral-700",
-  secondary: "bg-paper text-ink border border-line-strong hover:border-ink",
-  inverse: "bg-paper text-ink border border-paper hover:bg-mist",
-  "inverse-outline": "bg-transparent text-paper border border-neutral-500 hover:border-paper",
+  primary: "bg-blue text-paper border border-blue hover:bg-blue-deep hover:border-blue-deep shadow-sm shadow-blue/20",
+  secondary: "bg-paper text-navy border border-line-strong hover:border-blue hover:text-blue",
+  inverse: "bg-paper text-navy border border-paper hover:bg-sky",
+  "inverse-outline": "bg-transparent text-paper border border-white/40 hover:border-paper",
 };
 
 export const buttonClass = (variant: ButtonVariant = "primary") =>
-  `inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-[0.9375rem] font-medium leading-tight transition-colors duration-150 ${buttonStyles[variant]}`;
+  `inline-flex min-h-11 items-center justify-center gap-2 rounded-md font-secondary px-5 py-2.5 text-[0.9375rem] font-semibold leading-tight transition-colors duration-150 ${buttonStyles[variant]}`;
 
 export function ButtonLink({
   href,
@@ -85,7 +85,7 @@ export function TextLink({ href, children, className = "" }: { href: string; chi
   return (
     <Link
       href={href}
-      className={`group inline-flex items-center gap-1.5 text-[0.9375rem] font-medium underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-ink ${className}`}
+      className={`group inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold text-blue transition-colors hover:text-blue-deep ${className}`}
     >
       {children}
       <ArrowIcon className="size-4 transition-transform duration-150 group-hover:translate-x-0.5" />
@@ -115,9 +115,9 @@ export function PageIntro({
   children?: ReactNode;
 }) {
   return (
-    <div className="border-b border-line bg-paper">
+    <div className="border-b border-line bg-sky">
       <Container className="py-12 md:py-16">
-        <h1 className="max-w-3xl text-display font-semibold">{title}</h1>
+        <h1 className="max-w-3xl text-display font-semibold text-navy">{title}</h1>
         {intro && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-strong">{intro}</p>}
         {children && <div className="mt-8 flex flex-wrap gap-3">{children}</div>}
       </Container>

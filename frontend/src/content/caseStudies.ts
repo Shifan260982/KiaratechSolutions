@@ -1,14 +1,22 @@
-// Client names must stay anonymised (requirements 2.2). Outcomes are published only once verified
-// by the delivery team; until then `outcome` stays undefined and the UI shows a placeholder.
+// Project descriptions supplied by the Kiaratech team (Oct 2026). Client names must stay anonymised.
+// Outcomes are published only once verified; until then `outcome` stays undefined and the UI shows a placeholder.
+// Do not add technology stacks or metrics that have not been confirmed.
+
+export type ProjectVisual = "arecon" | "digital-twin" | "smart-hr";
 
 export type CaseStudy = {
   slug: string;
+  name: string;
   title: string;
-  sector: string;
+  summary: string;
+  description: string;
+  capabilities: string[];
+  tags: string[];
   serviceSlugs: string[];
-  problem: string;
-  solution: string;
-  scope: string[];
+  visual?: ProjectVisual;
+  /** Stock photograph of the problem domain, used as a backdrop. Not a product screenshot. */
+  photo?: { src: string; alt: string };
+  featured?: boolean;
   outcome?: string;
 };
 
@@ -20,15 +28,73 @@ export type PendingCaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: "arecon-ai",
+    name: "ARECON AI",
+    title: "AI-Powered Tender Intelligence Platform",
+    summary: "Turn tender complexity into clear decisions.",
+    description:
+      "An AI-powered platform for construction and infrastructure firms that analyses tender documents and generates structured reports covering costs, timelines, eligibility, risks and obligations, with source-page references for every extracted fact.",
+    capabilities: [
+      "AI-powered document analysis",
+      "Tender information extraction",
+      "Risk and eligibility assessment",
+      "Cost and timeline identification",
+      "Source-linked findings",
+    ],
+    tags: ["AI", "Document intelligence", "Construction & infrastructure"],
+    serviceSlugs: ["software-development"],
+    visual: "arecon",
+    photo: { src: "/images/projects/arecon-ai.webp", alt: "Professional reviewing printed documents beside a laptop showing charts" },
+    featured: true,
+  },
+  {
+    slug: "digital-twin",
+    name: "Digital Twin",
+    title: "Real-Time Factory Digital Twin",
+    summary: "End-to-end visibility of every parcel on the factory floor.",
+    description:
+      "A real-time 3D factory interface that tracks every parcel across inbound docks, warehouses, conveyors, robotic picking and outbound dispatch, providing end-to-end visibility into factory operations.",
+    capabilities: [
+      "Real-time 3D factory visualisation",
+      "Parcel tracking",
+      "Warehouse and conveyor monitoring",
+      "Robotic picking visibility",
+      "End-to-end operational tracking",
+    ],
+    tags: ["Digital twin", "Real-time 3D", "Logistics & manufacturing"],
+    serviceSlugs: ["software-development"],
+    visual: "digital-twin",
+    photo: { src: "/images/projects/digital-twin.webp", alt: "Automated production line with conveyors and a robotic gantry in a factory" },
+    featured: true,
+  },
+  {
+    slug: "smart-hr",
+    name: "Smart HR",
+    title: "AI-Powered HR Workflow Automation",
+    summary: "Less admin for HR teams, faster hiring.",
+    description:
+      "An intelligent HR solution designed to streamline recruitment and administrative workflows through resume shortlisting, email drafting and interview scheduling, helping HR teams manage hiring activities more efficiently.",
+    capabilities: [
+      "Resume screening and shortlisting",
+      "AI-assisted email drafting",
+      "Interview scheduling",
+      "Recruitment workflow management",
+      "HR task automation",
+    ],
+    tags: ["AI", "Workflow automation", "HR & recruitment"],
+    serviceSlugs: ["software-development"],
+    visual: "smart-hr",
+    photo: { src: "/images/projects/smart-hr.webp", alt: "Two people in an interview across a desk in a bright office" },
+    featured: true,
+  },
+  {
     slug: "warehouse-production-platform",
+    name: "Warehouse platform",
     title: "Integrated warehouse and production management platform",
-    sector: "Warehousing and production",
-    serviceSlugs: ["software-development", "automation"],
-    problem:
-      "The client needed its warehouse and production operations to run reliably and efficiently on one integrated platform, rather than across disconnected processes.",
-    solution:
-      "We develop and maintain an integrated warehouse and production management platform, covering inventory control, production planning, system integrations, .NET backend services, UI enhancements and end-to-end testing.",
-    scope: [
+    summary: "One platform for warehouse and production operations.",
+    description:
+      "We develop and maintain an integrated warehouse and production management platform, covering inventory control, production planning, system integrations, .NET backend services, UI enhancements and end-to-end testing, to support reliable, efficient business operations.",
+    capabilities: [
       "Inventory control",
       "Production planning",
       "System integrations",
@@ -36,16 +102,18 @@ export const caseStudies: CaseStudy[] = [
       "UI enhancements",
       "End-to-end testing",
     ],
+    tags: ["Warehousing", "Production", ".NET"],
+    serviceSlugs: ["software-development", "software-testing-qa", "technical-support"],
   },
 ];
 
 // Shown on the Case Studies page as clearly marked placeholders until content is approved.
 export const pendingCaseStudies: PendingCaseStudy[] = [
-  { title: "Arecon AI", owner: "Amey (description: Atif and Nirupaman)", needed: "Product description, problem, solution and verified outcome" },
-  { title: "Anonymised client engagement A", owner: "Atif and Nirupaman", needed: "Problem, solution and verified outcome, with client name removed" },
-  { title: "Anonymised client engagement B", owner: "Atif and Nirupaman", needed: "Problem, solution and verified outcome, with client name removed" },
-  { title: "Simulator project", owner: "Sunil", needed: "Problem, solution and verified outcome" },
+  { title: "Product screenshots for ARECON AI, Digital Twin and Smart HR", owner: "Amey, Atif and Nirupaman", needed: "Approved screenshots to replace the illustrative mockups" },
+  { title: "Verified outcomes", owner: "Delivery team", needed: "Measured results for each project, approved for publication" },
+  { title: "Simulator project", owner: "Sunil", needed: "Description and verified outcome" },
   { title: "AI Academy", owner: "Leadership", needed: "Programme description and verified outcome" },
 ];
 
+export const featuredProjects = caseStudies.filter((c) => c.featured);
 export const getCaseStudy = (slug: string) => caseStudies.find((c) => c.slug === slug);

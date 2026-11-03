@@ -26,7 +26,7 @@ export const articles: Article[] = [
     topic: "AI agents",
     published: "2026-10-28",
     readingMinutes: 4,
-    serviceSlug: "ai-solutions",
+    serviceSlug: "business-analysis",
     body: [
       {
         type: "p",

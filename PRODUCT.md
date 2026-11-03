@@ -30,7 +30,8 @@ Success measures: qualified enquiries, booked discovery calls, proposal requests
 - Founded in India in 2022; UK presence established in 2025. 110+ professionals; 30+ projects; 12+ clients; 4 years of growth; operations in India and the UK; clients across the UK, Europe, North America and international markets.
 - Offices: UK — 60 Tottenham Court Road, Office 250, Fitzrovia, London, W1T 2EW. India — Office No. 1106, Haware Infotech Park, Sector 30A, Vashi (Opposite Inorbit Mall), Navi Mumbai, Maharashtra 400703.
 - Mission: Turn ambitious ideas into secure, intelligent and scalable digital solutions that create measurable value. Vision: Become the trusted partner for AI innovation, software engineering and technology transformation. Values: customer impact, integrity, innovation, engineering excellence, collaboration, continuous learning.
-- Service priority: (1) AI consulting, GenAI, AI agents, intelligent automation; (2) custom software and product engineering; (3) cloud, data and modernisation; then cybersecurity; Talent Solutions secondary.
+- Services (owner list, 31 Oct 2026; replaces the requirements-document categorisation): Software Development, Database Administration, Software Testing & QA, Technical Support & Maintenance, Business Analysis, Scrum & Project Management, Automation Testing, Azure DevOps, System Architecture.
+- Featured projects: ARECON AI (AI tender intelligence), Real-Time Factory Digital Twin, Smart HR (AI HR workflow automation). Descriptions supplied by the owner; outcomes, clients and tech stacks unverified.
 - Engagement models: discovery and AI strategy sprints; fixed-price delivery; dedicated cross-functional teams; staff augmentation; managed support.
 - Stack to highlight: Python, .NET/C#, Java, Node.js, React, Angular, Vue.js; Azure, AWS, Google Cloud; Power BI, Tableau, Looker; DevOps, APIs, automated testing, security tooling.
 
@@ -46,14 +47,15 @@ Success measures: qualified enquiries, booked discovery calls, proposal requests
 ## Brand Commitments
 
 - Existing logo (`assets/kiaratech_logo.png`, purple script wordmark), used as provided in its original colour.
-- Site palette is black and white (owner direction): white, off-white #F5F5F5, near-black #171717, grey #737373, borders #E5E5E5.
+- Site palette is blue and white (owner direction, 31 Oct 2026; replaces the earlier black and white): primary blue #155EEF, navy #102A56, light blue #EAF2FF, white, alternate #F5F8FC, text #172033, secondary text #64748B, borders #E2E8F0. White navbar; never an all-dark site.
+- Relevant imagery is expected: Pexels photography for services and hero, product screenshots or accurate mockups for projects.
 - Voice: concise, professional UK business English. Avoid robot and handshake imagery.
 
 ## Evidence on Hand
 
 - Company figures above (approved in the requirements document).
-- Case study: integrated warehouse and production management platform (inventory control, production planning, integrations, .NET backend, UI enhancements, end-to-end testing). Client must be anonymised. Outcome metrics not yet supplied.
-- Pending write-ups: Arecon AI (product), two anonymised client engagements, a simulator project, AI Academy.
+- Featured projects: ARECON AI, Digital Twin and Smart HR (owner descriptions, Oct 2026). Shown with illustrative coded mockups until product screenshots are approved. The warehouse and production platform remains as secondary work (not featured).
+- Pending: product screenshots, verified outcomes for all projects, simulator project, AI Academy.
 - No approved client names, logos, testimonials, certifications, partnerships or team photos yet. Do not fabricate any of these.
 
 ## Product Principles

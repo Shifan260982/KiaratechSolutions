@@ -1,32 +1,37 @@
-import { CaseStudySummary } from "@/components/CaseStudySummary";
 import { CtaBand } from "@/components/CtaBand";
+import { ProjectCard } from "@/components/ProjectCard";
 import { PageIntro, Placeholder, Section, SectionHeading } from "@/components/ui";
-import { caseStudies, pendingCaseStudies } from "@/content/caseStudies";
+import { featuredProjects, pendingCaseStudies } from "@/content/caseStudies";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Case Studies",
-  description: "Anonymised client projects from Kiaratech Solutions, each described by the problem, the solution and the verified outcome.",
+  title: "Projects",
+  description: "Projects and products from Kiaratech Solutions, including ARECON AI, a real-time factory digital twin and Smart HR.",
   path: "/case-studies",
 });
+
+const [lead, ...rest] = featuredProjects;
 
 export default function CaseStudiesPage() {
   return (
     <>
       <PageIntro
-        title="Case studies"
-        intro="Client names are withheld to protect confidentiality. Each project is described by the problem, our solution and the verified outcome."
+        title="Projects"
+        intro="Products and platforms our teams have designed and built. Client names are withheld to protect confidentiality."
       />
-      <Section aria-label="Published case studies">
-        <div className="space-y-14">
-          {caseStudies.map((study) => (
-            <CaseStudySummary key={study.slug} study={study} headingLevel="h2" />
-          ))}
+      <Section aria-label="Featured projects">
+        <div className="grid gap-6">
+          <ProjectCard project={lead} wide headingLevel="h2" />
+          <div className="grid gap-6 md:grid-cols-2">
+            {rest.map((p) => (
+              <ProjectCard key={p.slug} project={p} headingLevel="h2" />
+            ))}
+          </div>
         </div>
       </Section>
 
-      {/* Pre-launch only: remove this section once the pending case studies are approved or dropped. */}
-      <Section tone="mist" aria-labelledby="pending-heading">
+      {/* Pre-launch only: remove once the pending items are approved or dropped. */}
+      <Section aria-labelledby="pending-heading">
         <SectionHeading id="pending-heading" title="In preparation" />
         <ul className="grid gap-4 md:grid-cols-2">
           {pendingCaseStudies.map((p) => (

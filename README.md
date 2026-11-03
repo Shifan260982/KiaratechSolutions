@@ -54,8 +54,8 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 | Contact-form destination (8.6 is TBD). Form validates but sends nothing. | Patrick | `src/lib/enquiry.ts` (Phase 2) |
 | Verified WhatsApp number | Marketing | `NEXT_PUBLIC_WHATSAPP_NUMBER` |
 | Official LinkedIn page URL | Marketing | `NEXT_PUBLIC_LINKEDIN_URL` |
-| Verified outcome for the warehouse and production case study | Delivery team | `caseStudies.ts` |
-| Case studies: Arecon AI, two anonymised engagements, simulator, AI Academy | Amey, Atif, Nirupaman, Sunil | `caseStudies.ts` |
+| Product screenshots for ARECON AI, Digital Twin and Smart HR (replace the illustrative mockups in `ProjectVisual.tsx`) | Amey, Atif, Nirupaman | `caseStudies.ts` |
+| Verified outcomes for all projects; simulator and AI Academy write-ups | Delivery team, Sunil, Leadership | `caseStudies.ts` |
 | Review of all service, industry and homepage copy | Patrick and Amey | `src/content/`, `src/app/page.tsx` |
 | Approval of the draft Insights article | Sunil and Ameya | `insights.ts` |
 | Hiring steps and equal-opportunity statement | HR | `src/app/careers/page.tsx` |
@@ -66,3 +66,29 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 | Client logos, testimonials, certifications, partnerships | Patrick, HR / Compliance | not shown; do not add unverified items |
 | Analytics and Search Console. Add a cookie-consent banner at the same time as any non-essential cookies. | Marketing | not built |
 | Note: the requirements list `BD@kiaratechs.ai` while the site domain is `kiaratechs.com`. No business email is shown on the site, by decision. | Patrick | |
+
+## Image credits
+
+All photographs are from [Pexels](https://www.pexels.com/license/): free for commercial use and modification, with no attribution required. Pexels does not allow identifiable people to be shown in a way that implies they endorse a product. Several photos show identifiable people (the hero slides, the About portrait and the Smart HR backdrop), so never caption them as Kiaratech staff or clients; replace them with approved team photos when available. Project backdrops illustrate each project's domain; they are not product screenshots. Files are resized and converted to WebP in `frontend/public/images/`.
+
+| File | Photo | Photographer | Used on |
+|---|---|---|---|
+| `hero/engineering-team.webp` | [6804068](https://www.pexels.com/photo/6804068/) | cottonbro studio | Hero slide 1 |
+| `hero/software-code.webp` | [6424583](https://www.pexels.com/photo/6424583/) | Nemuel Sereti | Hero slide 2 |
+| `hero/cloud-infrastructure.webp` | [17489163](https://www.pexels.com/photo/17489163/) | panumas nikhomkhai | Hero slide 3 |
+| `hero/team-collaboration.webp` | [12903168](https://www.pexels.com/photo/12903168/) | Mizuno K | Hero slide 4 (cropped to landscape) |
+| `about/greeting.webp` | Supplied by the Kiaratech team (source: `assets/about-greeting-source.png`); licence to be confirmed | | Homepage About greeting |
+| `projects/arecon-ai.webp` | [8441814](https://www.pexels.com/photo/8441814/) | Kampus Production | ARECON AI slide backdrop |
+| `projects/digital-twin.webp` | [34222005](https://www.pexels.com/photo/34222005/) | Freek Wolsink | Digital Twin slide backdrop |
+| `projects/smart-hr.webp` | [5439368](https://www.pexels.com/photo/5439368/) | Tima Miroshnichenko | Smart HR slide backdrop |
+| `services/software-development.webp` | [4976712](https://www.pexels.com/photo/4976712/) | Godfrey Atima | Software Development card and page |
+| `services/database-administration.webp` | [1148820](https://www.pexels.com/photo/1148820/) | panumas nikhomkhai | Database Administration |
+| `services/software-testing-qa.webp` | [34803988](https://www.pexels.com/photo/34803988/) | Daniil Komov | Software Testing & QA |
+| `services/technical-support.webp` | [37605911](https://www.pexels.com/photo/37605911/) | panumas nikhomkhai | Technical Support & Maintenance |
+| `services/business-analysis.webp` | [7869111](https://www.pexels.com/photo/7869111/) | Pavel Danilyuk | Business Analysis |
+| `services/scrum-project-management.webp` | [6804093](https://www.pexels.com/photo/6804093/) | cottonbro studio | Scrum & Project Management |
+| `services/automation-testing.webp` | [34804018](https://www.pexels.com/photo/34804018/) | Daniil Komov | Automation Testing |
+| `services/azure-devops.webp` | [1181341](https://www.pexels.com/photo/1181341/) | Christina Morillo | Azure DevOps |
+| `services/system-architecture.webp` | [1181311](https://www.pexels.com/photo/1181311/) | Christina Morillo | System Architecture |
+
+Project visuals (ARECON AI, Digital Twin, Smart HR) are coded mockups in `frontend/src/components/ProjectVisual.tsx`, labelled "Illustrative mockup". They contain no real data.
