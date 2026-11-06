@@ -36,7 +36,7 @@ export default function HomePage() {
           <SectionHeading
             id="industries-heading"
             title="Industries we serve"
-            action={<TextLink href="/industries">Industries</TextLink>}
+            action={<TextLink href="/industries">Sectors</TextLink>}
           />
           <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {industries.map((i) => (
@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <h2 id="contact-heading" className="text-display font-bold text-navy">
-              Book an AI &amp; Software Discovery Call
+              Let&apos;s Connect
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-strong">
               Tell us the outcome you need. We will clarify scope, risks and success criteria with you, then recommend a practical

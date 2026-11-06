@@ -18,7 +18,7 @@ export const site = {
 } as const;
 
 export const ctas = {
-  discovery: { label: "Book an AI & Software Discovery Call", short: "Book a Discovery Call", href: "/contact?type=discovery" },
+  discovery: { label: "Let's Connect", short: "Let's Connect", href: "/contact?type=discovery" },
   proposal: { label: "Request a Proposal", href: "/contact?type=proposal" },
   services: { label: "Explore Our Services", href: "/services" },
   talent: { label: "Hire Specialist Talent", href: "/contact?type=talent" },

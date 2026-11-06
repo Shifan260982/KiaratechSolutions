@@ -32,7 +32,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
             <div className={study.visual ? "lg:col-span-5" : "lg:col-span-8"}>
               <nav aria-label="Breadcrumb" className="mb-5 text-sm">
                 <Link href="/case-studies" className="font-medium text-blue hover:text-blue-deep">
-                  Projects
+                  Portfolio
                 </Link>
               </nav>
               <h1 className="text-display font-bold text-navy">

@@ -35,7 +35,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           <div className="lg:col-span-6">
             <nav aria-label="Breadcrumb" className="mb-5 text-sm">
               <Link href="/services" className="font-medium text-blue hover:text-blue-deep">
-                Services
+                Capabilities
               </Link>
             </nav>
             <h1 className="text-display font-bold text-navy">{service.name}</h1>

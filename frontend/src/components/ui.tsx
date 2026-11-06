@@ -108,14 +108,25 @@ export function Placeholder({ children, className = "" }: { children: ReactNode;
 export function PageIntro({
   title,
   intro,
+  image,
   children,
 }: {
   title: string;
   intro?: string;
+  /** Decorative photo on the right. Absolutely positioned, so the band keeps its text-driven height. */
+  image?: string;
   children?: ReactNode;
 }) {
   return (
-    <div className="border-b border-line bg-sky">
+    <div className="relative isolate overflow-hidden border-b border-line bg-sky">
+      {image && (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element -- static export with unoptimised images, next/image adds nothing here */}
+          <img src={image} alt="" aria-hidden="true" className="absolute inset-0 -z-10 size-full object-cover" />
+          {/* Sky wash keeps the text readable: solid behind the copy, fading out so the photo shows on the right. */}
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-sky/85 lg:bg-transparent lg:bg-linear-to-r lg:from-sky lg:from-35% lg:via-sky/80 lg:via-55% lg:to-sky/10" />
+        </>
+      )}
       <Container className="py-12 md:py-16">
         <h1 className="max-w-3xl text-display font-semibold text-navy">{title}</h1>
         {intro && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-strong">{intro}</p>}

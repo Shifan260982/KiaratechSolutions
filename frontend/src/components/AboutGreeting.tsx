@@ -50,10 +50,9 @@ export function AboutGreeting() {
         className="absolute inset-x-0 bottom-0 top-[calc(3rem+var(--shoulder))] -z-10 hidden bg-linear-to-r from-blue via-blue-deep to-navy lg:block"
       />
       <Container className="grid gap-x-12 lg:grid-cols-12">
-        <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:h-(--shoulder)">
+        <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:flex lg:h-(--shoulder) lg:items-center">
           <h2 id="about-heading" className="text-display font-bold text-paper lg:text-navy">
-            About{" "}
-            <span className="lg:bg-linear-to-t lg:from-blue/20 lg:from-30% lg:to-transparent lg:to-30%">Kiaratech</span>
+            About Kiaratech
           </h2>
         </div>
 

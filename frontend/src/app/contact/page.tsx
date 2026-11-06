@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/metadata";
 export const metadata = pageMetadata({
   title: "Contact",
   description:
-    "Book an AI & Software Discovery Call, request a proposal or ask about specialist talent. Offices in London and Navi Mumbai.",
+    "Let's connect. Request a proposal or ask about specialist talent. Offices in London and Navi Mumbai.",
   path: "/contact",
 });
 
@@ -24,7 +24,7 @@ export default function ContactPage() {
   return (
     <Container className="grid gap-12 py-12 md:py-16 lg:grid-cols-12 lg:gap-16">
       <div className="lg:col-span-7">
-        <h1 className="text-display font-semibold">Book an AI &amp; Software Discovery Call</h1>
+        <h1 className="text-display font-semibold">Let&apos;s Connect</h1>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-strong">
           Tell us what you want to achieve. Use the same form to request a proposal or ask about specialist talent.
         </p>

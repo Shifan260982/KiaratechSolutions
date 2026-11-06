@@ -5,7 +5,7 @@ import { services } from "@/content/services";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Services",
+  title: "Capabilities",
   description:
     "Software development, database administration, testing and QA, technical support, business analysis, Scrum and project management, automation testing, Azure DevOps and system architecture.",
   path: "/services",
@@ -15,7 +15,7 @@ export default function ServicesPage() {
   return (
     <>
       <PageIntro
-        title="Services"
+        title="Capabilities"
         intro="Specialist teams for every stage of the software lifecycle: analysis, architecture, development, testing, DevOps and ongoing support."
       />
       <Section aria-label="All services">

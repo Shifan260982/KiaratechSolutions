@@ -8,11 +8,11 @@ import { ctas } from "@/content/site";
 import { services } from "@/content/services";
 import { ArrowIcon, buttonClass, Container } from "./ui";
 
-// Services sits second, after About, as a dropdown.
+// Capabilities (services) sits second, after Our Story, as a dropdown.
 const [aboutLink, ...navLinks] = [
-  { href: "/about", label: "About" },
-  { href: "/case-studies", label: "Projects" },
-  { href: "/industries", label: "Industries" },
+  { href: "/about", label: "Our Story" },
+  { href: "/case-studies", label: "Portfolio" },
+  { href: "/industries", label: "Sectors" },
   { href: "/careers", label: "Careers" },
 ];
 
@@ -122,7 +122,7 @@ export function Header() {
                     servicesActive || servicesOpen ? "text-blue" : "text-ink"
                   }`}
                 >
-                  Services
+                  Capabilities
                   <Chevron open={servicesOpen} />
                 </button>
                 {servicesOpen && (
@@ -147,7 +147,7 @@ export function Header() {
                         href="/services"
                         className="flex items-center justify-between border-t border-line bg-mist px-5 py-3 text-sm font-semibold text-blue transition-colors hover:text-blue-deep"
                       >
-                        <span>View all services</span>
+                        <span>View all capabilities</span>
                         <ArrowIcon />
                       </Link>
                     </div>
@@ -200,7 +200,7 @@ export function Header() {
             <Link href={aboutLink.href} aria-current={isActive(aboutLink.href) ? "page" : undefined} className="block border-b border-line py-2.5 text-ink">
               {aboutLink.label}
             </Link>
-            <p className="pb-2 pt-3 text-sm font-semibold text-muted-strong">Services</p>
+            <p className="pb-2 pt-3 text-sm font-semibold text-muted-strong">Capabilities</p>
             <ul className="border-b border-line pb-3">
               {services.map((s) => (
                 <li key={s.slug}>

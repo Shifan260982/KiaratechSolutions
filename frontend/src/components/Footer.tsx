@@ -6,9 +6,9 @@ import { services } from "@/content/services";
 import { Container } from "./ui";
 
 const company = [
-  { href: "/about", label: "About" },
-  { href: "/industries", label: "Industries" },
-  { href: "/case-studies", label: "Projects" },
+  { href: "/about", label: "Our Story" },
+  { href: "/industries", label: "Sectors" },
+  { href: "/case-studies", label: "Portfolio" },
   { href: "/insights", label: "Insights" },
   { href: "/careers", label: "Careers" },
   { href: "/contact", label: "Contact" },
@@ -37,8 +37,8 @@ export function Footer() {
           <p className="mt-4 max-w-xs leading-relaxed text-muted-strong">{site.positioning}</p>
         </div>
 
-        <nav aria-label="Services" className="md:col-span-3">
-          <FooterHeading>Services</FooterHeading>
+        <nav aria-label="Capabilities" className="md:col-span-3">
+          <FooterHeading>Capabilities</FooterHeading>
           <ul className="space-y-2">
             {services.map((s) => (
               <li key={s.slug}>

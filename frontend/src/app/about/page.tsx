@@ -1,11 +1,13 @@
+import Image from "next/image";
 import { CtaBand } from "@/components/CtaBand";
+import { SlideIn } from "@/components/SlideIn";
 import { PageIntro, Section, SectionHeading } from "@/components/ui";
 import { engagementModels } from "@/content/services";
 import { metrics, offices } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "About",
+  title: "Our Story",
   description:
     "Founded in India in 2022 with a UK presence since 2025, Kiaratech Solutions is a 110+ person AI-driven software partner.",
   path: "/about",
@@ -23,10 +25,24 @@ const technologies = [
 export default function AboutPage() {
   return (
     <>
-      <PageIntro
-        title="An AI-driven software partner, built on specialist engineering"
-        intro="Founded in India in 2022, Kiaratech Solutions has grown into a technology organisation of more than 110 professionals. We established our UK presence in 2025 to work more closely with clients across the UK and Europe."
-      />
+      <PageIntro title="An AI-driven software partner, built on specialist engineering" />
+
+      <Section tone="mist" aria-label="Who we are">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <p className="text-lg leading-relaxed text-muted-strong md:text-xl">
+            Founded in India in 2022, Kiaratech Solutions has grown into a technology organisation of more than 110 professionals.
+            We established our UK presence in 2025 to work more closely with clients across the UK and Europe.
+          </p>
+          <Image
+            src="/images/about/team.webp"
+            alt="Members of the Kiaratech Solutions team standing together for a group photo"
+            width={1600}
+            height={1066}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="h-auto w-full rounded-lg shadow-[0_18px_40px_-20px_rgb(16_42_86/0.45)]"
+          />
+        </div>
+      </Section>
 
       <Section aria-labelledby="story-heading">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -86,7 +102,9 @@ export default function AboutPage() {
           {engagementModels.map((m) => (
             <div key={m.title} className="grid gap-1 border-b border-line py-4 md:grid-cols-12 md:gap-8">
               <dt className="font-semibold md:col-span-4">{m.title}</dt>
-              <dd className="leading-relaxed text-muted-strong md:col-span-8">{m.detail}</dd>
+              <dd className="leading-relaxed text-muted-strong md:col-span-8">
+                <SlideIn>{m.detail}</SlideIn>
+              </dd>
             </div>
           ))}
         </dl>
@@ -94,22 +112,35 @@ export default function AboutPage() {
 
       <Section tone="mist" aria-labelledby="tech-heading">
         <SectionHeading id="tech-heading" title="Technology" />
-        <dl className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* items-start lets a hovered card grow without stretching its row; touch screens show the detail outright. */}
+        <dl className="grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {technologies.map((t) => (
-            <div key={t.group} className="border-t border-line-strong pt-4">
-              <dt className="font-semibold">{t.group}</dt>
-              <dd className="mt-2 leading-relaxed text-muted-strong">{t.items}</dd>
+            <div
+              key={t.group}
+              className="group rounded-lg border border-line bg-paper p-5 shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-blue hover:shadow-[0_18px_36px_-20px_rgb(16_42_86/0.45)]"
+            >
+              <dt className="flex items-center justify-between gap-3 font-semibold text-navy">
+                {t.group}
+                <svg viewBox="0 0 12 12" aria-hidden="true" className="size-3 shrink-0 text-blue transition-transform duration-300 group-hover:rotate-180 [@media(hover:none)]:hidden">
+                  <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </dt>
+              <dd className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-hover:grid-rows-[1fr] motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
+                <span className="overflow-hidden">
+                  <span className="block pt-3 leading-relaxed text-muted-strong">{t.items}</span>
+                </span>
+              </dd>
             </div>
           ))}
         </dl>
       </Section>
 
-      <Section aria-labelledby="offices-heading">
-        <SectionHeading id="offices-heading" title="Offices" />
-        <div className="grid gap-8 md:grid-cols-2">
+      <CtaBand>
+        <h2 className="text-heading font-semibold">Offices</h2>
+        <div className="mt-5 grid gap-8 md:grid-cols-2">
           {offices.map((o) => (
-            <address key={o.region} className="border-t border-ink pt-4 not-italic leading-relaxed text-muted-strong">
-              <span className="block text-heading font-semibold text-ink">{o.region}</span>
+            <address key={o.region} className="border-t border-white/25 pt-4 not-italic leading-relaxed text-blue-100">
+              <span className="block font-semibold text-paper">{o.region}</span>
               <span className="mt-2 block">
                 {o.lines.map((line) => (
                   <span key={line} className="block">
@@ -120,9 +151,7 @@ export default function AboutPage() {
             </address>
           ))}
         </div>
-      </Section>
-
-      <CtaBand />
+      </CtaBand>
     </>
   );
 }

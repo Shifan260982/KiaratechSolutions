@@ -4,7 +4,7 @@ import { industries } from "@/content/industries";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Industries",
+  title: "Sectors",
   description:
     "AI, software, cloud and automation for industrial automation, logistics, FMCG and manufacturing, technology, finance and professional services.",
   path: "/industries",
@@ -14,8 +14,9 @@ export default function IndustriesPage() {
   return (
     <>
       <PageIntro
-        title="Industries"
+        title="Sectors"
         intro="We work with mid-market and enterprise organisations across the UK, Europe, North America and India, where operations, data and software meet."
+        image="/images/heroes/sectors-buildings.webp"
       />
       <Section aria-label="Industries we serve">
         <dl>
