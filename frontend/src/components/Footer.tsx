@@ -3,13 +3,13 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { offices, site, whatsappHref } from "@/content/site";
 import { services } from "@/content/services";
+import { OpenArsenalButton } from "./Header";
 import { Container } from "./ui";
 
 const company = [
   { href: "/about", label: "Our Story" },
   { href: "/industries", label: "Sectors" },
   { href: "/case-studies", label: "Portfolio" },
-  { href: "/insights", label: "Insights" },
   { href: "/careers", label: "Careers" },
   { href: "/contact", label: "Contact" },
 ];
@@ -60,6 +60,9 @@ export function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <OpenArsenalButton className={`${linkClass} text-left`} />
+            </li>
           </ul>
         </nav>
 

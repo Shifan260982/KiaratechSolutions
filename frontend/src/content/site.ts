@@ -46,6 +46,14 @@ export const offices = [
   },
 ] as const;
 
+// "Our Arsenal" navbar menu: the engineering stack, display only (no pages behind it).
+export const arsenal = [
+  { group: "Languages and frameworks", items: "Python, .NET / C#, Java, Node.js, React, Angular, Vue.js" },
+  { group: "Cloud", items: "Microsoft Azure, AWS, Google Cloud" },
+  { group: "Data and analytics", items: "Power BI, Tableau, Looker" },
+  { group: "Engineering practice", items: "DevOps, APIs, databases, automated testing, cybersecurity tooling" },
+] as const;
+
 export function whatsappHref(message?: string) {
   if (!site.whatsappNumber) return undefined;
   const text = message ? `?text=${encodeURIComponent(message)}` : "";

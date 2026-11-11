@@ -25,6 +25,10 @@ export default function CookiesPage() {
       <p>
         Links to external services, such as LinkedIn or WhatsApp, take you to sites with their own cookie policies.
       </p>
+      <p>
+        The office maps on our Our Story page are provided by Google Maps and load when you view that part of the page. When they
+        load, Google may set cookies under its own policy.
+      </p>
     </LegalPage>
   );
 }

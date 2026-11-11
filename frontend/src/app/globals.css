@@ -90,7 +90,39 @@
   }
 }
 
+@keyframes arsenal-unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 -48px 0); /* past the bottom edge so the drop shadow is not clipped */
+  }
+}
+
+@keyframes arsenal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+
 @layer components {
+  /* Our Arsenal mega panel: the sheet unrolls from the navbar edge, then its columns rise in sequence.
+     Both start visible-ready (backwards fill only) and are switched off under reduced motion. */
+  .arsenal-sheet {
+    animation: arsenal-unroll 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .arsenal-rise {
+    animation: arsenal-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .arsenal-sheet,
+    .arsenal-rise {
+      animation: none;
+    }
+  }
+
   /* Divider rows that fade out at both ends; the hovered row's top and bottom lines turn blue. */
   .industry-row {
     --row-line: linear-gradient(to right, transparent, var(--color-line-strong) 15%, var(--color-line-strong) 85%, transparent);

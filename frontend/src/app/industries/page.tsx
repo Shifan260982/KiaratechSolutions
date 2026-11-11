@@ -1,4 +1,3 @@
-import { CtaBand } from "@/components/CtaBand";
 import { PageIntro, Section } from "@/components/ui";
 import { industries } from "@/content/industries";
 import { pageMetadata } from "@/lib/metadata";
@@ -17,6 +16,7 @@ export default function IndustriesPage() {
         title="Sectors"
         intro="We work with mid-market and enterprise organisations across the UK, Europe, North America and India, where operations, data and software meet."
         image="/images/heroes/sectors-buildings.webp"
+        highlight
       />
       <Section aria-label="Industries we serve">
         <dl>
@@ -28,7 +28,6 @@ export default function IndustriesPage() {
           ))}
         </dl>
       </Section>
-      <CtaBand title="Working in a sector not listed here?" text="Tell us about your operation. We will tell you honestly whether we are the right partner." />
     </>
   );
 }

@@ -18,6 +18,7 @@ export default function CareersPage() {
         title="Careers"
         intro="Join a team of more than 110 professionals delivering AI, software, cloud, data and automation work for clients in the UK, Europe, North America and beyond."
         image="/images/heroes/careers-summit.webp"
+        highlight
       />
 
       <Section aria-labelledby="openings-heading">

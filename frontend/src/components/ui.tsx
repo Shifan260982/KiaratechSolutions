@@ -109,27 +109,43 @@ export function PageIntro({
   title,
   intro,
   image,
+  imagePosition = "center",
+  tall = false,
+  highlight = false,
   children,
 }: {
   title: string;
   intro?: string;
   /** Decorative photo on the right. Absolutely positioned, so the band keeps its text-driven height. */
   image?: string;
+  /** Which part of the photo stays visible when it is cropped to the band (CSS object-position). */
+  imagePosition?: string;
+  /** Taller band (a third of the page width) so the photo carries more of the hero. */
+  tall?: boolean;
+  /** Puts the title and intro on a solid text background instead of relying on a text shadow. */
+  highlight?: boolean;
   children?: ReactNode;
 }) {
+  const textShadow = "[text-shadow:0_1px_12px_rgb(0_0_0/0.75)]";
+  const marker = "rounded-md bg-black/50 px-3 py-1 box-decoration-clone";
   return (
-    <div className="relative isolate overflow-hidden border-b border-line bg-sky">
+    // tall: a 3:1 band (height = a third of the width), so a 3:2 photo anchored to the top shows its upper half.
+    <div className={`relative isolate overflow-hidden border-b border-line bg-sky ${tall ? "flex min-h-[33.34vw] items-center" : ""}`}>
       {image && (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element -- static export with unoptimised images, next/image adds nothing here */}
-          <img src={image} alt="" aria-hidden="true" className="absolute inset-0 -z-10 size-full object-cover" />
-          {/* Sky wash keeps the text readable: solid behind the copy, fading out so the photo shows on the right. */}
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-sky/85 lg:bg-transparent lg:bg-linear-to-r lg:from-sky lg:from-35% lg:via-sky/80 lg:via-55% lg:to-sky/10" />
-        </>
+        // eslint-disable-next-line @next/next/no-img-element -- static export with unoptimised images, next/image adds nothing here
+        <img src={image} alt="" aria-hidden="true" className="absolute inset-0 -z-10 size-full object-cover" style={{ objectPosition: imagePosition }} />
       )}
       <Container className="py-12 md:py-16">
-        <h1 className="max-w-3xl text-display font-semibold text-navy">{title}</h1>
-        {intro && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-strong">{intro}</p>}
+        {/* Over a full-strength photo, white text with a soft shadow stays readable on both light and dark areas;
+            highlight instead sets each line on a black marker band (box-decoration-clone repeats the padding per line). */}
+        <h1 className={`max-w-3xl text-display font-semibold ${image ? `text-paper ${highlight ? "" : textShadow}` : "text-navy"}`}>
+          {highlight ? <span className={marker}>{title}</span> : title}
+        </h1>
+        {intro && (
+          <p className={`mt-5 max-w-2xl text-lg ${image ? `font-medium text-paper ${highlight ? "leading-loose" : `leading-relaxed ${textShadow}`}` : "leading-relaxed text-muted-strong"}`}>
+            {highlight ? <span className={marker}>{intro}</span> : intro}
+          </p>
+        )}
         {children && <div className="mt-8 flex flex-wrap gap-3">{children}</div>}
       </Container>
     </div>

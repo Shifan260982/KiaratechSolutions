@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CtaBand } from "@/components/CtaBand";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ArrowIcon, ButtonLink, Container, Section, SectionHeading } from "@/components/ui";
 import { getCaseStudy } from "@/content/caseStudies";
@@ -147,7 +146,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         </Container>
       </section>
 
-      <CtaBand />
     </>
   );
 }

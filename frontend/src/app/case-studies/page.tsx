@@ -1,4 +1,3 @@
-import { CtaBand } from "@/components/CtaBand";
 import { ProjectCard } from "@/components/ProjectCard";
 import { PageIntro, Section } from "@/components/ui";
 import { featuredProjects } from "@/content/caseStudies";
@@ -19,6 +18,7 @@ export default function CaseStudiesPage() {
         title="Portfolio"
         intro="Products and platforms our teams have designed and built. Client names are withheld to protect confidentiality."
         image="/images/heroes/portfolio-code.webp"
+        highlight
       />
       <Section aria-label="Featured projects">
         <div className="grid gap-6">
@@ -30,7 +30,6 @@ export default function CaseStudiesPage() {
           </div>
         </div>
       </Section>
-      <CtaBand />
     </>
   );
 }

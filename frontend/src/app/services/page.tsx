@@ -1,4 +1,3 @@
-import { CtaBand } from "@/components/CtaBand";
 import { ServiceCard } from "@/components/ServiceCard";
 import { PageIntro, Section } from "@/components/ui";
 import { services } from "@/content/services";
@@ -17,6 +16,7 @@ export default function ServicesPage() {
       <PageIntro
         title="Capabilities"
         intro="Specialist teams for every stage of the software lifecycle: analysis, architecture, development, testing, DevOps and ongoing support."
+        image="/images/heroes/capabilities.webp"
       />
       <Section aria-label="All services">
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -27,7 +27,6 @@ export default function ServicesPage() {
           ))}
         </ul>
       </Section>
-      <CtaBand />
     </>
   );
 }

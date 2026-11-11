@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CtaBand } from "@/components/CtaBand";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Container, Placeholder, TextLink } from "@/components/ui";
 import { caseStudies, getCaseStudy } from "@/content/caseStudies";
@@ -99,7 +98,6 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
           </aside>
         </Container>
       </article>
-      <CtaBand />
     </>
   );
 }

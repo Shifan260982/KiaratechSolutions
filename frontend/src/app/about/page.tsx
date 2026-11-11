@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { CtaBand } from "@/components/CtaBand";
+import { InViewVideo } from "@/components/InViewVideo";
+import { OfficeMap } from "@/components/OfficeMap";
 import { SlideIn } from "@/components/SlideIn";
 import { PageIntro, Section, SectionHeading } from "@/components/ui";
 import { engagementModels } from "@/content/services";
@@ -13,31 +15,30 @@ export const metadata = pageMetadata({
   path: "/about",
 });
 
-const values = ["Customer impact", "Integrity", "Innovation", "Engineering excellence", "Collaboration", "Continuous learning"];
-
-const technologies = [
-  { group: "Languages and frameworks", items: "Python, .NET / C#, Java, Node.js, React, Angular, Vue.js" },
-  { group: "Cloud", items: "Microsoft Azure, AWS, Google Cloud" },
-  { group: "Data and analytics", items: "Power BI, Tableau, Looker" },
-  { group: "Engineering practice", items: "DevOps, APIs, databases, automated testing, cybersecurity tooling" },
-];
+// Deep shades for the "How we engage" hover dividers: navy blue, forest green, deep violet, burnt orange, plum.
+const dividerShades = ["#1e3a8a", "#166534", "#5b21b6", "#9a3412", "#831843"];
 
 export default function AboutPage() {
   return (
     <>
-      <PageIntro title="An AI-driven software partner, built on specialist engineering" />
+      <PageIntro title="An AI-driven software partner, built on specialist engineering" image="/images/heroes/our-story.webp" imagePosition="top" tall />
 
-      <Section tone="mist" aria-label="Who we are">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <p className="text-lg leading-relaxed text-muted-strong md:text-xl">
-            Founded in India in 2022, Kiaratech Solutions has grown into a technology organisation of more than 110 professionals.
-            We established our UK presence in 2025 to work more closely with clients across the UK and Europe.
-          </p>
+      <Section tone="mist" aria-labelledby="team-heading">
+        {/* The heading starts level with the top of the photo; the copy stays centred in the space below it. */}
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="flex flex-col">
+            <h2 id="team-heading" className="text-title font-semibold text-navy">
+              Team
+            </h2>
+            <p className="mt-3 text-md leading-relaxed text-muted-strong md:text-lg ">
+              Founded in India in 2022, Kiaratech Solutions has grown into a technology organisation with more than 110 professionals. We focus on delivering innovative and reliable technology solutions that help businesses improve efficiency and adapt to evolving digital needs. In 2025, we expanded our presence to the United Kingdom, enabling us to work more closely with clients across the UK and Europe while continuing to build lasting partnerships and drive digital growth.
+            </p>
+          </div>
           <Image
             src="/images/about/team.webp"
             alt="Members of the Kiaratech Solutions team standing together for a group photo"
-            width={1600}
-            height={1066}
+            width={1348}
+            height={898}
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="h-auto w-full rounded-lg shadow-[0_18px_40px_-20px_rgb(16_42_86/0.45)]"
           />
@@ -67,28 +68,13 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section tone="mist" aria-label="Mission, vision and values">
-        <div className="grid gap-10 md:grid-cols-3 md:gap-8">
-          <div>
-            <h2 className="text-heading font-semibold">Mission</h2>
-            <p className="mt-2 leading-relaxed text-muted-strong">
-              Turn ambitious ideas into secure, intelligent and scalable digital solutions that create measurable value.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-heading font-semibold">Vision</h2>
-            <p className="mt-2 leading-relaxed text-muted-strong">
-              Become the trusted partner for AI innovation, software engineering and technology transformation.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-heading font-semibold">Values</h2>
-            <ul className="mt-2 space-y-1 text-muted-strong">
-              {values.map((v) => (
-                <li key={v}>{v}</li>
-              ))}
-            </ul>
-          </div>
+      <Section tone="mist" aria-label="Company film">
+        <div className="mx-auto max-w-5xl">
+          <InViewVideo
+            src="/images/about/company-film.mp4"
+            poster="/images/about/company-film-poster.jpg"
+            label="Kiaratech Solutions company film"
+          />
         </div>
       </Section>
 
@@ -99,37 +85,18 @@ export default function AboutPage() {
           intro="Every engagement starts with clear business goals, delivery milestones and measurable success criteria."
         />
         <dl className="border-t border-line">
-          {engagementModels.map((m) => (
-            <div key={m.title} className="grid gap-1 border-b border-line py-4 md:grid-cols-12 md:gap-8">
+          {engagementModels.map((m, i) => (
+            <div key={m.title} className="group relative grid gap-1 border-b border-line py-4 md:grid-cols-12 md:gap-8">
               <dt className="font-semibold md:col-span-4">{m.title}</dt>
               <dd className="leading-relaxed text-muted-strong md:col-span-8">
                 <SlideIn>{m.detail}</SlideIn>
               </dd>
-            </div>
-          ))}
-        </dl>
-      </Section>
-
-      <Section tone="mist" aria-labelledby="tech-heading">
-        <SectionHeading id="tech-heading" title="Technology" />
-        {/* items-start lets a hovered card grow without stretching its row; touch screens show the detail outright. */}
-        <dl className="grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {technologies.map((t) => (
-            <div
-              key={t.group}
-              className="group rounded-lg border border-line bg-paper p-5 shadow-sm transition-[border-color,box-shadow] duration-300 hover:border-blue hover:shadow-[0_18px_36px_-20px_rgb(16_42_86/0.45)]"
-            >
-              <dt className="flex items-center justify-between gap-3 font-semibold text-navy">
-                {t.group}
-                <svg viewBox="0 0 12 12" aria-hidden="true" className="size-3 shrink-0 text-blue transition-transform duration-300 group-hover:rotate-180 [@media(hover:none)]:hidden">
-                  <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-              </dt>
-              <dd className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-hover:grid-rows-[1fr] motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
-                <span className="overflow-hidden">
-                  <span className="block pt-3 leading-relaxed text-muted-strong">{t.items}</span>
-                </span>
-              </dd>
+              {/* Divider fills left to right in this row's colour, thickening as it grows, while the row is hovered. */}
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 transition-[scale,height] duration-1000 ease-out group-hover:h-1 group-hover:scale-x-100 motion-reduce:transition-none"
+                style={{ backgroundColor: dividerShades[i % dividerShades.length] }}
+              />
             </div>
           ))}
         </dl>
@@ -139,16 +106,14 @@ export default function AboutPage() {
         <h2 className="text-heading font-semibold">Offices</h2>
         <div className="mt-5 grid gap-8 md:grid-cols-2">
           {offices.map((o) => (
-            <address key={o.region} className="border-t border-white/25 pt-4 not-italic leading-relaxed text-blue-100">
-              <span className="block font-semibold text-paper">{o.region}</span>
-              <span className="mt-2 block">
-                {o.lines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </span>
-            </address>
+            <div key={o.region} className="border-t border-white/25 pt-4">
+              <h3 className="font-semibold text-paper">{o.region}</h3>
+              {/* The map replaces the visible address; screen readers still get it as text. */}
+              <address className="sr-only">{o.lines.join(", ")}</address>
+              <div className="mt-3">
+                <OfficeMap region={o.region} address={o.lines.join(", ")} />
+              </div>
+            </div>
           ))}
         </div>
       </CtaBand>
