@@ -1,10 +1,10 @@
 # Pin the base by digest in CI once the registry is set up; Dependabot keeps it current.
-FROM python:3.12-slim AS build
+FROM python:3.15-slim AS build
 WORKDIR /build
 COPY requirements.txt .
 RUN pip install --no-cache-dir --require-hashes --target /deps -r requirements.txt
 
-FROM python:3.12-slim
+FROM python:3.15-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/deps:/app
 # Apply Debian security fixes released after the base image was built.
 RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
