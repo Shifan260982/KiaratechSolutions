@@ -1,0 +1,66 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  pull_request:
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # gitleaks scans history
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned dependencies
+        run: pip install --require-hashes -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint and format
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Tests
+        run: pytest -q
+
+      - name: Bandit (code security)
+        run: bandit -c pyproject.toml -r app --severity-level medium
+
+      - name: pip-audit (vulnerable dependencies)
+        run: pip-audit -r requirements.txt --require-hashes --disable-pip --strict
+
+      - name: Semgrep
+        run: docker run --rm -v "$PWD:/src" semgrep/semgrep:1.184.0 semgrep scan --config p/python --config p/owasp-top-ten --error --metrics=off
+
+      - name: Gitleaks (secrets)
+        working-directory: .
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 git /repo --redact --exit-code 1
+
+      - name: Build image
+        run: docker build -t kiaratech-api:${{ github.sha }} .
+
+      - name: Trivy (image vulnerabilities and misconfig)
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.76.2 \
+            image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 kiaratech-api:${{ github.sha }}
+          docker run --rm -v "$PWD:/src" aquasec/trivy:0.76.2 config --severity HIGH,CRITICAL --exit-code 1 /src
