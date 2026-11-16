@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { EnquiryForm, EnquiryFormFromUrl } from "@/components/EnquiryForm";
+import { EnquiryForm } from "@/components/EnquiryForm";
 import { Container } from "@/components/ui";
 import { offices, site, whatsappHref } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
@@ -8,7 +7,7 @@ import { pageMetadata } from "@/lib/metadata";
 export const metadata = pageMetadata({
   title: "Contact",
   description:
-    "Let's connect. Request a proposal or ask about specialist talent. Offices in London and Navi Mumbai.",
+    "Let's connect. Tell us the outcome you need and we will come back to you. Offices in London and Navi Mumbai.",
   path: "/contact",
 });
 
@@ -26,12 +25,10 @@ export default function ContactPage() {
       <div className="lg:col-span-7">
         <h1 className="text-display font-semibold">Let&apos;s Connect</h1>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-strong">
-          Tell us what you want to achieve. Use the same form to request a proposal or ask about specialist talent.
+          Tell us what you want to achieve and we will come back to you with a practical next step.
         </p>
         <div className="mt-10">
-          <Suspense fallback={<EnquiryForm />}>
-            <EnquiryFormFromUrl />
-          </Suspense>
+          <EnquiryForm />
         </div>
       </div>
 

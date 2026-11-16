@@ -9,10 +9,10 @@ import { SmartHrScene } from "./SmartHrScene";
 
 function Frame({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-paper text-[10px] leading-tight text-ink shadow-[0_10px_30px_-15px_rgb(16_42_86/0.35)] sm:text-[11px]">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-paper text-[10px] leading-tight text-ink shadow-[0_10px_30px_-15px_rgb(2_33_98/0.35)] sm:text-[11px]">
       <div className="flex items-center justify-between border-b border-line bg-paper px-3 py-2">
         <span className="font-semibold text-navy">{title}</span>
-        <span className="rounded-full bg-sky px-2 py-0.5 text-[9px] font-medium text-blue">Illustrative mockup</span>
+        <span className="rounded-full bg-sky px-2 py-0.5 text-[11px] font-medium text-blue-deep">Illustrative mockup</span>
       </div>
       <div className="min-h-0 flex-1 bg-mist p-3">{children}</div>
     </div>

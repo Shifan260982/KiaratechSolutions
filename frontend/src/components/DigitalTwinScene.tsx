@@ -17,8 +17,8 @@ type Key = [t: number, x: number, y: number, z: number];
 type Tone = { top: string; left: string; right: string };
 type Solid = { x: number; y: number; z: number; w: number; d: number; h: number; tone: Tone; opacity?: number; bias?: number };
 
-const blue: Tone = { top: "#93b4f8", left: "#155eef", right: "#2f6ff2" };
-const navy: Tone = { top: "#4a6595", left: "#102a56", right: "#1d3a6e" };
+const blue: Tone = { top: "#93b4f8", left: "#0071fd", right: "#2f6ff2" };
+const navy: Tone = { top: "#4a6595", left: "#022162", right: "#1d3a6e" };
 const grey: Tone = { top: "#e2e8f0", left: "#94a3b8", right: "#cbd5e1" };
 const slate: Tone = { top: "#cbd5e1", left: "#64748b", right: "#94a3b8" };
 const amber: Tone = { top: "#fcd34d", left: "#d97706", right: "#f59e0b" };
@@ -173,7 +173,7 @@ function Arm({ t }: { t: number }) {
   const [gx, gy, gz] = gripAt(t);
   const wrist: Vec = [gx, gy, gz + 0.5];
   const elbow: Vec = [(16.5 + gx) / 2, (10.9 + gy) / 2, gz + 1.5];
-  const line = { fill: "none", stroke: "#102a56", strokeLinecap: "round", strokeLinejoin: "round" } as const;
+  const line = { fill: "none", stroke: "#022162", strokeLinecap: "round", strokeLinejoin: "round" } as const;
   return (
     <g>
       <polyline points={[iso(16.5, 10.9, 0.8), iso(16.5, 10.9, 1.6), iso(...elbow), iso(...wrist)].join(" ")} strokeWidth={3} {...line} />
@@ -186,7 +186,7 @@ function Label({ x, y, z = 0, children }: { x: number; y: number; z?: number; ch
   const [px, py] = iso(x, y, z).split(",").map(Number);
   return (
     <g transform={`translate(${px},${py})`}>
-      <rect x={-children.length * 2.9 - 6} y={-9} width={children.length * 5.8 + 12} height={14} rx={7} fill="#102a56" />
+      <rect x={-children.length * 2.9 - 6} y={-9} width={children.length * 5.8 + 12} height={14} rx={7} fill="#022162" />
       <text textAnchor="middle" y={1.5} fontSize={8} fontWeight={600} fill="#fff">
         {children}
       </text>
@@ -210,7 +210,7 @@ export function DigitalTwinScene() {
         <polyline
           points={[iso(2, 1.5), iso(5.5, 1.5), iso(5.5, 2.8), iso(10, 2.8), iso(10, 5.4), iso(14.5, 5.4), iso(14.5, 9.6), iso(18.5, 9.4), iso(18.5, 2.2)].join(" ")}
           fill="none"
-          stroke="#155eef"
+          stroke="#0071fd"
           strokeWidth={1.5}
           strokeDasharray="4 3"
         />

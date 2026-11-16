@@ -103,7 +103,7 @@ export function Cursor({ t, x, y, opacity, clicks }: { t: number; x: number; y: 
         <span className="absolute size-6 rounded-full border-2 border-blue" style={{ left: -12, top: -12, opacity: 1 - ripple, transform: `scale(${0.3 + ripple})` }} />
       )}
       <svg viewBox="0 0 12 16" className="relative w-3 drop-shadow-sm">
-        <path d="M0.5 0.5v13l3.4-3.3 2.3 5.1 2.1-0.9-2.3-5h4.6z" fill="#102a56" stroke="#fff" strokeWidth="1" strokeLinejoin="round" />
+        <path d="M0.5 0.5v13l3.4-3.3 2.3 5.1 2.1-0.9-2.3-5h4.6z" fill="#022162" stroke="#fff" strokeWidth="1" strokeLinejoin="round" />
       </svg>
     </span>
   );

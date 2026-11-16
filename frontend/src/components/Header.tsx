@@ -30,7 +30,7 @@ const OPEN_ARSENAL = "kiaratech:open-arsenal";
 
 type Menu = "services" | "arsenal" | null;
 
-const navText = (active: boolean) => `rounded-sm px-3 py-2 transition-colors hover:text-blue-soft ${active ? "text-blue-soft" : "text-white/85"}`;
+const navText = (active: boolean) => `rounded-sm px-2 py-2 whitespace-nowrap transition-colors xl:px-3 hover:text-blue ${active ? "text-blue-deep" : "text-navy"}`;
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -139,18 +139,18 @@ const riseDelay = (i: number) => ({ animationDelay: `${120 + i * 70}ms` });
 
 /**
  * Shell shared by the full-width navbar panels (Capabilities, Our Arsenal).
- * Translucent black sheet with the navbar's blur, so the page shows through softly but the type stays legible;
+ * Deep navy sheet, a touch translucent with blur; supporting text uses navy-muted, a light tinted from the navy itself;
  * blue appears as the top edge and in each panel's accents. A short intro holds the left edge; content fills the rest.
  * Entrance: the sheet unrolls from the navbar edge, then the intro and items rise in sequence (CSS, off under reduced motion).
  */
 function MegaPanel({ title, intro, footer, children }: { title: string; intro: string; footer?: ReactNode; children: ReactNode }) {
   return (
-    <div className="arsenal-sheet border-t-2 border-blue bg-neutral-950/75 text-paper shadow-[0_28px_48px_-24px_rgb(0_0_0/0.6)] backdrop-blur-xl">
+    <div className="arsenal-sheet border-t-2 border-blue bg-navy/75 text-paper shadow-[0_28px_48px_-24px_rgb(2_33_98/0.55)] backdrop-blur-xl">
       {/* Below xl the intro sits above the content so the columns keep their room. */}
       <Container className="grid gap-8 py-10 xl:grid-cols-[minmax(0,15rem)_1fr] xl:gap-12">
         <div className="arsenal-rise" style={{ animationDelay: "60ms" }}>
           <p className="text-title font-semibold text-paper">{title}</p>
-          <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/70">{intro}</p>
+          <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-navy-muted">{intro}</p>
           {footer}
         </div>
         {children}
@@ -181,13 +181,13 @@ function CapabilitiesPanel({ isActive }: { isActive: (href: string) => boolean }
             <Link
               href={`/services/${s.slug}`}
               aria-current={isActive(`/services/${s.slug}`) ? "page" : undefined}
-              className="group block h-full rounded-lg px-4 py-3 transition-colors hover:bg-white/[0.06] focus-visible:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-blue-soft aria-[current=page]:bg-blue/15"
+              className="group block h-full rounded-lg px-4 py-3 transition-colors hover:bg-white/[0.07] focus-visible:bg-white/[0.07] focus-visible:outline-2 focus-visible:outline-blue-soft aria-[current=page]:bg-blue/15"
             >
               <span className="flex items-center gap-2 font-semibold text-paper transition-colors group-hover:text-blue-soft group-aria-[current=page]:text-blue-soft">
                 {s.name}
                 <ArrowIcon className="size-3.5 -translate-x-1 opacity-0 transition-[opacity,translate] duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
               </span>
-              <span className="mt-1 line-clamp-2 text-sm leading-snug text-white/60">{s.summary}</span>
+              <span className="mt-1 line-clamp-2 text-sm leading-snug text-navy-muted">{s.summary}</span>
             </Link>
           </li>
         ))}
@@ -288,10 +288,10 @@ export function Header() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10">
+    <header className="sticky top-0 z-40 border-b border-line">
       {/* Tint and blur live on a layer, not the header itself: a blurred parent would stop the Our Arsenal panel
           from blurring the page beneath it. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-neutral-700/85 backdrop-blur-md" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-paper/95 backdrop-blur-md" />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-ink focus:px-3 focus:py-2 focus:text-paper"
@@ -299,9 +299,8 @@ export function Header() {
         Skip to content
       </a>
       <Container className="flex h-16 items-center justify-between gap-6">
-        {/* Translucent white backing keeps the purple logo legible on the dark navbar. */}
-        <Link href="/" className="shrink-0 rounded-lg bg-white/80 px-2 py-0.5" aria-label="Kiaratech Solutions home">
-          <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={480} height={172} priority className="h-12 w-auto" />
+        <Link href="/" className="shrink-0 rounded-sm" aria-label="Kiaratech Solutions home">
+          <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={1396} height={274} priority className="h-9 w-auto" />
         </Link>
 
         <nav aria-label="Main" className="hidden font-secondary lg:block">
@@ -346,12 +345,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href={ctas.discovery.href} className={`${buttonClass("inverse-outline")} max-sm:hidden`}>
+          <Link href={ctas.discovery.href} className={`${buttonClass("primary")} whitespace-nowrap max-sm:hidden`}>
             {ctas.discovery.short}
           </Link>
           <button
             type="button"
-            className="inline-flex size-11 items-center justify-center rounded-sm border border-white/30 text-white lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-sm border border-line-strong text-navy lg:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
             onClick={() => setMobileOpen((o) => !o)}

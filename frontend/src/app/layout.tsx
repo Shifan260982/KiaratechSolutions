@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
     locale: "en_GB",
-    images: [{ url: "/brand/kiaratech-logo.png", width: 480, height: 172, alt: "Kiaratech Solutions" }],
+    images: [{ url: "/brand/kiaratech-logo.png", width: 1396, height: 274, alt: "Kiaratech Solutions" }],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#fefefe",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

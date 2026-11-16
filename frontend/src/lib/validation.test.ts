@@ -4,12 +4,12 @@ import { test } from "node:test";
 import { sanitiseText, validateEnquiry, type EnquiryInput } from "./validation.ts";
 
 const valid: EnquiryInput = {
-  name: "Alex Morgan",
+  firstName: "Alex",
+  lastName: "Morgan",
   email: "alex@example.com",
   company: "Example Ltd",
-  type: "discovery",
+  topic: "Invoice automation",
   message: "We want to automate invoice processing across three sites.",
-  consent: true,
 };
 
 test("accepts a complete enquiry", () => {
@@ -17,8 +17,8 @@ test("accepts a complete enquiry", () => {
 });
 
 test("reports every missing field", () => {
-  const errors = validateEnquiry({ name: "", email: "", company: "", type: "", message: "", consent: false });
-  assert.deepEqual(Object.keys(errors).sort(), ["company", "consent", "email", "message", "name", "type"]);
+  const errors = validateEnquiry({ firstName: "", lastName: "", email: "", company: "", topic: "", message: "" });
+  assert.deepEqual(Object.keys(errors).sort(), ["company", "email", "firstName", "lastName", "message", "topic"]);
 });
 
 test("rejects malformed emails", () => {
@@ -27,19 +27,16 @@ test("rejects malformed emails", () => {
   }
 });
 
-test("rejects unknown enquiry types", () => {
-  assert.ok(validateEnquiry({ ...valid, type: "<script>" }).type);
-});
-
 test("treats whitespace-only fields as empty", () => {
-  const errors = validateEnquiry({ ...valid, name: "   ", message: " \n\t " });
-  assert.ok(errors.name);
+  const errors = validateEnquiry({ ...valid, firstName: "   ", message: " \n\t " });
+  assert.ok(errors.firstName);
   assert.ok(errors.message);
 });
 
 test("enforces maximum lengths", () => {
   assert.ok(validateEnquiry({ ...valid, message: "x".repeat(2001) }).message);
   assert.ok(validateEnquiry({ ...valid, company: "x".repeat(121) }).company);
+  assert.ok(validateEnquiry({ ...valid, topic: "x".repeat(121) }).topic);
 });
 
 test("strips control characters but keeps line breaks", () => {

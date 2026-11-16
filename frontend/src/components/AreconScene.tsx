@@ -42,7 +42,7 @@ const CURSOR: CursorKey[] = [
 
 const BARS = [62, 88, 46, 74, 55];
 const SLICES = [
-  { share: 48, colour: "#155eef" },
+  { share: 48, colour: "#0071fd" },
   { share: 32, colour: "#8db4ff" },
   { share: 20, colour: "#f59e0b" },
 ].map((slice, i, all) => ({ ...slice, before: all.slice(0, i).reduce((sum, s) => sum + s.share, 0) }));
@@ -110,7 +110,7 @@ const Copy = ({ children }: { children: string }) => <span className="mt-1 block
 
 /** Two A4 sheets of the downloaded report, scrolled by the viewer. */
 function ReportPages() {
-  const sheet = "mx-auto min-h-[24rem] w-[84%] rounded-sm bg-paper p-[5%] text-[8.5px] shadow-[0_6px_16px_-8px_rgb(16_42_86/0.5)]";
+  const sheet = "mx-auto min-h-[24rem] w-[84%] rounded-sm bg-paper p-[5%] text-[8.5px] shadow-[0_6px_16px_-8px_rgb(2_33_98/0.5)]";
   return (
     <>
       <div className={sheet}>
@@ -205,7 +205,7 @@ export function AreconScene() {
         </span>
         <span
           aria-hidden="true"
-          className="absolute flex items-center gap-1.5 whitespace-nowrap rounded-md bg-blue px-4 py-2 text-[11px] font-semibold text-paper shadow-[0_8px_20px_-8px_rgb(21_94_239/0.7)]"
+          className="absolute flex items-center gap-1.5 whitespace-nowrap rounded-md bg-blue px-4 py-2 text-[11px] font-semibold text-paper shadow-[0_8px_20px_-8px_rgb(0_113_253/0.7)]"
           style={{ ...at(UPLOAD.x, UPLOAD.y, `scale(${lerp(0.7, 1, buttonIn) * (1 - 0.08 * press(t, 0.95, 1.25))})`), opacity: buttonIn }}
         >
           <svg viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -217,7 +217,7 @@ export function AreconScene() {
         {/* File picker: five PDFs are box-selected, then dragged together onto the drop zone. */}
         <div aria-hidden="true" style={{ opacity: pickerIn }}>
           <div
-            className="absolute bottom-[8%] left-[55%] right-[3%] top-[10%] origin-top-left rounded-lg border border-line bg-paper shadow-[0_16px_40px_-16px_rgb(16_42_86/0.5)]"
+            className="absolute bottom-[8%] left-[55%] right-[3%] top-[10%] origin-top-left rounded-lg border border-line bg-paper shadow-[0_16px_40px_-16px_rgb(2_33_98/0.5)]"
             style={{ transform: `scale(${lerp(0.92, 1, pickerIn)})` }}
           >
             <span className="flex items-center gap-1 border-b border-line px-2 py-1.5">
@@ -256,7 +256,7 @@ export function AreconScene() {
             {/* Two offset sheets behind the front card read as a stack of files. */}
             <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 rounded-md border border-blue/30 bg-paper" />
             <span className="absolute inset-0 translate-x-0.75 translate-y-0.75 rounded-md border border-blue/30 bg-paper" />
-            <span className="relative flex items-center gap-1.5 rounded-md border border-blue/40 bg-paper px-2 py-1.5 shadow-[0_10px_24px_-10px_rgb(16_42_86/0.6)]">
+            <span className="relative flex items-center gap-1.5 rounded-md border border-blue/40 bg-paper px-2 py-1.5 shadow-[0_10px_24px_-10px_rgb(2_33_98/0.6)]">
               <FileIcon name={GRAB.name} />
               <span className="whitespace-nowrap font-semibold text-navy">{PICKED.length} PDF files</span>
             </span>
@@ -322,7 +322,7 @@ export function AreconScene() {
 
           {/* PDF viewer for the downloaded report, scrolling from page 1 into page 2. */}
           <div
-            className="absolute inset-x-[3%] bottom-0 top-[3%] flex flex-col overflow-hidden rounded-t-md border border-line bg-line shadow-[0_-10px_30px_-12px_rgb(16_42_86/0.35)]"
+            className="absolute inset-x-[3%] bottom-0 top-[3%] flex flex-col overflow-hidden rounded-t-md border border-line bg-line shadow-[0_-10px_30px_-12px_rgb(2_33_98/0.35)]"
             style={{ opacity: pdfIn, transform: `translateY(${(1 - pdfIn) * 40}px)` }}
           >
             <span className="flex items-center justify-between bg-navy px-2.5 py-1.5 text-paper">

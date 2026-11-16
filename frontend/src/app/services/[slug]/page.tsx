@@ -39,12 +39,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </nav>
             <h1 className="text-display font-bold text-navy">{service.name}</h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-strong">{service.intro}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={ctas.discovery.href}>{ctas.discovery.short}</ButtonLink>
-              <ButtonLink href={ctas.proposal.href} variant="secondary">
-                {ctas.proposal.label}
-              </ButtonLink>
-            </div>
+            <ButtonLink href={ctas.discovery.href} className="mt-8">
+              {ctas.discovery.short}
+            </ButtonLink>
           </div>
           <div className="lg:col-span-6">
             <Image
@@ -54,14 +51,14 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
               height={500}
               priority
               sizes="(min-width: 1024px) 600px, 100vw"
-              className="aspect-[16/10] w-full rounded-2xl bg-sky object-cover shadow-[0_24px_50px_-28px_rgb(16_42_86/0.45)]"
+              className="aspect-[16/10] w-full rounded-2xl bg-sky object-cover shadow-[0_24px_50px_-28px_rgb(2_33_98/0.45)]"
             />
           </div>
         </Container>
       </div>
 
       <Section aria-labelledby="capabilities-heading">
-        <SectionHeading id="capabilities-heading" title="Capabilities" />
+        <SectionHeading id="capabilities-heading" title="What's included" />
         <ul className="grid gap-4 sm:grid-cols-2">
           {service.capabilities.map((c) => (
             <li key={c.title} className="rounded-xl border border-line bg-paper p-5">

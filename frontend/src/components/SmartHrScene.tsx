@@ -196,7 +196,7 @@ export function SmartHrScene() {
           })}
 
           <span
-            className="absolute flex items-center gap-1.5 whitespace-nowrap rounded-md bg-blue px-4 py-2 text-[11px] font-semibold text-paper shadow-[0_8px_20px_-8px_rgb(21_94_239/0.7)]"
+            className="absolute flex items-center gap-1.5 whitespace-nowrap rounded-md bg-blue px-4 py-2 text-[11px] font-semibold text-paper shadow-[0_8px_20px_-8px_rgb(0_113_253/0.7)]"
             style={{ ...at(SCAN.x, SCAN.y, `scale(${lerp(0.9, 1, scanIn) * (1 - 0.08 * press(t, SCAN.click - 0.05, SCAN.click + 0.25))})`), opacity: scanIn }}
           >
             <MailIcon className="size-3.5" />

@@ -17,12 +17,13 @@ export default function ServicesPage() {
         title="Capabilities"
         intro="Specialist teams for every stage of the software lifecycle: analysis, architecture, development, testing, DevOps and ongoing support."
         image="/images/heroes/capabilities.webp"
+        highlight
       />
       <Section aria-label="All services">
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {services.map((s) => (
             <li key={s.slug} className="flex">
-              <ServiceCard service={s} />
+              <ServiceCard service={s} headingLevel="h2" />
             </li>
           ))}
         </ul>

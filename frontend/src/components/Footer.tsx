@@ -33,7 +33,7 @@ export function Footer() {
     <footer className="border-t border-line bg-paper font-secondary text-[0.9375rem]">
       <Container className="grid gap-10 py-12 md:grid-cols-12 md:py-14">
         <div className="md:col-span-4">
-          <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={480} height={172} className="h-14 w-auto" />
+          <Image src="/brand/kiaratech-logo.webp" alt="Kiaratech Solutions" width={1396} height={274} className="h-10 w-auto" />
           <p className="mt-4 max-w-xs leading-relaxed text-muted-strong">{site.positioning}</p>
         </div>
 

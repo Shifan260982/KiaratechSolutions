@@ -76,7 +76,7 @@ export function ProjectSlider({ projects }: { projects: CaseStudy[] }) {
       {/* Heading sits above the slides so it stays fixed while they change. */}
       <Container className="pointer-events-none absolute inset-x-0 top-0 z-10 pt-12 md:pt-16">
         <h2 id="projects-heading" className="text-title font-semibold">
-          Our projects
+          Our portfolio
         </h2>
       </Container>
 

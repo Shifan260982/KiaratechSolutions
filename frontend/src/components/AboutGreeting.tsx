@@ -68,7 +68,7 @@ export function AboutGreeting() {
             width={257}
             height={394}
             sizes="(min-width: 1024px) 380px, 260px"
-            className="mx-auto h-[24rem] w-auto drop-shadow-[0_24px_30px_rgb(16_42_86/0.35)] lg:h-(--fig-h)"
+            className="mx-auto h-[24rem] w-auto drop-shadow-[0_24px_30px_rgb(2_33_98/0.35)] lg:h-(--fig-h)"
           />
         </div>
 

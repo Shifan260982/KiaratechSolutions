@@ -138,11 +138,14 @@ export function PageIntro({
       <Container className="py-12 md:py-16">
         {/* Over a full-strength photo, white text with a soft shadow stays readable on both light and dark areas;
             highlight instead sets each line on a black marker band (box-decoration-clone repeats the padding per line). */}
-        <h1 className={`max-w-3xl text-display font-semibold ${image ? `text-paper ${highlight ? "" : textShadow}` : "text-navy"}`}>
+        <h1 className={`max-w-3xl text-display font-semibold ${highlight ? "hero-drive" : ""} ${image ? `text-paper ${highlight ? "" : textShadow}` : "text-navy"}`}>
           {highlight ? <span className={marker}>{title}</span> : title}
         </h1>
         {intro && (
-          <p className={`mt-5 max-w-2xl text-lg ${image ? `font-medium text-paper ${highlight ? "leading-loose" : `leading-relaxed ${textShadow}`}` : "leading-relaxed text-muted-strong"}`}>
+          <p
+            className={`mt-5 max-w-2xl text-lg ${highlight ? "hero-drive" : ""} ${image ? `font-medium text-paper ${highlight ? "leading-loose" : `leading-relaxed ${textShadow}`}` : "leading-relaxed text-muted-strong"}`}
+            style={highlight ? { animationDelay: "140ms" } : undefined}
+          >
             {highlight ? <span className={marker}>{intro}</span> : intro}
           </p>
         )}

@@ -18,7 +18,7 @@ export default function IndustriesPage() {
         image="/images/heroes/sectors-buildings.webp"
         highlight
       />
-      <Section aria-label="Industries we serve">
+      <Section aria-label="Sectors we serve">
         <dl>
           {industries.map((industry) => (
             <div key={industry.name} className="industry-row group grid gap-1 py-5 md:grid-cols-12 md:gap-8">

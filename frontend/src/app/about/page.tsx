@@ -40,7 +40,7 @@ export default function AboutPage() {
             width={1348}
             height={898}
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="h-auto w-full rounded-lg shadow-[0_18px_40px_-20px_rgb(16_42_86/0.45)]"
+            className="h-auto w-full rounded-lg shadow-[0_18px_40px_-20px_rgb(2_33_98/0.45)]"
           />
         </div>
       </Section>

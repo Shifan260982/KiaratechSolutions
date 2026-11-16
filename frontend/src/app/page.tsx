@@ -19,7 +19,7 @@ export default function HomePage() {
       <Section aria-labelledby="services-heading" id="services">
         <SectionHeading
           id="services-heading"
-          title="Our services"
+          title="Our capabilities"
           intro="From analysis and architecture to development, testing, DevOps and long-term support."
         />
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -35,17 +35,15 @@ export default function HomePage() {
         <Container>
           <SectionHeading
             id="industries-heading"
-            title="Industries we serve"
-            action={<TextLink href="/industries">Sectors</TextLink>}
+            title="Sectors we serve"
+            action={<TextLink href="/industries">All sectors</TextLink>}
           />
-          <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {/* An open hairline grid, not boxed cards: these are not links, so nothing here moves or lights up on hover. */}
+          <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line lg:grid-cols-4">
             {industries.map((i) => (
-              <li
-                key={i.name}
-                className="group rounded-xl border border-line bg-paper p-4 transition-[background-color,border-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-blue hover:bg-blue hover:shadow-[0_18px_40px_-14px_rgb(21_94_239/0.6)] sm:p-5"
-              >
-                <h3 className="text-sm font-semibold text-navy transition-colors duration-200 group-hover:text-paper sm:text-base">{i.name}</h3>
-                <p className="mt-1.5 hidden text-sm leading-relaxed text-muted-strong transition-colors duration-200 group-hover:text-sky sm:block">{i.focus}</p>
+              <li key={i.name} className="bg-paper p-4 sm:p-6">
+                <h3 className="text-sm font-semibold text-navy sm:text-base">{i.name}</h3>
+                <p className="mt-1.5 hidden text-sm leading-relaxed text-muted-strong sm:block">{i.focus}</p>
               </li>
             ))}
           </ul>
@@ -77,7 +75,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-line bg-paper p-5 shadow-[0_24px_60px_-40px_rgb(16_42_86/0.45)] sm:p-8 lg:col-span-7">
+          <div className="rounded-2xl border border-line bg-paper p-5 shadow-[0_24px_60px_-40px_rgb(2_33_98/0.45)] sm:p-8 lg:col-span-7">
             <EnquiryForm />
           </div>
         </div>

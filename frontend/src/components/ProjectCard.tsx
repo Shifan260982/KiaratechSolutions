@@ -20,7 +20,7 @@ export function ProjectCard({ project, wide = false, headingLevel = "h3" }: { pr
   const Heading = headingLevel;
   return (
     <article
-      className={`group relative grid overflow-hidden rounded-xl border border-line bg-paper transition-[border-color,box-shadow] duration-200 hover:border-blue/40 hover:shadow-[0_16px_40px_-24px_rgb(16_42_86/0.45)] ${
+      className={`group relative grid overflow-hidden rounded-xl border border-line bg-paper transition-[border-color,box-shadow] duration-200 hover:border-blue/40 hover:shadow-[0_16px_40px_-24px_rgb(2_33_98/0.45)] ${
         wide ? "lg:grid-cols-12" : ""
       }`}
     >

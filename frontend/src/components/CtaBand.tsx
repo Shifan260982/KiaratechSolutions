@@ -5,12 +5,10 @@ import { ButtonLink, Container } from "./ui";
 export function CtaBand({
   title = "Have a challenge AI or software could solve?",
   text = "Start with a discovery call. We will define the goal, the options and a practical delivery plan with you.",
-  secondary = ctas.proposal,
   children,
 }: {
   title?: string;
   text?: string;
-  secondary?: { label: string; href: string };
   /** Extra content shown below the call to action, inside the same band. */
   children?: ReactNode;
 }) {
@@ -23,14 +21,9 @@ export function CtaBand({
           </h2>
           <p className="mt-3 text-lg leading-relaxed text-blue-100">{text}</p>
         </div>
-        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-          <ButtonLink href={ctas.discovery.href} variant="inverse">
-            {ctas.discovery.label}
-          </ButtonLink>
-          <ButtonLink href={secondary.href} variant="inverse-outline">
-            {secondary.label}
-          </ButtonLink>
-        </div>
+        <ButtonLink href={ctas.discovery.href} variant="inverse" className="shrink-0">
+          {ctas.discovery.label}
+        </ButtonLink>
       </Container>
       {children && <Container className="border-t border-white/15 py-10 md:py-12">{children}</Container>}
     </section>

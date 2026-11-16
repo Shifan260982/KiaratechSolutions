@@ -34,7 +34,7 @@ export function InViewVideo({ src, poster, label }: { src: string; poster: strin
       playsInline
       controls
       preload="metadata"
-      className="aspect-video w-full rounded-lg bg-navy shadow-[0_18px_40px_-20px_rgb(16_42_86/0.45)]"
+      className="aspect-video w-full rounded-lg bg-navy shadow-[0_18px_40px_-20px_rgb(2_33_98/0.45)]"
     />
   );
 }
