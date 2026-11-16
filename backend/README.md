@@ -10,7 +10,36 @@ py -3.12 -m venv .venv            # macOS/Linux: python3.12 -m venv .venv
 APP_ENV=development .venv/Scripts/uvicorn app.main:app --reload   # docs at http://localhost:8000/docs
 ```
 
-Settings (environment variables): `APP_ENV` (defaults to `production`, which hides the API docs) and `ALLOWED_ORIGINS` (comma-separated exact `https://` origins).
+## Settings (environment variables)
+
+| Name | Purpose |
+|---|---|
+| `APP_ENV` | Defaults to `production`, which hides the API docs |
+| `ALLOWED_ORIGINS` | Comma-separated exact `https://` origins allowed by CORS |
+| `GRAPH_SITE_ID` | SharePoint site ID (`host,siteCollectionId,webId`) |
+| `ENQUIRIES_LIST_ID` | ID of the `Enquiries` list |
+| `MAIL_SENDER` | Mailbox the notification is sent from |
+| `ENQUIRY_RECIPIENT` | Who is told about new enquiries (requirement 8.6) |
+| `AZURE_CLIENT_ID` | Only for a user-assigned Managed Identity |
+
+Set all four SharePoint variables or none. With none, the API starts but answers submissions with `503`. There are no secrets: the app's Managed Identity is granted the Graph application permissions `Sites.Selected` (write access to this one site) and `Mail.Send`, restricted to `MAIL_SENDER` by an Exchange application access policy.
+
+## API
+
+`POST /api/v1/enquiries`, JSON body with `firstName`, `lastName`, `email`, `company`, `topic`, `message` and the hidden honeypot `website`.
+
+| Status | Meaning |
+|---|---|
+| `202` | Saved (or honeypot triggered: nothing is saved) |
+| `400` | `{"title", "errors": {field: message}}`, keyed by form field name |
+| `413` | Body over 32 KB |
+| `503` | SharePoint unavailable or not configured; nothing was kept, the visitor should retry |
+
+Do not expose this publicly until captcha and rate limiting (plan step 4) are in place.
+
+## SharePoint list `Enquiries`
+
+Columns (internal names): `Title` (topic), `FirstName`, `LastName`, `Email`, `Company`, `Message` (multiple lines, plain text), `Status` (choice: New, Contacted, Qualified, Closed). Give BD access to this list only.
 
 ## Checks
 
@@ -33,7 +62,7 @@ pip-compile --generate-hashes --allow-unsafe --strip-extras requirements-dev.in
 
 Integration points already prepared in the frontend:
 
-- `frontend/src/lib/enquiry.ts`: `submitEnquiry()` currently returns `not-connected`. Replace it with a POST to the enquiry API.
-- `frontend/src/lib/validation.ts`: client-side rules for the enquiry form. The API must re-validate every field server-side, and add spam protection and rate limiting.
+- `frontend/src/lib/enquiry.ts`: `submitEnquiry()` currently returns `not-connected`. Replace it with a POST to `/api/v1/enquiries` and add the hidden `website` honeypot field to the form.
+- `frontend/src/lib/validation.ts`: client-side rules for the enquiry form, mirrored server-side in `app/validation.py`. Keep both in step.
 - Discovery-call booking CTAs currently link to `/contact?type=discovery`.
 - After adding an API origin, update `connect-src` in `frontend/vercel.json` (Content-Security-Policy).

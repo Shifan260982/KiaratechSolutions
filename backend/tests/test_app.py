@@ -62,6 +62,20 @@ def test_rejects_unsafe_origins_in_production(monkeypatch, origins):
         load_settings()
 
 
+def test_sharepoint_settings_must_be_complete(monkeypatch):
+    monkeypatch.setenv("GRAPH_SITE_ID", "site")
+    for name in ("ENQUIRIES_LIST_ID", "MAIL_SENDER", "ENQUIRY_RECIPIENT"):
+        monkeypatch.delenv(name, raising=False)
+    with pytest.raises(ValueError, match="ENQUIRY_RECIPIENT"):
+        load_settings()
+
+
+def test_sharepoint_unset_means_not_configured(monkeypatch):
+    for name in ("GRAPH_SITE_ID", "ENQUIRIES_LIST_ID", "MAIL_SENDER", "ENQUIRY_RECIPIENT"):
+        monkeypatch.delenv(name, raising=False)
+    assert load_settings().graph is None
+
+
 def test_defaults_to_production(monkeypatch):
     monkeypatch.delenv("APP_ENV", raising=False)
     assert load_settings().is_production
