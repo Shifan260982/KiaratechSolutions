@@ -3,9 +3,8 @@ import { EnquiryForm } from "@/components/EnquiryForm";
 import { HeroSlider } from "@/components/HeroSlider";
 import { ProjectSlider } from "@/components/ProjectSlider";
 import { ServiceCard } from "@/components/ServiceCard";
-import { Container, Section, SectionHeading, TextLink } from "@/components/ui";
+import { Section, SectionHeading } from "@/components/ui";
 import { featuredProjects } from "@/content/caseStudies";
-import { industries } from "@/content/industries";
 import { services } from "@/content/services";
 import { offices } from "@/content/site";
 
@@ -30,25 +29,6 @@ export default function HomePage() {
           ))}
         </ul>
       </Section>
-
-      <section aria-labelledby="industries-heading" className="bg-paper py-14 md:py-20">
-        <Container>
-          <SectionHeading
-            id="industries-heading"
-            title="Sectors we serve"
-            action={<TextLink href="/industries">All sectors</TextLink>}
-          />
-          {/* An open hairline grid, not boxed cards: these are not links, so nothing here moves or lights up on hover. */}
-          <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line lg:grid-cols-4">
-            {industries.map((i) => (
-              <li key={i.name} className="bg-paper p-4 sm:p-6">
-                <h3 className="text-sm font-semibold text-navy sm:text-base">{i.name}</h3>
-                <p className="mt-1.5 hidden text-sm leading-relaxed text-muted-strong sm:block">{i.focus}</p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
 
       <ProjectSlider projects={featuredProjects} />
 

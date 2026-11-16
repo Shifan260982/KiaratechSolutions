@@ -61,6 +61,19 @@ export default function ContactPage() {
           </section>
         )}
 
+        <section aria-labelledby="email-heading" className="border-t border-line pt-8">
+          <h2 id="email-heading" className="text-heading font-semibold">
+            Prefer email?
+          </h2>
+          <p className="mt-2 leading-relaxed text-muted-strong">
+            Write to us at{" "}
+            <a href={`mailto:${site.businessEmail}`} className="font-medium text-blue-deep underline underline-offset-4">
+              {site.businessEmail}
+            </a>
+            .
+          </p>
+        </section>
+
         <section aria-labelledby="offices-heading" className="border-t border-line pt-8">
           <h2 id="offices-heading" className="text-heading font-semibold">
             Offices

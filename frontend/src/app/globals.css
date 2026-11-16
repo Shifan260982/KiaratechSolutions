@@ -141,33 +141,6 @@
     }
   }
 
-  /* Divider rows that fade out at both ends; the hovered row's top and bottom lines turn blue. */
-  .industry-row {
-    --row-line: linear-gradient(to right, transparent, var(--color-line-strong) 15%, var(--color-line-strong) 85%, transparent);
-    position: relative;
-    margin-top: -1px;
-    background: var(--row-line) top / 100% 1px no-repeat, var(--row-line) bottom / 100% 1px no-repeat;
-  }
-
-  .industry-row::before {
-    --row-line: linear-gradient(to right, transparent, var(--color-blue) 15%, var(--color-blue) 85%, transparent);
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: var(--row-line) top / 100% 1px no-repeat, var(--row-line) bottom / 100% 1px no-repeat;
-    opacity: 0;
-    transition: opacity 200ms ease-out;
-  }
-
-  .industry-row:hover {
-    z-index: 1;
-  }
-
-  .industry-row:hover::before {
-    opacity: 1;
-  }
-
   .prose-legal h2 {
     font-size: var(--text-heading);
     font-weight: 600;

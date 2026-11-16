@@ -21,8 +21,8 @@ export default function PrivacyPage() {
 
       <h2>What we collect</h2>
       <ul>
-        <li>Details you submit through our enquiry form: name, work email, company, enquiry type and message.</li>
-        <li>Job applications and CVs you send to {site.careersEmail}.</li>
+        <li>Details you submit through our enquiry form or send to {site.businessEmail}: name, email, company, topic and message.</li>
+        <li>Job applications and CVs you submit through our careers pages or send to {site.careersEmail}.</li>
         <li>Technical data needed to deliver the website securely, such as server logs held by our hosting provider.</li>
       </ul>
 

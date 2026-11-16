@@ -21,7 +21,6 @@ import { ArrowIcon, buttonClass, Container } from "./ui";
 const [aboutLink, ...navLinks] = [
   { href: "/about", label: "Our Story" },
   { href: "/case-studies", label: "Portfolio" },
-  { href: "/industries", label: "Sectors" },
   { href: "/careers", label: "Careers" },
 ];
 

@@ -71,8 +71,8 @@ export default function AboutPage() {
       <Section tone="mist" aria-label="Company film">
         <div className="mx-auto max-w-5xl">
           <InViewVideo
-            src="/images/about/company-film.mp4"
-            poster="/images/about/company-film-poster.jpg"
+            src="/images/about/kiaratech-film.mp4"
+            poster="/images/about/kiaratech-film-poster.jpg"
             label="Kiaratech Solutions company film"
           />
         </div>

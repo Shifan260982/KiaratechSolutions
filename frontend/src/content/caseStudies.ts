@@ -20,12 +20,6 @@ export type CaseStudy = {
   outcome?: string;
 };
 
-export type PendingCaseStudy = {
-  title: string;
-  owner: string;
-  needed: string;
-};
-
 export const caseStudies: CaseStudy[] = [
   {
     slug: "arecon-ai",
@@ -105,14 +99,6 @@ export const caseStudies: CaseStudy[] = [
     tags: ["Warehousing", "Production", ".NET"],
     serviceSlugs: ["software-development", "software-testing-qa", "technical-support"],
   },
-];
-
-// Shown on the Case Studies page as clearly marked placeholders until content is approved.
-export const pendingCaseStudies: PendingCaseStudy[] = [
-  { title: "Product screenshots for ARECON AI, Digital Twin and Smart HR", owner: "Amey, Atif and Nirupaman", needed: "Approved screenshots to replace the illustrative mockups" },
-  { title: "Verified outcomes", owner: "Delivery team", needed: "Measured results for each project, approved for publication" },
-  { title: "Simulator project", owner: "Sunil", needed: "Description and verified outcome" },
-  { title: "AI Academy", owner: "Leadership", needed: "Programme description and verified outcome" },
 ];
 
 export const featuredProjects = caseStudies.filter((c) => c.featured);

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
+import { site } from "@/content/site";
 import { submitEnquiry, type SubmitResult } from "@/lib/enquiry";
 import { limits, validateEnquiry, type EnquiryErrors, type EnquiryInput } from "@/lib/validation";
 import { FieldError, FormAlerts, inputClass, NotConnected } from "./FormParts";
@@ -52,10 +53,19 @@ export function EnquiryForm() {
         text={
           result.status === "sent"
             ? "We have received your enquiry and will be in touch."
-            : "Online enquiries are not connected yet, so this message has not been sent. Submission will be enabled before launch."
+            : "Online enquiries are not connected yet, so this message has not been sent. Until they are, please email us your enquiry."
         }
         onBack={() => setResult(null)}
-      />
+      >
+        {result.status === "not-connected" && (
+          <a
+            href={`mailto:${site.businessEmail}?subject=${encodeURIComponent("Enquiry")}`}
+            className="mt-4 inline-block font-medium text-blue-deep underline underline-offset-4"
+          >
+            Email {site.businessEmail}
+          </a>
+        )}
+      </NotConnected>
     );
   }
 

@@ -11,6 +11,8 @@ export const site = {
   url: httpsUrl(env(process.env.NEXT_PUBLIC_SITE_URL)) ?? "https://kiaratechs.com",
   positioning:
     "Kiaratech Solutions is an AI-driven technology partner that turns business challenges into intelligent, scalable software powered by specialists.",
+  /** Business enquiries and the Let's Connect form. */
+  businessEmail: "BD@kiaratechs.ai",
   careersEmail: "jobs@kiaratechs.com",
   // Unverified until supplied: features that depend on these stay hidden while unset.
   linkedInUrl: httpsUrl(env(process.env.NEXT_PUBLIC_LINKEDIN_URL)),

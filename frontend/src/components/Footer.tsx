@@ -8,7 +8,6 @@ import { Container } from "./ui";
 
 const company = [
   { href: "/about", label: "Our Story" },
-  { href: "/industries", label: "Sectors" },
   { href: "/case-studies", label: "Portfolio" },
   { href: "/careers", label: "Careers" },
   { href: "/contact", label: "Contact" },
@@ -81,6 +80,11 @@ export function Footer() {
             ))}
           </div>
           <ul className="mt-5 space-y-2">
+            <li>
+              <a href={`mailto:${site.businessEmail}`} className={linkClass}>
+                Business: {site.businessEmail}
+              </a>
+            </li>
             <li>
               <a href={`mailto:${site.careersEmail}`} className={linkClass}>
                 Careers: {site.careersEmail}

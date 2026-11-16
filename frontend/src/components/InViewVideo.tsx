@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
  * Plays muted while at least half of it is on screen and pauses when scrolled away.
  * Browsers only allow autoplay when muted; the controls let visitors unmute or replay.
  * Reduced-motion visitors get the poster and press play themselves.
+ * preload="none": nothing but the poster downloads until the film scrolls into view or is played.
  */
 export function InViewVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -33,7 +34,7 @@ export function InViewVideo({ src, poster, label }: { src: string; poster: strin
       muted
       playsInline
       controls
-      preload="metadata"
+      preload="none"
       className="aspect-video w-full rounded-lg bg-navy shadow-[0_18px_40px_-20px_rgb(2_33_98/0.45)]"
     />
   );
