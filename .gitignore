@@ -46,3 +46,4 @@ next-env.d.ts
 .claude
 # review bin: replaced and leftover files awaiting deletion
 /dubin/
+/backend/PLAN.md

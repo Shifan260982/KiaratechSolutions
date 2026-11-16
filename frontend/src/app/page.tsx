@@ -21,10 +21,11 @@ export default function HomePage() {
           title="Our capabilities"
           intro="From analysis and architecture to development, testing, DevOps and long-term support."
         />
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        {/* On phones an odd last card spans both columns instead of sitting alone. */}
+        <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
           {services.map((s) => (
-            <li key={s.slug} className="flex">
-              <ServiceCard service={s} />
+            <li key={s.slug} className="flex max-sm:last:odd:col-span-2">
+              <ServiceCard service={s} titleOnlyOnMobile />
             </li>
           ))}
         </ul>

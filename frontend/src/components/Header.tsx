@@ -369,32 +369,48 @@ export function Header() {
       {mobileOpen && (
         <nav id="mobile-menu" aria-label="Main" className="font-secondary max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper lg:hidden">
           <Container className="py-4">
-            <Link href={aboutLink.href} aria-current={isActive(aboutLink.href) ? "page" : undefined} className="block border-b border-line py-2.5 text-ink">
+            <Link href={aboutLink.href} aria-current={isActive(aboutLink.href) ? "page" : undefined} className="block border-b border-line py-3 font-medium text-ink">
               {aboutLink.label}
             </Link>
-            <p className="pb-2 pt-3 text-sm font-semibold text-muted-strong">Capabilities</p>
-            <ul className="border-b border-line pb-3">
+            {/* Native disclosure: opens and closes with tap or keyboard, collapsed by default so the menu stays short.
+                Opens itself when the current page is one of its services. */}
+            <details className="group border-b border-line" open={pathname.startsWith("/services/") || undefined}>
+              <summary className="flex cursor-pointer list-none items-center justify-between py-3 font-medium text-ink [&::-webkit-details-marker]:hidden">
+                Capabilities
+                <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 text-muted-strong transition-transform duration-200 group-open:rotate-180">
+                  <path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
+              <ul className="pb-3 pl-3">
               {services.map((s) => (
                 <li key={s.slug}>
                   <Link
                     href={`/services/${s.slug}`}
                     aria-current={isActive(`/services/${s.slug}`) ? "page" : undefined}
-                    className="block py-2.5 text-ink"
+                    className="block py-2 text-[0.9375rem] text-ink/85 aria-[current=page]:font-medium aria-[current=page]:text-blue-deep"
                   >
                     {s.name}
                   </Link>
                 </li>
               ))}
-            </ul>
-            <p className="pb-2 pt-3 text-sm font-semibold text-muted-strong">Our Arsenal</p>
-            <ul className="border-b border-line pb-3">
-              {arsenal.map((a) => (
-                <li key={a.group} className="py-2">
-                  <span className="block text-ink">{a.group}</span>
-                  <span className="mt-0.5 block text-sm leading-snug text-muted-strong">{a.items}</span>
-                </li>
-              ))}
-            </ul>
+              </ul>
+            </details>
+            <details className="group border-b border-line">
+              <summary className="flex cursor-pointer list-none items-center justify-between py-3 font-medium text-ink [&::-webkit-details-marker]:hidden">
+                Our Arsenal
+                <svg viewBox="0 0 20 20" aria-hidden="true" className="size-4 text-muted-strong transition-transform duration-200 group-open:rotate-180">
+                  <path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
+              <ul className="space-y-3 pb-4 pl-3">
+                {arsenal.map((a) => (
+                  <li key={a.group}>
+                    <span className="block text-[0.9375rem] text-ink">{a.group}</span>
+                    <span className="mt-0.5 block text-sm leading-snug text-muted-strong">{a.items}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
             <ul className="py-3">
               {[...navLinks, { href: "/contact", label: "Contact" }].map((l) => (
                 <li key={l.href}>

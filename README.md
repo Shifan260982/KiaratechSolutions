@@ -5,7 +5,7 @@ Phase 1: a static, frontend-only corporate website. Source of truth: *Internal R
 | Folder | Purpose |
 |---|---|
 | `frontend/` | Next.js 16 (App Router, static export), React 19, TypeScript, Tailwind CSS 4 |
-| `backend/` | Reserved for Phase 2 (Node.js and FastAPI). Empty in Phase 1. |
+| `backend/` | Reserved for Phase 2 (Python, FastAPI; plan in `backend/PLAN.md`). Empty in Phase 1. |
 | `assets/` | Original brand assets (logo source) |
 | `PRODUCT.md` / `DESIGN.md` | Product facts and the design system |
 

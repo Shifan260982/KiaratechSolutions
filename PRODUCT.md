@@ -9,7 +9,7 @@ web
 ## Stack
 
 Phase 1: Next.js (App Router, static export) + React + TypeScript + Tailwind CSS, hosted on Vercel. Frontend only, in `frontend/`.
-Phase 2 (later, separate): backend in `backend/` (Node.js and FastAPI). No APIs, databases or server logic in Phase 1.
+Phase 2 (later, separate): backend in `backend/` (Python, FastAPI; submissions stored in SharePoint, notified via Outlook; see `backend/PLAN.md`). No APIs, databases or server logic in Phase 1.
 
 ## Users
 

@@ -1,6 +1,6 @@
 # Backend (Phase 2)
 
-Reserved for the Phase 2 backend (Node.js and FastAPI). Nothing in Phase 1 depends on this folder.
+Reserved for the Phase 2 backend (Python, FastAPI). Nothing in Phase 1 depends on this folder. See [PLAN.md](PLAN.md).
 
 Integration points already prepared in the frontend:
 
