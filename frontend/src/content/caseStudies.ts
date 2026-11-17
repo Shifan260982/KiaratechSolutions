@@ -42,8 +42,8 @@ export const caseStudies: CaseStudy[] = [
     featured: true,
   },
   {
-    slug: "digital-twin",
-    name: "Digital Twin",
+    slug: "factorypall",
+    name: "FactoryPall",
     title: "Real-Time Factory Digital Twin",
     summary: "End-to-end visibility of every parcel on the factory floor.",
     description:
