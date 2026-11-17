@@ -3,10 +3,14 @@
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { site } from "@/content/site";
+import { apiConnected } from "@/lib/api";
 import { submitEnquiry, type SubmitResult } from "@/lib/enquiry";
 import { limits, validateEnquiry, type EnquiryErrors, type EnquiryInput } from "@/lib/validation";
-import { FieldError, FormAlerts, inputClass, NotConnected } from "./FormParts";
+import { FieldError, FormAlerts, Honeypot, honeypotValue, inputClass, NotConnected } from "./FormParts";
+import { Turnstile, type TurnstileHandle } from "./Turnstile";
 import { buttonClass } from "./ui";
+
+const CAPTCHA_PENDING = "Wait for the security check to finish, then send again.";
 
 const fieldOrder: (keyof EnquiryInput)[] = ["firstName", "lastName", "email", "company", "topic", "message"];
 
@@ -18,7 +22,15 @@ export function EnquiryForm() {
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const captchaRef = useRef<TurnstileHandle>(null);
+
+  const onCaptchaToken = (token: string) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError("");
+  };
 
   const update = (key: keyof EnquiryInput, value: string) => {
     const next = { ...values, [key]: value };
@@ -36,20 +48,31 @@ export function EnquiryForm() {
       formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
       return;
     }
-    setSubmitting(true);
-    try {
-      setResult(await submitEnquiry(values));
-    } catch {
-      setResult({ status: "error", message: "Something went wrong. Please try again." });
-    } finally {
-      setSubmitting(false);
+    if (apiConnected && !captchaToken) {
+      setCaptchaError(CAPTCHA_PENDING);
+      return;
     }
+    setSubmitting(true);
+    const outcome = await submitEnquiry(values, { captchaToken, website: honeypotValue(formRef.current) });
+    setSubmitting(false);
+    if (apiConnected) captchaRef.current?.reset(); // the token is spent once the server has seen it
+
+    if (outcome.status === "invalid") {
+      const { captchaToken: captchaProblem, ...fieldErrors } = outcome.errors;
+      setErrors(fieldErrors);
+      setCaptchaError(captchaProblem ?? "");
+      setResult(null);
+      const firstInvalid = fieldOrder.find((k) => fieldErrors[k]);
+      if (firstInvalid) formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      return;
+    }
+    setResult(outcome);
   }
 
   if (result?.status === "not-connected" || result?.status === "sent") {
     return (
       <NotConnected
-        title="Thank you, your details are complete"
+        title={result.status === "sent" ? "Thank you, your enquiry has been sent" : "Thank you, your details are complete"}
         text={
           result.status === "sent"
             ? "We have received your enquiry and will be in touch."
@@ -128,9 +151,12 @@ export function EnquiryForm() {
         <FieldError id="message-error" message={errors.message} />
       </div>
 
+      <Honeypot />
+      {apiConnected && <Turnstile ref={captchaRef} action="enquiry" onToken={onCaptchaToken} error={captchaError} />}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <button type="submit" disabled={submitting} className={`${buttonClass("primary")} w-full shrink-0 disabled:opacity-60 sm:w-auto`}>
-          {submitting ? "Checking…" : "Send enquiry"}
+          {submitting ? (apiConnected ? "Sending…" : "Checking…") : "Send enquiry"}
         </button>
         <p className="text-sm leading-relaxed text-muted-strong">
           We use these details only to respond to your enquiry. See our{" "}

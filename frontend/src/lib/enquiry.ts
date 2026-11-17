@@ -1,10 +1,9 @@
-import type { EnquiryInput } from "./validation";
+import { postToApi, type SubmitResult } from "./api.ts";
+import { sanitiseEnquiry, type EnquiryInput } from "./validation.ts";
 
-export type SubmitResult = { status: "sent" } | { status: "not-connected" } | { status: "error"; message: string };
+export type { SubmitResult } from "./api.ts";
 
-// Phase 1: no submission destination is approved (requirements 8.6 is TBD), so nothing is sent.
-// Phase 2: replace the body with a POST of `sanitiseEnquiry(input)` to the backend API, which must re-validate it.
-export async function submitEnquiry(input: EnquiryInput): Promise<SubmitResult> {
-  void input;
-  return { status: "not-connected" };
+/** Sends the enquiry to the API, which re-validates every field. `website` is the hidden honeypot. */
+export async function submitEnquiry(input: EnquiryInput, extra: { captchaToken: string; website: string }): Promise<SubmitResult> {
+  return postToApi("/api/v1/enquiries", JSON.stringify({ ...sanitiseEnquiry(input), ...extra }), { "Content-Type": "application/json" });
 }

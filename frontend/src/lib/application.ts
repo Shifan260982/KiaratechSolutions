@@ -1,5 +1,5 @@
-// Job application: field definitions, sanitising and client-side validation (UX only; the Phase 2 backend must re-validate).
-import type { SubmitResult } from "./enquiry.ts";
+// Job application: field definitions, sanitising and client-side validation (UX only; the backend re-validates).
+import { postToApi, type SubmitResult } from "./api.ts";
 import { emailError, nameError, sanitiseText } from "./validation.ts";
 
 type NumberField = { kind: "number"; label: string; hint?: string; min: number; max: number; integer: boolean };
@@ -108,10 +108,24 @@ export function validateApplication(raw: ApplicationInput, asked: readonly Appli
   return errors;
 }
 
-// Phase 1: no submission destination is approved, so nothing is sent or stored.
-// Phase 2: POST `sanitiseApplication(input)` and the CV file as multipart form data to the backend API, which must
-// re-validate every field, virus-scan the file and check its real type (not just the extension).
-export async function submitApplication(input: ApplicationInput): Promise<SubmitResult> {
-  void input;
-  return { status: "not-connected" };
+/**
+ * Sends the application and CV as multipart form data. The API re-validates every field, checks the file's real
+ * type and scans it for malware. Only the role's own detail fields are sent; `website` is the hidden honeypot.
+ */
+export async function submitApplication(
+  raw: ApplicationInput,
+  cv: File,
+  asked: readonly ApplicationFieldKey[],
+  extra: { captchaToken: string; website: string },
+): Promise<SubmitResult> {
+  const input = sanitiseApplication(raw);
+  const form = new FormData();
+  const basic = ["roleId", "roleTitle", "firstName", "lastName", "email", "phone", "location", "linkedIn", "coverNote"] as const;
+  for (const key of basic) form.append(key, input[key]);
+  for (const key of asked) form.append(key, input.details[key] ?? "");
+  form.append("captchaToken", extra.captchaToken);
+  form.append("website", extra.website);
+  form.append("cv", cv, cv.name);
+  // No Content-Type header: the browser sets multipart/form-data with its boundary.
+  return postToApi("/api/v1/applications", form);
 }
