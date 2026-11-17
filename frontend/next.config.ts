@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   allowedDevOrigins: ['192.168.1.5'],
   poweredByHeader: false,
+  experimental: {
+    agentUpgrade: "security",
+  },
   turbopack: {
     rules: {
       "*.css": {
