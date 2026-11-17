@@ -15,4 +15,5 @@ COPY app ./app
 USER 10001
 EXPOSE 8000
 # Run with a read-only root filesystem in Container Apps; the app writes nothing to disk.
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-server-header"]
+# No access log: it records visitor IP addresses, which are personal data. The app logs each request without them.
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-server-header", "--no-access-log"]

@@ -1,8 +1,10 @@
+import logging
+
 import pytest
 from fastapi.testclient import TestClient
 
 from app.config import Settings, load_settings
-from app.main import create_app
+from app.main import configure_logging, create_app
 
 SITE = "https://www.kiaratechs.com"
 
@@ -138,3 +140,19 @@ def test_captcha_hostnames_come_from_origins_in_production_only():
     production = Settings(environment="production", allowed_origins=(SITE, "https://kiaratechs.com"))
     assert production.captcha_hostnames == {"www.kiaratechs.com", "kiaratechs.com"}
     assert Settings(environment="development", allowed_origins=(SITE,)).captcha_hostnames == frozenset()
+
+
+def test_every_request_is_logged_without_the_visitor_ip(client, caplog):
+    with caplog.at_level(logging.INFO, logger="kiaratech"):
+        client.get("/health", headers={"X-Forwarded-For": "203.0.113.5"})
+    line = next(r.getMessage() for r in caplog.records if "path=/health" in r.getMessage())
+    assert "method=GET" in line and "status=200" in line and "request_id=" in line
+    assert "203.0.113.5" not in caplog.text and "testclient" not in caplog.text
+
+
+def test_logging_is_configured_for_info_once():
+    configure_logging()
+    configure_logging()
+    app_logger = logging.getLogger("kiaratech")
+    assert app_logger.level == logging.INFO
+    assert len(app_logger.handlers) == 1
