@@ -8,6 +8,10 @@ updates:
     directory: /backend
     schedule:
       interval: weekly
+    ignore:
+      # Python minor/major upgrades are deliberate: bump Dockerfile and CI python-version together.
+      - dependency-name: python
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
