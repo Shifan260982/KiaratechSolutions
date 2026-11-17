@@ -27,7 +27,7 @@ The API is stateless: it validates, writes to SharePoint, and sends a notificati
 | | Enquiry | Job application |
 |---|---|---|
 | Stored in | SharePoint list `Enquiries` | SharePoint list `Applications`; CV in a private document library |
-| Notified | BD inbox (recipient TBD, requirement 8.6) | jobs@kiaratechs.com |
+| Notified | BD@kiaratechs.ai (confirmed in the content document) | jobs@kiaratechs.com |
 | Worked by | BD, `Status`: New → Contacted → Qualified / Closed | HR, `Status`: New → Screening → Interview → Rejected / Hired |
 | Retention | Microsoft 365 retention policy (period from Legal) | Same, for items and CVs |
 
@@ -51,7 +51,7 @@ Target: OWASP ASVS Level 2. CI fails on any high or critical finding.
 In the service:
 
 - Pydantic models mirror every frontend rule (`frontend/src/lib/validation.ts`, `application.ts`); unknown fields rejected; control characters stripped.
-- CV: 5 MB limit enforced while streaming; type checked from magic bytes (PDF, DOC, DOCX); malware scan (ClamAV, or SharePoint Safe Attachments if licensed) before upload; stored under a random name.
+- CV: PDF, Word (.docx) or older Word (.doc), up to 5 MB, enforced while streaming; type checked from the file's bytes; macro-enabled Word (.docm, even renamed) refused; malware scan by a ClamAV sidecar before upload (Safe Attachments, if licensed, is only a second layer: it scans after storage); stored under a readable name built from validated fields, e.g. `Priya Shah - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf`, never the applicant's own file name.
 - Abuse: Cloudflare Turnstile verified server-side, honeypot field, rate limit per IP, request size limits.
 - CORS restricted to the production domain; HTTPS only; security headers; generic errors, no stack traces.
 - No secrets in code or config; Managed Identity to Key Vault and Graph.
@@ -61,15 +61,15 @@ In the service:
 
 ## Build order
 
-1. Scaffold service, CI security gates, staging deploy.
-2. Enquiry endpoint.
-3. Application endpoint and CV handling.
-4. Turnstile and rate limits.
-5. Wire frontend forms; add API and Turnstile origins to the CSP in `frontend/vercel.json`.
-6. ZAP scan, penetration test, go live.
+1. Scaffold service, CI security gates. **Done, on main.** (Staging deploy moved to step 6.)
+2. Enquiry endpoint. **Done**, branch `backend/enquiries`, not yet merged.
+3. Application endpoint and CV handling. **Done**, branch `backend/applications`, not yet committed.
+4. Turnstile and rate limits. **Done**, same branch as step 3.
+5. Wire frontend forms; add API and Turnstile origins to the CSP in `frontend/vercel.json`. **Done, on main.**
+6. Azure hosting, ZAP scan, penetration test, go live. Hosting steps for the admins: `handover/Kiaratech-Hosting-Handover.pdf`.
 
 ## Blockers
 
-- Enquiry recipient (requirement 8.6), owner Patrick.
+- Steps 2 to 4 merged to main before the admins deploy.
 - Retention period and data-protection contact, Legal.
-- Microsoft 365 licence check (decides ClamAV vs Safe Attachments) and a SharePoint site for the lists, IT.
+- SharePoint site, lists, CV library and Graph permissions, Microsoft 365 admin; Azure resources, Azure admin; Turnstile keys; `api.kiaratechs.com` DNS records.
