@@ -62,14 +62,14 @@ In the service:
 ## Build order
 
 1. Scaffold service, CI security gates. **Done, on main.** (Staging deploy moved to step 6.)
-2. Enquiry endpoint. **Done**, branch `backend/enquiries`, not yet merged.
-3. Application endpoint and CV handling. **Done**, branch `backend/applications`, not yet committed.
-4. Turnstile and rate limits. **Done**, same branch as step 3.
+2. Enquiry endpoint. **Done, on main.**
+3. Application endpoint and CV handling. **Done, on main.**
+4. Turnstile and rate limits. **Done, on main.**
 5. Wire frontend forms; add API and Turnstile origins to the CSP in `frontend/vercel.json`. **Done, on main.**
 6. Azure hosting, ZAP scan, penetration test, go live. Hosting steps for the admins: `handover/Kiaratech-Hosting-Handover.pdf`.
+   Development side still open: infrastructure as code (Bicep) and a deploy workflow, Application Insights, automated ZAP scan against staging.
 
 ## Blockers
 
-- Steps 2 to 4 merged to main before the admins deploy.
 - Retention period and data-protection contact, Legal.
 - SharePoint site, lists, CV library and Graph permissions, Microsoft 365 admin; Azure resources, Azure admin; Turnstile keys; `api.kiaratechs.com` DNS records.
