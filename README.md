@@ -51,7 +51,7 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 
 | Item | Owner (per requirements) | Where |
 |---|---|---|
-| Contact-form destination (8.6 is TBD). Forms send nothing until `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are set (see `.env.example` and `backend/README.md`). | Patrick | `ENQUIRY_RECIPIENT` on the backend |
+| Connect the forms. Enquiries go to `BD@kiaratechs.ai` (business e-mail confirmed in the content document; note it is on `.ai` while the site is on `kiaratechs.com`), applications to `jobs@kiaratechs.com`. Forms send nothing until `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are set (see `.env.example`, `backend/README.md` and `handover/Kiaratech-Hosting-Handover.pdf`). | Hosting admins | `ENQUIRY_RECIPIENT` and `APPLICATION_RECIPIENT` on the backend |
 | Verified WhatsApp number | Marketing | `NEXT_PUBLIC_WHATSAPP_NUMBER` |
 | Official LinkedIn page URL | Marketing | `NEXT_PUBLIC_LINKEDIN_URL` |
 | Product screenshots for ARECON AI, Digital Twin and Smart HR (replace the illustrative mockups in `ProjectVisual.tsx`) | Amey, Atif, Nirupaman | `caseStudies.ts` |
@@ -65,7 +65,6 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 | Team and office photos (with consent) | Rakhi / HR | not used yet |
 | Client logos, testimonials, certifications, partnerships | Patrick, HR / Compliance | not shown; do not add unverified items |
 | Analytics and Search Console. Add a cookie-consent banner at the same time as any non-essential cookies. | Marketing | not built |
-| Note: the requirements list `BD@kiaratechs.ai` while the site domain is `kiaratechs.com`. No business email is shown on the site, by decision. | Patrick | |
 
 ## Image credits
 
