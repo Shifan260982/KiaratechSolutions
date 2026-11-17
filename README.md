@@ -51,7 +51,7 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 
 | Item | Owner (per requirements) | Where |
 |---|---|---|
-| Contact-form destination (8.6 is TBD). Form validates but sends nothing. | Patrick | `src/lib/enquiry.ts` (Phase 2) |
+| Contact-form destination (8.6 is TBD). Forms send nothing until `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are set (see `.env.example` and `backend/README.md`). | Patrick | `ENQUIRY_RECIPIENT` on the backend |
 | Verified WhatsApp number | Marketing | `NEXT_PUBLIC_WHATSAPP_NUMBER` |
 | Official LinkedIn page URL | Marketing | `NEXT_PUBLIC_LINKEDIN_URL` |
 | Product screenshots for ARECON AI, Digital Twin and Smart HR (replace the illustrative mockups in `ProjectVisual.tsx`) | Amey, Atif, Nirupaman | `caseStudies.ts` |

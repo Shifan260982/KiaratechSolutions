@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
   title: "Portfolio",
-  description: "Projects and products from Kiaratech Solutions, including ARECON AI, a real-time factory digital twin and Smart HR.",
+  description: "Projects and products from Kiaratech Solutions, including ARECON AI, FactoryPall and Smart HR.",
   path: "/case-studies",
 });
 

@@ -1,14 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { roleFamilies, splitTitle, type Job, type RoleFamily } from "@/content/jobs";
+import { useMemo, useRef, useState } from "react";
+import { roleFamilies, type Job, type RoleFamily } from "@/content/jobs";
 import { inputClass } from "./FormParts";
-import { ArrowIcon } from "./ui";
+import { ArrowIcon, dividerShades } from "./ui";
+
+const PAGE_SIZE = 5;
+
+const pagerButton =
+  "inline-flex min-h-11 items-center gap-2 rounded-md border border-line-strong bg-paper px-4 font-secondary text-[0.9375rem] font-semibold text-navy transition-colors hover:border-blue hover:text-blue-deep disabled:pointer-events-none disabled:opacity-40";
 
 export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string }) {
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState<RoleFamily | "all">("all");
+  const [page, setPage] = useState(1);
+  const listTop = useRef<HTMLParagraphElement>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -19,6 +26,18 @@ export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string
     );
   }, [jobs, query, family]);
 
+  const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount); // a narrower filter can leave fewer pages than the one we were on
+  const first = (current - 1) * PAGE_SIZE;
+  const visible = results.slice(first, first + PAGE_SIZE);
+
+  const goToPage = (next: number) => {
+    setPage(next);
+    // Bring the top of the list back into view and give keyboard and screen-reader users a fixed starting point.
+    listTop.current?.focus({ preventScroll: true });
+    listTop.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   // Only families with an open role get a filter, so no button leads to an empty list.
   const families = roleFamilies.map((f) => ({ value: f, count: jobs.filter((j) => j.family === f).length })).filter((f) => f.count > 0);
 
@@ -27,7 +46,10 @@ export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string
       key={value}
       type="button"
       aria-pressed={family === value}
-      onClick={() => setFamily(value)}
+      onClick={() => {
+        setFamily(value);
+        setPage(1);
+      }}
       className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line-strong px-3.5 py-1.5 text-sm font-medium text-navy transition-colors hover:border-blue hover:text-blue-deep aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-paper"
     >
       {label}
@@ -46,7 +68,10 @@ export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string
             id="job-search"
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             placeholder="Job title, skill or location"
             maxLength={100}
             className={inputClass}
@@ -63,57 +88,62 @@ export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string
         </div>
       </div>
 
-      <div aria-live="polite" className="mt-10">
-        <p className="text-sm text-muted-strong">
-          {results.length === 1 ? "1 open role" : `${results.length} open roles`}
+      <div className="mt-10">
+        <p ref={listTop} tabIndex={-1} aria-live="polite" className="scroll-mt-24 text-sm text-muted-strong focus:outline-none">
+          {results.length === 0
+            ? "0 open roles"
+            : results.length <= PAGE_SIZE
+              ? `${results.length} open ${results.length === 1 ? "role" : "roles"}`
+              : `Showing ${visible.length === 1 ? first + 1 : `${first + 1}–${first + visible.length}`} of ${results.length} open roles`}
         </p>
-        {results.length > 0 ? (
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {results.map((job, i) => {
-              const { name, specialism } = splitTitle(job.title);
-              return (
-                // Cards rise in a short stagger on load and whenever a filter brings them in.
-                <li key={job.id} className="arsenal-rise flex" style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}>
-                  <article className="group relative flex w-full flex-col rounded-xl border border-line bg-paper p-5 transition-[border-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-blue/40 hover:shadow-[0_16px_40px_-24px_rgb(2_33_98/0.45)] has-[a:focus-visible]:border-blue has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-blue">
-                    <h3 className="text-lg font-semibold leading-snug text-navy">
-                      {/* The title link stretches over the card; Apply sits above it and jumps straight to the form. */}
-                      <Link href={`/careers/${job.id}`} className="after:absolute after:inset-0 group-hover:text-blue-deep focus-visible:outline-none">
-                        {name}
-                        {specialism && <span className="sr-only"> – {specialism}</span>}
-                      </Link>
-                    </h3>
-                    {specialism && (
-                      <p aria-hidden="true" className="mt-1 text-sm font-medium text-blue-deep">
-                        {specialism}
-                      </p>
-                    )}
-                    <p className="mt-3 text-sm text-muted-strong">
-                      {[job.experience, job.type, job.workMode].join(" · ")}
-                      {job.location && <span className="mt-0.5 block">{job.location}</span>}
-                    </p>
-                    <ul aria-label="Key requirements" className="mt-4 flex flex-wrap gap-1.5">
-                      {job.facts.map((fact) => (
-                        <li key={fact} className="rounded-full bg-sky px-2.5 py-1 text-[0.8125rem] font-medium leading-tight text-blue-deep">
-                          {fact}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-auto pt-5">
-                      <Link
-                        href={`/careers/${job.id}#apply`}
-                        aria-label={`Apply for ${job.title}`}
-                        className="relative z-10 flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-line-strong bg-paper px-5 font-secondary text-[0.9375rem] font-semibold text-navy transition-colors hover:border-blue hover:bg-blue hover:text-paper"
-                      >
-                        Apply
-                        <ArrowIcon className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                      </Link>
-                    </div>
-                  </article>
-                </li>
-              );
-            })}
+        {results.length > 0 && (
+          <ul className="mt-4 border-t border-line">
+            {visible.map((job, i) => (
+              // Plain list row: only the title is a link; the rest of the row is not clickable.
+              <li key={job.id} className="group relative border-b border-line py-5">
+                <div>
+                  <h3 className="text-lg font-medium leading-snug text-navy">
+                    <Link
+                      href={`/careers/${job.id}`}
+                      className="rounded-sm underline decoration-line-strong underline-offset-[0.3em] transition-colors hover:text-blue-deep hover:decoration-blue-deep"
+                    >
+                      {job.title}
+                    </Link>
+                  </h3>
+                  <dl className="mt-2 flex items-center text-[0.9375rem] text-muted-strong">
+                    <dt className="sr-only">Location</dt>
+                    {/* Roles without a fixed office show their work mode (Remote, Hybrid) instead. */}
+                    <dd>{job.location ?? job.workMode}</dd>
+                    <dt className="sr-only">Experience</dt>
+                    <dd className="ml-4 border-l border-line-strong pl-4">{job.experience}</dd>
+                  </dl>
+                </div>
+                {/* Same hover line as the Our Story "How we engage" rows: fills left to right in the row's shade and thickens. */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 transition-[scale,height] duration-1000 ease-out group-hover:h-1 group-hover:scale-x-100 group-has-[a:focus-visible]:h-1 group-has-[a:focus-visible]:scale-x-100 motion-reduce:transition-none"
+                  style={{ backgroundColor: dividerShades[(first + i) % dividerShades.length] }}
+                />
+              </li>
+            ))}
           </ul>
-        ) : (
+        )}
+        {pageCount > 1 && (
+          <nav aria-label="Job list pages" className="mt-8 flex items-center justify-between gap-4">
+            <button type="button" onClick={() => goToPage(current - 1)} disabled={current === 1} className={pagerButton}>
+              <ArrowIcon className="size-4 rotate-180" />
+              Previous
+            </button>
+            <p className="text-sm text-muted-strong">
+              Page <span className="font-semibold text-navy tabular-nums">{current}</span> of <span className="tabular-nums">{pageCount}</span>
+            </p>
+            <button type="button" onClick={() => goToPage(current + 1)} disabled={current === pageCount} className={pagerButton}>
+              Next
+              <ArrowIcon className="size-4" />
+            </button>
+          </nav>
+        )}
+        {results.length === 0 && (
           <div className="mt-3 border-y border-line py-8">
             <p className="font-medium text-navy">
               {jobs.length === 0 ? "There are no open roles listed right now." : "No roles match your search."}

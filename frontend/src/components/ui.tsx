@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
+// Dark, soft shades for hover divider lines (Our Story "How we engage", careers list): navy blue, forest green, deep violet, burnt orange, plum.
+export const dividerShades = ["#1e3a8a", "#166534", "#5b21b6", "#9a3412", "#831843"];
+
 export function Container({ className = "", children }: { className?: string; children: ReactNode }) {
   return <div className={`mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
 }

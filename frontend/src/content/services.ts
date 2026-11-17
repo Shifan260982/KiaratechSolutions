@@ -42,7 +42,7 @@ export const services: Service[] = [
       { title: "Legacy modernisation", detail: "Incremental re-platforming without disrupting operations." },
     ],
     technologies: [".NET / C#", "Java", "Node.js", "Python", "React", "Angular", "Vue.js"],
-    caseStudySlugs: ["arecon-ai", "digital-twin", "smart-hr"],
+    caseStudySlugs: ["arecon-ai", "factorypall", "smart-hr"],
   },
   {
     slug: "database-administration",

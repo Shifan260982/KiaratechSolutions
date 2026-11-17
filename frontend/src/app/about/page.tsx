@@ -3,7 +3,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { InViewVideo } from "@/components/InViewVideo";
 import { OfficeMap } from "@/components/OfficeMap";
 import { SlideIn } from "@/components/SlideIn";
-import { PageIntro, Section, SectionHeading } from "@/components/ui";
+import { PageIntro, Section, SectionHeading, dividerShades } from "@/components/ui";
 import { engagementModels } from "@/content/services";
 import { metrics, offices } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
@@ -15,8 +15,6 @@ export const metadata = pageMetadata({
   path: "/about",
 });
 
-// Deep shades for the "How we engage" hover dividers: navy blue, forest green, deep violet, burnt orange, plum.
-const dividerShades = ["#1e3a8a", "#166534", "#5b21b6", "#9a3412", "#831843"];
 
 export default function AboutPage() {
   return (

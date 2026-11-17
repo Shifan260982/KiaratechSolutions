@@ -13,10 +13,13 @@ import {
   type ApplicationFieldKey,
   type ApplicationInput,
 } from "@/lib/application";
-import type { SubmitResult } from "@/lib/enquiry";
+import { apiConnected, type SubmitResult } from "@/lib/api";
 import { limits } from "@/lib/validation";
-import { FieldError, FormAlerts, inputClass, NotConnected } from "./FormParts";
+import { CopyButton, FieldError, FormAlerts, Honeypot, honeypotValue, inputClass, NotConnected } from "./FormParts";
+import { Turnstile, type TurnstileHandle } from "./Turnstile";
 import { buttonClass } from "./ui";
+
+const CAPTCHA_PENDING = "Wait for the security check to finish, then submit again.";
 
 const sectionTitle = "mb-4 text-base font-semibold text-navy";
 
@@ -51,7 +54,15 @@ export function ApplicationForm({
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const captchaRef = useRef<TurnstileHandle>(null);
+
+  const onCaptchaToken = (token: string) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError("");
+  };
 
   const apply = (next: ApplicationInput) => {
     setValues(next);
@@ -83,23 +94,33 @@ export function ApplicationForm({
       formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
       return;
     }
-    setSubmitting(true);
-    try {
-      // cvFile is the actual upload for Phase 2; values.cv carries only its name and size for validation.
-      void cvFile;
-      setResult(await submitApplication(values));
-    } catch {
-      setResult({ status: "error", message: "Something went wrong. Please try again." });
-    } finally {
-      setSubmitting(false);
+    if (!cvFile) return; // unreachable: validation requires a CV
+    if (apiConnected && !captchaToken) {
+      setCaptchaError(CAPTCHA_PENDING);
+      return;
     }
+    setSubmitting(true);
+    // cvFile is the upload itself; values.cv carries only its name and size for validation.
+    const outcome = await submitApplication(values, cvFile, ask, { captchaToken, website: honeypotValue(formRef.current) });
+    setSubmitting(false);
+    if (apiConnected) captchaRef.current?.reset(); // the token is spent once the server has seen it
+
+    if (outcome.status === "invalid") {
+      const { captchaToken: captchaProblem, ...fieldErrors } = outcome.errors;
+      setErrors(fieldErrors);
+      setCaptchaError(captchaProblem ?? "");
+      setResult(null);
+      const firstInvalid = Object.keys(fieldErrors)[0];
+      if (firstInvalid) formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      return;
+    }
+    setResult(outcome);
   }
 
   if (result?.status === "not-connected" || result?.status === "sent") {
-    const subject = `Application – ${roleTitle}`;
     return (
       <NotConnected
-        title="Thank you, your application is complete"
+        title={result.status === "sent" ? "Thank you, your application has been sent" : "Thank you, your application is complete"}
         text={
           result.status === "sent"
             ? `We have received your application for ${roleTitle} and will be in touch.`
@@ -108,12 +129,12 @@ export function ApplicationForm({
         onBack={() => setResult(null)}
       >
         {result.status === "not-connected" && (
-          <a
-            href={`mailto:${applyEmail}?subject=${encodeURIComponent(subject)}`}
-            className="mt-4 inline-block font-medium text-blue-deep underline underline-offset-4"
-          >
-            Email {applyEmail}
-          </a>
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p className="text-ink">
+              Reach out to <span className="font-medium">{applyEmail}</span>
+            </p>
+            <CopyButton text={applyEmail} label="Copy address" />
+          </div>
         )}
       </NotConnected>
     );
@@ -258,9 +279,12 @@ export function ApplicationForm({
         </div>
       </div>
 
+      <Honeypot />
+      {apiConnected && <Turnstile ref={captchaRef} action="application" onToken={onCaptchaToken} error={captchaError} />}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <button type="submit" disabled={submitting} className={`${buttonClass("primary")} w-full shrink-0 disabled:opacity-60 sm:w-auto`}>
-          {submitting ? "Checking…" : "Submit application"}
+          {submitting ? (apiConnected ? "Sending…" : "Checking…") : "Submit application"}
         </button>
         <p className="text-sm leading-relaxed text-muted-strong">
           We use these details only to assess your application. See our{" "}
