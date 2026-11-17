@@ -14,17 +14,21 @@ class BodyTooLarge(HTTPException):
 
 
 class BodySizeLimit:
-    def __init__(self, app: ASGIApp, max_bytes: int) -> None:
+    """`max_bytes` for every route, except exact paths listed in `per_path` (such as the CV upload)."""
+
+    def __init__(self, app: ASGIApp, max_bytes: int, per_path: dict[str, int] | None = None) -> None:
         self.app = app
         self.max_bytes = max_bytes
+        self.per_path = per_path or {}
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
 
+        limit = self.per_path.get(scope["path"], self.max_bytes)
         declared = dict(scope["headers"]).get(b"content-length")
-        if declared is not None and (not declared.isdigit() or int(declared) > self.max_bytes):
+        if declared is not None and (not declared.isdigit() or int(declared) > limit):
             await JSONResponse(TOO_LARGE, status_code=413)(scope, receive, send)
             return
 
@@ -35,7 +39,7 @@ class BodySizeLimit:
             message = await receive()
             if message["type"] == "http.request":
                 received += len(message.get("body", b""))
-                if received > self.max_bytes:
+                if received > limit:
                     raise BodyTooLarge
             return message
 

@@ -44,6 +44,7 @@ class EnquiryIn(BaseModel):
     topic: str
     message: str
     website: str = ""
+    captchaToken: str = ""  # noqa: N815 - Cloudflare Turnstile token from the form's widget
 
 
 class Enquiry(BaseModel):

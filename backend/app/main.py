@@ -1,7 +1,9 @@
 """Kiaratech website API. Phase 2: enquiry and job-application endpoints (see PLAN.md)."""
 
 import logging
+import time
 import uuid
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 
 import httpx2
@@ -10,15 +12,24 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app import enquiries
+from app import applications, enquiries
+from app.captcha import CaptchaVerifier, TurnstileVerifier
 from app.config import Settings, load_settings
 from app.limits import BodySizeLimit
+from app.ratelimit import Limit, RateLimit
+from app.scanner import ClamAvScanner, Scanner
 from app.sharepoint import GraphStore, SubmissionStore, managed_identity_token
 
 logger = logging.getLogger("kiaratech.api")
 
-# Largest valid enquiry is about 10 KB of JSON; the job-application route will need its own, larger limit.
+# Largest valid enquiry is about 10 KB of JSON. Only the CV upload route gets more.
 MAX_BODY_BYTES = 32 * 1024
+
+# Per visitor IP. Generous for people correcting a mistake; useless for scripts.
+RATE_LIMITS = {
+    "/api/v1/enquiries": Limit(requests=5, window_seconds=10 * 60),
+    "/api/v1/applications": Limit(requests=5, window_seconds=60 * 60),
+}
 
 # An API returns no HTML, so lock the response down completely.
 SECURITY_HEADERS = {
@@ -31,25 +42,32 @@ SECURITY_HEADERS = {
 }
 
 
-def create_app(settings: Settings | None = None, store: SubmissionStore | None = None) -> FastAPI:
-    """`store` is injected by tests; otherwise a Graph store is built when SharePoint is configured."""
+def create_app(
+    settings: Settings | None = None,
+    store: SubmissionStore | None = None,
+    scanner: Scanner | None = None,
+    captcha: CaptchaVerifier | None = None,
+    clock: Callable[[], float] = time.monotonic,
+) -> FastAPI:
+    """Dependencies are injected by tests; otherwise they are built from settings when configured."""
     settings = settings or load_settings()
+    if scanner is None and settings.scanner is not None:
+        scanner = ClamAvScanner(settings.scanner.host, settings.scanner.port)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        if store is not None or settings.graph is None:
-            app.state.store = store
-            yield
-            return
-        async with httpx2.AsyncClient(timeout=10) as client:
-            app.state.store = GraphStore(
-                client,
-                managed_identity_token(settings.graph.client_id),
-                site_id=settings.graph.site_id,
-                enquiries_list_id=settings.graph.enquiries_list_id,
-                mail_sender=settings.graph.mail_sender,
-                enquiry_recipient=settings.graph.enquiry_recipient,
-            )
+        async with httpx2.AsyncClient(timeout=30) as client:  # a CV chunk upload can take a while
+            if app.state.store is None and settings.graph is not None:
+                app.state.store = GraphStore(
+                    client,
+                    managed_identity_token(settings.graph.client_id),
+                    site_id=settings.graph.site_id,
+                    mail_sender=settings.graph.mail_sender,
+                    enquiries=settings.graph.enquiries,
+                    applications=settings.graph.applications,
+                )
+            if app.state.captcha is None and settings.turnstile_secret:
+                app.state.captcha = TurnstileVerifier(client, settings.turnstile_secret, settings.captcha_hostnames)
             yield
 
     docs = None if settings.is_production else "/docs"
@@ -61,7 +79,11 @@ def create_app(settings: Settings | None = None, store: SubmissionStore | None =
         lifespan=lifespan,
     )
     app.state.store = store
+    app.state.scanner = scanner
+    app.state.captcha = captcha
+    app.state.trusted_proxy_hops = settings.trusted_proxy_hops
     app.include_router(enquiries.router)
+    app.include_router(applications.router)
 
     @app.exception_handler(RequestValidationError)
     async def invalid_request(request: Request, error: RequestValidationError) -> JSONResponse:
@@ -69,7 +91,9 @@ def create_app(settings: Settings | None = None, store: SubmissionStore | None =
         fields = {str(e["loc"][1]): "This value is not valid." for e in error.errors() if len(e["loc"]) > 1}
         return JSONResponse({"title": "The request is not valid.", "errors": fields}, status_code=400)
 
-    app.add_middleware(BodySizeLimit, max_bytes=MAX_BODY_BYTES)
+    app.add_middleware(BodySizeLimit, max_bytes=MAX_BODY_BYTES, per_path={"/api/v1/applications": applications.MAX_REQUEST_BYTES})
+    # Inside CORS, so a 429 still carries CORS headers and the form can show the message.
+    app.add_middleware(RateLimit, limits=RATE_LIMITS, trusted_proxy_hops=settings.trusted_proxy_hops, clock=clock)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=list(settings.allowed_origins),

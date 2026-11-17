@@ -5,6 +5,7 @@ from app.config import Settings
 from app.main import create_app
 from app.sharepoint import StoreUnavailable
 from app.validation import Enquiry
+from tests.fakes import GOOD_TOKEN, FakeCaptcha
 
 URL = "/api/v1/enquiries"
 VALID = {
@@ -14,6 +15,7 @@ VALID = {
     "company": "Example Ltd",
     "topic": "Invoice automation",
     "message": "We want to automate invoice processing across three sites.",
+    "captchaToken": GOOD_TOKEN,
 }
 
 
@@ -28,8 +30,9 @@ class FakeStore:
         self.saved.append(enquiry)
 
 
-def make_client(store) -> TestClient:
-    app = create_app(Settings(environment="production", allowed_origins=("https://www.kiaratechs.com",)), store=store)
+def make_client(store, captcha=None) -> TestClient:
+    settings = Settings(environment="production", allowed_origins=("https://www.kiaratechs.com",))
+    app = create_app(settings, store=store, captcha=captcha or FakeCaptcha())
     return TestClient(app, raise_server_exceptions=False)
 
 
@@ -62,7 +65,7 @@ def test_sanitises_before_saving(client, store):
 def test_reports_every_missing_field_by_form_name(client, store):
     response = client.post(URL, json={key: "" for key in VALID})
     assert response.status_code == 400
-    assert sorted(response.json()["errors"]) == sorted(VALID)
+    assert sorted(response.json()["errors"]) == sorted(key for key in VALID if key != "captchaToken")
     assert store.saved == []
 
 
@@ -149,3 +152,28 @@ def test_not_configured_refuses_submissions():
 
 def test_only_post_is_allowed(client):
     assert client.get(URL).status_code == 405
+
+
+def test_missing_or_bad_captcha_is_refused_after_field_checks(store):
+    captcha = FakeCaptcha()
+    client = make_client(store, captcha)
+    response = client.post(URL, json={**VALID, "captchaToken": "forged"})
+    assert response.status_code == 400
+    assert "captchaToken" in response.json()["errors"]
+    assert store.saved == []
+    assert captcha.calls[0][1] == "enquiry"
+
+    client.post(URL, json={**VALID, "email": "bad", "captchaToken": "forged"})
+    assert len(captcha.calls) == 1  # invalid fields never spend the visitor's single-use token
+
+
+def test_captcha_down_or_unconfigured_fails_closed(store):
+    assert make_client(store, FakeCaptcha(fail=True)).post(URL, json=VALID).status_code == 503
+    app = create_app(Settings(environment="production", allowed_origins=()), store=store)
+    assert TestClient(app).post(URL, json=VALID).status_code == 503
+    assert store.saved == []
+
+
+def test_sixth_enquiry_in_ten_minutes_is_rate_limited(client):
+    statuses = [client.post(URL, json=VALID).status_code for _ in range(6)]
+    assert statuses == [202] * 5 + [429]

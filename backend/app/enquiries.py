@@ -5,6 +5,8 @@ import logging
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import JSONResponse
 
+from app import captcha
+from app.captcha import CaptchaUnavailable, captcha_passed
 from app.sharepoint import StoreUnavailable
 from app.validation import EnquiryIn, validate_enquiry
 
@@ -30,7 +32,10 @@ async def submit_enquiry(body: EnquiryIn, request: Request) -> Response:
     if store is None:
         return JSONResponse(UNAVAILABLE, status_code=503)
     try:
+        # After field checks, so a typo does not spend the visitor's single-use token.
+        if not await captcha_passed(request, body.captchaToken, "enquiry"):
+            return JSONResponse({"title": captcha.FAILED, "errors": {captcha.FIELD: captcha.FAILED}}, status_code=400)
         await store.save_enquiry(enquiry)
-    except StoreUnavailable:
+    except (CaptchaUnavailable, StoreUnavailable):
         return JSONResponse(UNAVAILABLE, status_code=503)
     return Response(status_code=202)

@@ -62,20 +62,79 @@ def test_rejects_unsafe_origins_in_production(monkeypatch, origins):
         load_settings()
 
 
-def test_sharepoint_settings_must_be_complete(monkeypatch):
-    monkeypatch.setenv("GRAPH_SITE_ID", "site")
-    for name in ("ENQUIRIES_LIST_ID", "MAIL_SENDER", "ENQUIRY_RECIPIENT"):
+GRAPH_VARIABLES = (
+    "GRAPH_SITE_ID",
+    "MAIL_SENDER",
+    "ENQUIRIES_LIST_ID",
+    "ENQUIRY_RECIPIENT",
+    "APPLICATIONS_LIST_ID",
+    "CV_DRIVE_ID",
+    "APPLICATION_RECIPIENT",
+    "CLAMAV_HOST",
+    "TURNSTILE_SECRET_KEY",
+    "TRUSTED_PROXY_HOPS",
+)
+
+
+@pytest.fixture
+def clean_env(monkeypatch):
+    for name in GRAPH_VARIABLES:
         monkeypatch.delenv(name, raising=False)
-    with pytest.raises(ValueError, match="ENQUIRY_RECIPIENT"):
+    return monkeypatch
+
+
+@pytest.mark.parametrize(
+    ("variables", "missing"),
+    [
+        ({"ENQUIRIES_LIST_ID": "l"}, "ENQUIRY_RECIPIENT"),
+        ({"APPLICATIONS_LIST_ID": "l", "CV_DRIVE_ID": "d"}, "APPLICATION_RECIPIENT"),
+        ({"ENQUIRIES_LIST_ID": "l", "ENQUIRY_RECIPIENT": "r"}, "GRAPH_SITE_ID"),
+        ({"GRAPH_SITE_ID": "s"}, "MAIL_SENDER"),
+    ],
+)
+def test_half_configured_settings_fail_at_startup(clean_env, variables, missing):
+    for name, value in variables.items():
+        clean_env.setenv(name, value)
+    with pytest.raises(ValueError, match=missing):
         load_settings()
 
 
-def test_sharepoint_unset_means_not_configured(monkeypatch):
-    for name in ("GRAPH_SITE_ID", "ENQUIRIES_LIST_ID", "MAIL_SENDER", "ENQUIRY_RECIPIENT"):
-        monkeypatch.delenv(name, raising=False)
-    assert load_settings().graph is None
+def test_unset_means_not_configured(clean_env):
+    settings = load_settings()
+    assert settings.graph is None and settings.scanner is None
+
+
+def test_applications_without_enquiries(clean_env):
+    for name, value in {"GRAPH_SITE_ID": "s", "MAIL_SENDER": "m", "APPLICATIONS_LIST_ID": "l", "CV_DRIVE_ID": "d"}.items():
+        clean_env.setenv(name, value)
+    clean_env.setenv("APPLICATION_RECIPIENT", "jobs@kiaratechs.com")
+    clean_env.setenv("CLAMAV_HOST", "localhost")
+    settings = load_settings()
+    assert settings.graph.enquiries is None
+    assert settings.graph.applications.recipient == "jobs@kiaratechs.com"
+    assert settings.scanner.port == 3310
 
 
 def test_defaults_to_production(monkeypatch):
     monkeypatch.delenv("APP_ENV", raising=False)
     assert load_settings().is_production
+
+
+def test_captcha_secret_never_appears_in_settings_output(clean_env):
+    clean_env.setenv("TURNSTILE_SECRET_KEY", "super-secret-value")
+    settings = load_settings()
+    assert settings.turnstile_secret == "super-secret-value"
+    assert "super-secret-value" not in repr(settings)
+
+
+def test_proxy_hops_default_and_validation(clean_env):
+    assert load_settings().trusted_proxy_hops == 1
+    clean_env.setenv("TRUSTED_PROXY_HOPS", "-1")
+    with pytest.raises(ValueError, match="TRUSTED_PROXY_HOPS"):
+        load_settings()
+
+
+def test_captcha_hostnames_come_from_origins_in_production_only():
+    production = Settings(environment="production", allowed_origins=(SITE, "https://kiaratechs.com"))
+    assert production.captcha_hostnames == {"www.kiaratechs.com", "kiaratechs.com"}
+    assert Settings(environment="development", allowed_origins=(SITE,)).captcha_hostnames == frozenset()
