@@ -6,12 +6,14 @@ on:
     paths: ["backend/**", ".github/workflows/backend.yml"]
   pull_request:
     paths: ["backend/**", ".github/workflows/backend.yml"]
+  workflow_call: # the deploy workflow runs these checks on the commit it deploys
 
 permissions:
   contents: read
 
 concurrency:
-  group: backend-${{ github.ref }}
+  # github.workflow is the caller's name when called from deploy, so a deploy never cancels (or is cancelled by) CI.
+  group: backend-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 defaults:

@@ -1,0 +1,90 @@
+name: deploy
+
+# Builds the API image from main and deploys it to Azure Container Apps (infra/app.bicep).
+# Manual only: Actions > deploy > Run workflow. Needs the one-off setup in the handover guide, section 6.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false # never stop a deployment halfway
+
+jobs:
+  # The full backend CI (tests and every security scan) runs on the exact commit being deployed.
+  test-and-scan:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/backend.yml
+
+  deploy:
+    needs: test-and-scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # signs in to Azure with OpenID Connect: no password is stored in GitHub
+    environment: production # add required reviewers on this environment to approve each release
+    timeout-minutes: 30
+    env:
+      # Values from Settings > Environments > production > Variables. None of them is a secret.
+      RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
+      GRAPH_SITE_ID: ${{ vars.GRAPH_SITE_ID }}
+      MAIL_SENDER: ${{ vars.MAIL_SENDER }}
+      ENQUIRIES_LIST_ID: ${{ vars.ENQUIRIES_LIST_ID }}
+      ENQUIRY_RECIPIENT: ${{ vars.ENQUIRY_RECIPIENT }}
+      APPLICATIONS_LIST_ID: ${{ vars.APPLICATIONS_LIST_ID }}
+      CV_DRIVE_ID: ${{ vars.CV_DRIVE_ID }}
+      APPLICATION_RECIPIENT: ${{ vars.APPLICATION_RECIPIENT }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check the required settings are present
+        run: |
+          missing=""
+          for name in RESOURCE_GROUP ALLOWED_ORIGINS; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing environment variables:$missing (see the handover guide, section 6)"
+            exit 1
+          fi
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build the API image in the registry
+        run: |
+          registry=$(az acr list --resource-group "$RESOURCE_GROUP" --query "[0].name" --output tsv)
+          az acr build --registry "$registry" --image "kiaratech-api:$GITHUB_SHA" backend/
+
+      - name: Deploy the Container App
+        id: deploy
+        run: |
+          fqdn=$(az deployment group create \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "api-$GITHUB_RUN_NUMBER" \
+            --template-file infra/app.bicep \
+            --parameters imageTag="$GITHUB_SHA" \
+              allowedOrigins="$ALLOWED_ORIGINS" \
+              graphSiteId="$GRAPH_SITE_ID" mailSender="$MAIL_SENDER" \
+              enquiriesListId="$ENQUIRIES_LIST_ID" enquiryRecipient="$ENQUIRY_RECIPIENT" \
+              applicationsListId="$APPLICATIONS_LIST_ID" cvDriveId="$CV_DRIVE_ID" \
+              applicationRecipient="$APPLICATION_RECIPIENT" \
+            --query properties.outputs.fqdn.value --output tsv)
+          echo "fqdn=$fqdn" >> "$GITHUB_OUTPUT"
+
+      - name: Check the API answers
+        env:
+          FQDN: ${{ steps.deploy.outputs.fqdn }}
+        run: |
+          curl --fail --silent --show-error --retry 10 --retry-delay 15 --retry-all-errors "https://$FQDN/health"
+          echo
+          echo "Deployed $GITHUB_SHA to https://$FQDN" >> "$GITHUB_STEP_SUMMARY"
