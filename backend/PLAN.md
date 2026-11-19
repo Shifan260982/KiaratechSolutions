@@ -67,7 +67,7 @@ In the service:
 4. Turnstile and rate limits. **Done, on main.**
 5. Wire frontend forms; add API and Turnstile origins to the CSP in `frontend/vercel.json`. **Done, on main.**
 6. Azure hosting, ZAP scan, penetration test, go live. Hosting steps for the admins: `handover/Kiaratech-Hosting-Handover.pdf`.
-   Development side still open: infrastructure as code (Bicep) and a deploy workflow, Application Insights, automated ZAP scan against staging.
+   Development side: Bicep templates in `infra/` and a manual, approval-gated deploy workflow (`.github/workflows/deploy.yml`) that reruns the backend CI before every release. Not used: Application Insights (Log Analytics holds the logs and the error alert) and an automated ZAP scan (the penetration test covers dynamic testing).
 
 ## Blockers
 
