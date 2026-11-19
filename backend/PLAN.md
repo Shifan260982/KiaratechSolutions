@@ -27,7 +27,7 @@ The API is stateless: it validates, writes to SharePoint, and sends a notificati
 | | Enquiry | Job application |
 |---|---|---|
 | Stored in | SharePoint list `Enquiries` | SharePoint list `Applications`; CV in a private document library |
-| Notified | BD@kiaratechs.ai (confirmed in the content document) | jobs@kiaratechs.com |
+| Notified | BD@kiaratech.ai (confirmed in the content document) | jobs@kiaratechs.com |
 | Worked by | BD, `Status`: New → Contacted → Qualified / Closed | HR, `Status`: New → Screening → Interview → Rejected / Hired |
 | Retention | Microsoft 365 retention policy (period from Legal) | Same, for items and CVs |
 

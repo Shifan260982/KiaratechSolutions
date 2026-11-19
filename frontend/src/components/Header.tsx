@@ -122,6 +122,7 @@ function NavDropdown({
 
 // One stroke family (24px grid, 1.5 stroke) for the four stack groups.
 const arsenalIcons: Record<(typeof arsenal)[number]["group"], ReactNode> = {
+  AI: <path d="M12 3.5 13.9 8.6 19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9L12 3.5ZM18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />,
   "Languages and frameworks": <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />,
   Cloud: <path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96 6 6 0 0 1 11.47 1.47A3.75 3.75 0 0 1 17.25 18.5H7Z" />,
   "Data and analytics": <path d="M4 20h16M7 16.5V11M12 16.5V6.5M17 16.5v-3.5" />,
@@ -142,11 +143,24 @@ const riseDelay = (i: number) => ({ animationDelay: `${120 + i * 70}ms` });
  * blue appears as the top edge and in each panel's accents. A short intro holds the left edge; content fills the rest.
  * Entrance: the sheet unrolls from the navbar edge, then the intro and items rise in sequence (CSS, off under reduced motion).
  */
-function MegaPanel({ title, intro, footer, children }: { title: string; intro: string; footer?: ReactNode; children: ReactNode }) {
+function MegaPanel({
+  title,
+  intro,
+  footer,
+  stacked = false,
+  children,
+}: {
+  title: string;
+  intro: string;
+  footer?: ReactNode;
+  /** Keep the intro above the content at every width, so wide content (Our Arsenal's columns) gets the full row. */
+  stacked?: boolean;
+  children: ReactNode;
+}) {
   return (
     <div className="arsenal-sheet border-t-2 border-blue bg-navy/75 text-paper shadow-[0_28px_48px_-24px_rgb(2_33_98/0.55)] backdrop-blur-xl">
       {/* Below xl the intro sits above the content so the columns keep their room. */}
-      <Container className="grid gap-8 py-10 xl:grid-cols-[minmax(0,15rem)_1fr] xl:gap-12">
+      <Container className={`grid gap-8 py-10 ${stacked ? "" : "xl:grid-cols-[minmax(0,15rem)_1fr] xl:gap-12"}`}>
         <div className="arsenal-rise" style={{ animationDelay: "60ms" }}>
           <p className="text-title font-semibold text-paper">{title}</p>
           <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-navy-muted">{intro}</p>
@@ -197,14 +211,15 @@ function CapabilitiesPanel({ isActive }: { isActive: (href: string) => boolean }
 
 /**
  * Our Arsenal panel. Display only: nothing links anywhere.
- * The four groups run as open columns split by hairlines, each technology set as a chip so the whole stack scans in one pass.
+ * The five groups run as open columns split by hairlines, each technology set as a chip so the whole stack scans in one pass.
  */
 function ArsenalPanel() {
   return (
-    <MegaPanel title="Our Arsenal" intro="The languages, platforms and practices our teams build with, from the first prototype to production.">
-        <ul className="grid grid-cols-4 divide-x divide-white/10">
+    <MegaPanel stacked title="Our Arsenal" intro="The languages, platforms and practices our teams build with, from the first prototype to production.">
+        {/* Three columns on laptops, all five in one row with hairline dividers from xl. */}
+        <ul className="grid grid-cols-3 gap-8 xl:grid-cols-5 xl:gap-0 xl:divide-x xl:divide-white/10">
           {arsenal.map((a, i) => (
-            <li key={a.group} className="arsenal-rise px-6 first:pl-0 last:pr-0" style={riseDelay(i)}>
+            <li key={a.group} className="arsenal-rise xl:px-6 xl:first:pl-0 xl:last:pr-0" style={riseDelay(i)}>
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"

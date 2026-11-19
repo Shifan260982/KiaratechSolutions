@@ -42,9 +42,9 @@ export const caseStudies: CaseStudy[] = [
     featured: true,
   },
   {
-    slug: "factorypal",
-    name: "FactoryPal",
-    title: "Real-Time Factory Digital Twin",
+    slug: "factorycopilot",
+    name: "FactoryCopilot",
+    title: "AI-Based Factory Simulator",
     summary: "End-to-end visibility of every parcel on the factory floor.",
     description:
       "A real-time 3D factory interface that tracks every parcel across inbound docks, warehouses, conveyors, robotic picking and outbound dispatch, providing end-to-end visibility into factory operations.",

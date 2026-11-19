@@ -11,17 +11,27 @@ export const site = {
   url: httpsUrl(env(process.env.NEXT_PUBLIC_SITE_URL)) ?? "https://kiaratechs.com",
   positioning:
     "Kiaratech Solutions is an AI-driven technology partner that turns business challenges into intelligent, scalable software powered by specialists.",
+  /** Corporate Identity Number (India, Ministry of Corporate Affairs). */
+  cin: "U62099MR2026PTC480845",
+  /** Data protection contact for privacy questions and rights requests. */
+  dataProtectionEmail: "cybersecurity@kiaratech.ai",
   /** Business enquiries and the Let's Connect form. */
-  businessEmail: "BD@kiaratechs.ai",
+  businessEmail: "BD@kiaratech.ai",
   careersEmail: "jobs@kiaratechs.com",
   // Unverified until supplied: features that depend on these stay hidden while unset.
-  linkedInUrl: httpsUrl(env(process.env.NEXT_PUBLIC_LINKEDIN_URL)),
+  linkedInUrl: httpsUrl(env(process.env.NEXT_PUBLIC_LINKEDIN_URL)) ?? "https://www.linkedin.com/company/kiaratechsolutions",
   whatsappNumber: env(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)?.replace(/\D/g, ""),
 } as const;
 
 export const ctas = {
   discovery: { label: "Let's Connect", short: "Let's Connect", href: "/contact" },
 } as const;
+
+// Certificates supplied by the company (certificate numbers not published).
+export const certifications = [
+  { standard: "ISO/IEC 27001:2022", scope: "Information security management system", body: "Ranalysis Certification Pvt. Ltd." },
+  { standard: "ISO 9001:2015", scope: "Quality management system", body: "ACPL Audittech Certification Pvt. Ltd." },
+] as const;
 
 export const metrics = [
   { value: "110+", label: "Professionals across AI, software, cloud, data and security" },
@@ -47,6 +57,7 @@ export const offices = [
 
 // "Our Arsenal" navbar menu: the engineering stack, display only (no pages behind it).
 export const arsenal = [
+  { group: "AI", items: "AI integration, AI/ML, AI consulting and strategy, LangChain, agentic AI, workflow automation, Gen AI" },
   { group: "Languages and frameworks", items: "Python, .NET / C#, Java, Node.js, React, Angular, Vue.js" },
   { group: "Cloud", items: "Microsoft Azure, AWS, Google Cloud" },
   { group: "Data and analytics", items: "Power BI, Tableau, Looker" },

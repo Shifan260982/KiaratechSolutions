@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { CtaBand } from "@/components/CtaBand";
 import { InViewVideo } from "@/components/InViewVideo";
-import { OfficeMap } from "@/components/OfficeMap";
+import { OfficeExplorer } from "@/components/OfficeExplorer";
 import { SlideIn } from "@/components/SlideIn";
 import { PageIntro, Section, SectionHeading, dividerShades } from "@/components/ui";
 import { engagementModels } from "@/content/services";
@@ -69,8 +69,8 @@ export default function AboutPage() {
       <Section tone="mist" aria-label="Company film">
         <div className="mx-auto max-w-5xl">
           <InViewVideo
-            src="/images/about/kiaratech-film.mp4"
-            poster="/images/about/kiaratech-film-poster.jpg"
+            src="/images/about/kiaratech-film-v4.mp4"
+            poster="/images/about/kiaratech-film-v4-poster.jpg"
             label="Kiaratech Solutions company film"
           />
         </div>
@@ -102,17 +102,15 @@ export default function AboutPage() {
 
       <CtaBand>
         <h2 className="text-heading font-semibold">Offices</h2>
-        <div className="mt-5 grid gap-8 md:grid-cols-2">
-          {offices.map((o) => (
-            <div key={o.region} className="border-t border-white/25 pt-4">
-              <h3 className="font-semibold text-paper">{o.region}</h3>
-              {/* The map replaces the visible address; screen readers still get it as text. */}
-              <address className="sr-only">{o.lines.join(", ")}</address>
-              <div className="mt-3">
-                <OfficeMap region={o.region} address={o.lines.join(", ")} />
-              </div>
-            </div>
-          ))}
+        <p className="mt-2 max-w-xl text-navy-muted">Choose an office to zoom in to its neighbourhood.</p>
+        {/* The map shows each office area; screen readers get the addresses as text. */}
+        {offices.map((o) => (
+          <address key={o.region} className="sr-only">
+            {o.region}: {o.lines.join(", ")}
+          </address>
+        ))}
+        <div className="mt-6">
+          <OfficeExplorer />
         </div>
       </CtaBand>
     </>

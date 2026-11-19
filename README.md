@@ -51,7 +51,7 @@ Anything awaiting approval is rendered with the `<Placeholder>` component. Searc
 
 | Item | Owner (per requirements) | Where |
 |---|---|---|
-| Connect the forms. Enquiries go to `BD@kiaratechs.ai` (business e-mail confirmed in the content document; note it is on `.ai` while the site is on `kiaratechs.com`), applications to `jobs@kiaratechs.com`. Forms send nothing until `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are set (see `.env.example`, `backend/README.md` and the hosting handover guide, shared privately). | Hosting admins | `ENQUIRY_RECIPIENT` and `APPLICATION_RECIPIENT` on the backend |
+| Connect the forms. Enquiries go to `BD@kiaratech.ai` (business e-mail confirmed in the content document; note it is on `.ai` while the site is on `kiaratechs.com`), applications to `jobs@kiaratechs.com`. Forms send nothing until `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are set (see `.env.example`, `backend/README.md` and the hosting handover guide, shared privately). | Hosting admins | `ENQUIRY_RECIPIENT` and `APPLICATION_RECIPIENT` on the backend |
 | Verified WhatsApp number | Marketing | `NEXT_PUBLIC_WHATSAPP_NUMBER` |
 | Official LinkedIn page URL | Marketing | `NEXT_PUBLIC_LINKEDIN_URL` |
 | Product screenshots for ARECON AI, Digital Twin and Smart HR (replace the illustrative mockups in `ProjectVisual.tsx`) | Amey, Atif, Nirupaman | `caseStudies.ts` |
@@ -90,4 +90,4 @@ All photographs are from [Pexels](https://www.pexels.com/license/): free for com
 | `services/azure-devops.webp` | [1181341](https://www.pexels.com/photo/1181341/) | Christina Morillo | Azure DevOps |
 | `services/system-architecture.webp` | [1181311](https://www.pexels.com/photo/1181311/) | Christina Morillo | System Architecture |
 
-Project visuals (ARECON AI, Digital Twin, Smart HR) are coded mockups in `frontend/src/components/ProjectVisual.tsx`, labelled "Illustrative mockup". They contain no real data.
+Project visuals (ARECON AI, FactoryCopilot, Smart HR) are coded mockups in `frontend/src/components/ProjectVisual.tsx`. They contain no real data.

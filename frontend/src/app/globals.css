@@ -120,7 +120,23 @@
   }
 }
 
+@keyframes office-pin-pulse {
+  from {
+    opacity: 0.9;
+    scale: 0.35;
+  }
+  to {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
 @layer components {
+  /* Office map pin: a soft ring that keeps expanding from the office city (uses scale, so it composes with the pin translate). */
+  .office-pin-pulse {
+    animation: office-pin-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
   /* Highlighted page heroes: title then intro drive in from the left on every load. */
   .hero-drive {
     animation: hero-drive 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -136,7 +152,8 @@
   @media (prefers-reduced-motion: reduce) {
     .arsenal-sheet,
     .arsenal-rise,
-    .hero-drive {
+    .hero-drive,
+    .office-pin-pulse {
       animation: none;
     }
   }
@@ -158,6 +175,35 @@
   .prose-legal ul {
     list-style: disc;
     padding-left: 1.25rem;
+  }
+
+  .prose-legal strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .prose-legal table {
+    width: 100%;
+    margin-bottom: 0.875rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .prose-legal th,
+  .prose-legal td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.625rem 0.75rem 0.625rem 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose-legal th {
+    color: var(--color-navy);
+    font-weight: 600;
+  }
+
+  .prose-legal td {
+    color: var(--color-muted-strong);
   }
 
   .prose-legal a {
