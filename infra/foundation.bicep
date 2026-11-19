@@ -24,7 +24,7 @@ var names = resourceNames(resourceGroup().id)
 // Built-in role definition IDs (the same in every Azure tenant).
 var roles = {
   acrPull: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-  keyVaultSecretsUser: '4633458b-17de-408a-b874-0445c86b69e6'
+  keyVaultSecretsUser: '4633458b-17de-408a-b874-0445c86b69e6' // gitleaks:allow (public built-in role ID, not a credential)
   contributor: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 }
 
