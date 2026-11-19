@@ -46,3 +46,6 @@ next-env.d.ts
 .claude
 # review bin: replaced and leftover files awaiting deletion
 /dubin/
+
+# Handover PDFs are shared privately, never committed
+/handover/

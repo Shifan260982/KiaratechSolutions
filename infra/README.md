@@ -6,7 +6,7 @@
 | `app.bicep` | The `kiaratech-api` Container App: API container plus ClamAV sidecar, settings, scaling, health probes | `.github/workflows/deploy.yml`, on every release |
 | `naming.bicep` | Shared resource names | Imported by both |
 
-Step-by-step setup is in `handover/Kiaratech-Hosting-Handover.pdf`, section 6. In short:
+Step-by-step setup is in the hosting handover guide (PDF, shared privately), section 6. In short:
 
 ```bash
 az group create --name rg-kiaratech-web --location uksouth
