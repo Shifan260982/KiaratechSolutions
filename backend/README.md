@@ -52,7 +52,7 @@ Both endpoints return:
 
 Order of checks: rate limit (before the body is read), size, field rules, CV type, captcha, malware scan, SharePoint. Field errors come before the captcha so a typo does not spend the visitor's single-use token. The captcha comes before the scan so bots never reach the expensive step.
 
-The CV is checked from its bytes (PDF, legacy Word, or Word without macros; the extension must match), scanned by ClamAV, then uploaded to SharePoint under a readable name built from the validated fields, for example `Priya Shah - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf` (the short code keeps applicants with the same name apart; the applicant's own file name is never used). If the list item then fails, the CV is deleted again.
+The CV is checked from its bytes (PDF, legacy Word, or Word without macros; the extension must match), scanned by ClamAV, then uploaded to SharePoint under a readable name built from the validated fields, for example `Jane Doe - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf` (the short code keeps applicants with the same name apart; the applicant's own file name is never used). If the list item then fails, the CV is deleted again.
 
 Rate-limit counts live in each replica's memory, so with N replicas a visitor gets up to N times the limit. Move them to Azure Cache for Redis if the app scales past a couple of replicas.
 

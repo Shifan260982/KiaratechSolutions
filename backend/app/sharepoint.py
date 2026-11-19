@@ -30,7 +30,7 @@ _UNSAFE_IN_FILE_NAME = re.compile(r'["*:<>?/\\|#%~&{}\x00-\x1f\x7f]+')
 
 
 def cv_file_name(application: Application, extension: str, today: date, suffix: str) -> str:
-    """A readable, unique CV name, e.g. 'Priya Shah - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf'.
+    """A readable, unique CV name, e.g. 'Jane Doe - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf'.
 
     Built only from validated fields, never from the applicant's own file name. The extension comes from the
     content check, and the suffix keeps two applicants with the same name apart. At most about 200 characters,

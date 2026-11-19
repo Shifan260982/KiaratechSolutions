@@ -51,7 +51,7 @@ Target: OWASP ASVS Level 2. CI fails on any high or critical finding.
 In the service:
 
 - Pydantic models mirror every frontend rule (`frontend/src/lib/validation.ts`, `application.ts`); unknown fields rejected; control characters stripped.
-- CV: PDF, Word (.docx) or older Word (.doc), up to 5 MB, enforced while streaming; type checked from the file's bytes; macro-enabled Word (.docm, even renamed) refused; malware scan by a ClamAV sidecar before upload (Safe Attachments, if licensed, is only a second layer: it scans after storage); stored under a readable name built from validated fields, e.g. `Priya Shah - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf`, never the applicant's own file name.
+- CV: PDF, Word (.docx) or older Word (.doc), up to 5 MB, enforced while streaming; type checked from the file's bytes; macro-enabled Word (.docm, even renamed) refused; malware scan by a ClamAV sidecar before upload (Safe Attachments, if licensed, is only a second layer: it scans after storage); stored under a readable name built from validated fields, e.g. `Jane Doe - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf`, never the applicant's own file name.
 - Abuse: Cloudflare Turnstile verified server-side, honeypot field, rate limit per IP, request size limits.
 - CORS restricted to the production domain; HTTPS only; security headers; generic errors, no stack traces.
 - No secrets in code or config; Managed Identity to Key Vault and Graph.
