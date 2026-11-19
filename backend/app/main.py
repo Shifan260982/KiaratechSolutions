@@ -1,6 +1,7 @@
 """Kiaratech website API. Phase 2: enquiry and job-application endpoints (see PLAN.md)."""
 
 import logging
+import sys
 import time
 import uuid
 from collections.abc import Callable
@@ -129,4 +130,16 @@ def create_app(
     return app
 
 
+def configure_logging() -> None:
+    """Sends the app's own log lines (loggers under "kiaratech") to stdout at INFO, where Container Apps collects
+    them for Log Analytics. Without this only warnings and errors appeared. Safe to call more than once."""
+    app_logger = logging.getLogger("kiaratech")
+    if not app_logger.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+        app_logger.addHandler(handler)
+    app_logger.setLevel(logging.INFO)
+
+
+configure_logging()
 app = create_app()
