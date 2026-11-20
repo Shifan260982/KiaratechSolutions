@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 import { apiConnected } from "@/lib/api";
 import { submitEnquiry, type SubmitResult } from "@/lib/enquiry";
 import { limits, validateEnquiry, type EnquiryErrors, type EnquiryInput } from "@/lib/validation";
-import { FieldError, FormAlerts, Honeypot, honeypotValue, inputClass, NotConnected } from "./FormParts";
+import { CopyButton, FieldError, FormAlerts, Honeypot, honeypotValue, inputClass, NotConnected } from "./FormParts";
 import { Turnstile, type TurnstileHandle } from "./Turnstile";
 import { buttonClass } from "./ui";
 
@@ -72,21 +72,29 @@ export function EnquiryForm() {
   if (result?.status === "not-connected" || result?.status === "sent") {
     return (
       <NotConnected
-        title={result.status === "sent" ? "Thank you, your enquiry has been sent" : "Thank you, your details are complete"}
+        title={result.status === "sent" ? "Thank you, your enquiry has been sent" : "Sorry, your enquiry could not be sent"}
         text={
           result.status === "sent"
             ? "We have received your enquiry and will be in touch."
-            : "Online enquiries are not connected yet, so this message has not been sent. Until they are, please email us your enquiry."
+            : "Our online enquiry form is temporarily unavailable, so this message has not been sent. Please email us your enquiry instead."
         }
-        onBack={() => setResult(null)}
+        onBack={() => {
+          if (result.status === "sent") {
+            setValues(empty);
+            setErrors({});
+            setAttempted(false);
+          }
+          setResult(null);
+        }}
       >
+        {/* Same fallback as job applications: show the address with a copy button. */}
         {result.status === "not-connected" && (
-          <a
-            href={`mailto:${site.businessEmail}?subject=${encodeURIComponent("Enquiry")}`}
-            className="mt-4 inline-block font-medium text-blue-deep underline underline-offset-4"
-          >
-            Email {site.businessEmail}
-          </a>
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p className="text-ink">
+              Reach out to <span className="font-medium">{site.businessEmail}</span>
+            </p>
+            <CopyButton text={site.businessEmail} label="Copy address" />
+          </div>
         )}
       </NotConnected>
     );

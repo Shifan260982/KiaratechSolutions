@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { site } from "@/content/site";
+import { baseOpenGraph } from "@/lib/metadata";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,12 +20,7 @@ export const metadata: Metadata = {
   },
   description: site.positioning,
   alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    locale: "en_GB",
-    images: [{ url: "/brand/kiaratech-logo.png", width: 1396, height: 274, alt: "Kiaratech Solutions" }],
-  },
+  openGraph: baseOpenGraph,
 };
 
 export const viewport: Viewport = {

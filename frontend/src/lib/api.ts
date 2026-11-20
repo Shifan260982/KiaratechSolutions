@@ -2,9 +2,11 @@
 // Until both are set, forms show the "not connected" message instead of sending anything.
 
 const env = (value: string | undefined) => value?.trim() || undefined;
-// https only, except a local API during development.
-const apiOrigin = (value: string | undefined) =>
-  value && /^(https:\/\/[^\s/"'<>]+|http:\/\/localhost(:\d+)?)$/i.test(value) ? value : undefined;
+// https only, except a local API during development. Trailing slashes are dropped, so "https://api.example.com/" works too.
+export const apiOrigin = (value: string | undefined) => {
+  const origin = value?.replace(/\/+$/, "");
+  return origin && /^(https:\/\/[^\s/"'<>]+|http:\/\/localhost(:\d+)?)$/i.test(origin) ? origin : undefined;
+};
 
 export const api = {
   url: apiOrigin(env(process.env.NEXT_PUBLIC_API_URL)),

@@ -1,6 +1,6 @@
 """Malware scanning with ClamAV (clamd INSTREAM protocol), run as a sidecar container next to the API.
 
-Files are scanned before they reach SharePoint. Any doubt (scanner down, timeout, odd reply) fails closed.
+CVs are scanned before they are e-mailed to HR. Any doubt (scanner down, timeout, odd reply) fails closed.
 """
 
 import logging

@@ -127,7 +127,7 @@ resource deployCanDeploy 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
   }
 }
 
-// One alert for any error the API logs (orphaned CV, failed notification, scanner down, Graph or captcha problems).
+// One alert for any error the API logs (e-mail not sent, a recipient not configured, scanner down, captcha problems).
 resource alertGroup 'Microsoft.Insights/actionGroups@2023-01-01' = if (!empty(alertEmail)) {
   name: 'ag-kiaratech-web'
   location: 'global'
@@ -145,7 +145,7 @@ resource apiErrors 'Microsoft.Insights/scheduledQueryRules@2023-03-15-preview' =
   location: location
   properties: {
     displayName: 'Kiaratech API logged an error'
-    description: 'The API logged at least one ERROR line. Read the message in Log Analytics: orphaned CV, notification failed, scanner unavailable, graph request rejected or captcha secret rejected.'
+    description: 'The API logged at least one ERROR line. Read the message in Log Analytics: e-mail not sent (Graph), recipient not configured, candidate confirmation failed, CV draft left in the noreply mailbox, scanner unavailable or captcha secret rejected.'
     severity: 2
     enabled: true
     scopes: [logs.id]

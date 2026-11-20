@@ -4,6 +4,7 @@
 |---|---|---|
 | `foundation.bicep` | Log Analytics, Container Apps environment, container registry, Key Vault, the API's managed identity (with pull and secret-read access), the deploy identity trusted by GitHub Actions, and an error alert | An Azure admin, once (and again only to change these resources) |
 | `app.bicep` | The `kiaratech-api` Container App: API container plus ClamAV sidecar, settings, scaling, health probes | `.github/workflows/deploy.yml`, on every release |
+| `clamav/Dockerfile` | The ClamAV sidecar image: the official image with macro detection on (`AlertOLE2Macros yes`), so Office files with macros are refused | Built by `.github/workflows/deploy.yml` on every release |
 | `naming.bicep` | Shared resource names | Imported by both |
 
 Step-by-step setup is in the hosting handover guide (PDF, shared privately), section 6. In short:

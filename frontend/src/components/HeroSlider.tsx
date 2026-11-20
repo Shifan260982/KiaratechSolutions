@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { heroSlides } from "@/content/home";
 import { CarouselControls } from "./CarouselControls";
 import { Container } from "./ui";
@@ -10,6 +11,9 @@ const ease = "ease-[cubic-bezier(0.16,1,0.3,1)]";
 
 export function HeroSlider() {
   const { index, goTo, autoplayOn, toggle, playing, holdProps } = useCarousel(heroSlides.length, 6500);
+  // Highest slide reached so far: photos up to one past it are rendered, so later slides do not compete with the first paint.
+  const [reached, setReached] = useState(0);
+  if (index > reached) setReached(index); // updating state while rendering, the pattern React documents for derived state
 
   return (
     <section
@@ -32,6 +36,7 @@ export function HeroSlider() {
               inert={!active}
               className={`absolute inset-0 transition-opacity duration-1000 ${active ? "z-[1] opacity-100" : "opacity-0"}`}
             >
+              {i <= reached + 1 && (
               <Image
                 src={slide.image.src}
                 alt={slide.image.alt}
@@ -40,6 +45,7 @@ export function HeroSlider() {
                 sizes="100vw"
                 className={`object-cover transition-transform duration-[7000ms] ease-out ${active ? "scale-100" : "scale-[1.06]"}`}
               />
+              )}
               <div aria-hidden="true" className="absolute inset-0 bg-linear-to-r from-navy/95 via-navy/75 to-navy/20" />
               <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-navy/70 to-transparent" />
               <Container className="relative flex h-full items-center pb-16">

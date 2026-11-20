@@ -10,19 +10,12 @@ param location string = resourceGroup().location
 @minLength(7)
 param imageTag string
 
-@description('ClamAV image. The official image updates its own virus signatures after start-up.')
-param clamavImage string = 'docker.io/clamav/clamav:stable'
-
 @description('Exact https origins of the website, comma-separated.')
 param allowedOrigins string
 
-// Microsoft 365 targets. Each group is all-or-none; the API refuses to start when one is half set.
-param graphSiteId string = ''
+// E-mail. Recipients need MAIL_SENDER; a form whose recipient is empty answers "try again later".
 param mailSender string = ''
-param enquiriesListId string = ''
 param enquiryRecipient string = ''
-param applicationsListId string = ''
-param cvDriveId string = ''
 param applicationRecipient string = ''
 
 var names = resourceNames(resourceGroup().id)
@@ -47,12 +40,8 @@ var settings = {
   APP_ENV: 'production'
   ALLOWED_ORIGINS: allowedOrigins
   AZURE_CLIENT_ID: apiIdentity.properties.clientId // tells the API which managed identity to sign in with
-  GRAPH_SITE_ID: graphSiteId
   MAIL_SENDER: mailSender
-  ENQUIRIES_LIST_ID: enquiriesListId
   ENQUIRY_RECIPIENT: enquiryRecipient
-  APPLICATIONS_LIST_ID: applicationsListId
-  CV_DRIVE_ID: cvDriveId
   APPLICATION_RECIPIENT: applicationRecipient
   CLAMAV_HOST: 'localhost' // the sidecar shares the replica's network
   CLAMAV_PORT: '3310'
@@ -102,7 +91,8 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
         }
         {
           name: 'clamav'
-          image: clamavImage
+          // infra/clamav/Dockerfile: the official image with macro detection on. It updates its own signatures after start-up.
+          image: '${registry.properties.loginServer}/kiaratech-clamav:${imageTag}'
           resources: { cpu: json('1.5'), memory: '3Gi' } // signature reloads briefly need about twice the resting memory
         }
       ]

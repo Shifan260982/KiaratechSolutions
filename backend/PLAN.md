@@ -1,10 +1,10 @@
 # Phase 2 backend plan
 
-Status: agreed direction, not built. Decisions: Python (FastAPI), no .NET or Node.js; submissions are operated in SharePoint and Outlook.
+Status: built and tested; waiting for Azure hosting and the noreply mailbox. Decisions: Python (FastAPI), no .NET or Node.js; submissions are sent by e-mail from noreply@kiaratech.ai, nothing is stored.
 
 ## Scope
 
-Two endpoints behind the two frontend stubs. No admin UI, no own database, no CRM.
+Two endpoints, called by the website's two forms. No admin UI, no own database, no CRM.
 
 | Endpoint | Frontend hook | Body |
 |---|---|---|
@@ -12,28 +12,27 @@ Two endpoints behind the two frontend stubs. No admin UI, no own database, no CR
 | `POST /api/v1/applications` | `submitApplication()` in `frontend/src/lib/application.ts` | multipart: fields + CV |
 | `GET /health` | | |
 
-Responses: `202` accepted; `400` with field errors keyed by the form's field names (the form focuses the first one); `413` file too large; `429` rate limited.
+Responses: `202` sent; `400` with field errors keyed by the form's field names (the form focuses the first one); `413` file too large; `429` rate limited; `503` e-mail, scanner or captcha unavailable or not configured (nothing sent, the visitor can retry).
 
 ## Stack
 
 - Python 3.12, FastAPI, Pydantic v2, pytest.
-- Azure Container Apps, UK South. Managed Identity, Key Vault, Application Insights.
-- Microsoft Graph for SharePoint lists and document library, and for notification email.
+- Azure Container Apps, UK South, with a ClamAV sidecar. Managed Identity, Key Vault, Log Analytics (logs and the error alert).
+- Microsoft Graph to send e-mail from the noreply mailbox.
 
 ## Operating model
 
-The API is stateless: it validates, writes to SharePoint, and sends a notification. Staff work in tools they already have.
+The API is stateless and stores nothing: it validates each submission and turns it into e-mail, sent from noreply@kiaratech.ai. Staff work from their inboxes.
 
 | | Enquiry | Job application |
 |---|---|---|
-| Stored in | SharePoint list `Enquiries` | SharePoint list `Applications`; CV in a private document library |
-| Notified | BD@kiaratech.ai (confirmed in the content document) | jobs@kiaratech.ai |
-| Worked by | BD, `Status`: New → Contacted → Qualified / Closed | HR, `Status`: New → Screening → Interview → Rejected / Hired |
-| Retention | Microsoft 365 retention policy (period from Legal) | Same, for items and CVs |
+| E-mailed to | BD@kiaratech.ai: every field in a structured table | jobs@kiaratech.ai: every field, the CV attached, and a warning not to open the CV straight from the e-mail |
+| Reply goes to | The enquirer | The candidate |
+| Visitor also gets | - | "Hi <first name>, we have received your application for the <role> role; our hiring team will contact you". Name and role are repeated only if they pass a strict check (no links), otherwise a generic greeting |
+| Retention | 6 months, as the Privacy Policy states: a retention policy on the BD@ inbox | 6 months on the jobs@ inbox and the noreply Sent Items, which keeps CVs over 3 MB |
 
-- Notification emails carry a link to the item only, never form contents or the CV.
-- Graph app registration uses `Sites.Selected` (write to the one site only) and `Mail.Send` limited to the sending mailbox with an application access policy.
-- SharePoint permissions: BD sees `Enquiries` only; HR sees `Applications` and CVs only.
+- Graph application permissions: `Mail.Send`, and `Mail.ReadWrite` for CVs over 3 MB, both restricted to the noreply mailbox.
+- Templates: `backend/app/emails.py`; sending: `backend/app/mailer.py`.
 
 ## Security
 
@@ -45,31 +44,30 @@ Target: OWASP ASVS Level 2. CI fails on any high or critical finding.
 | Dependencies | pip-audit (pinned, hashed requirements), Dependabot |
 | Secrets | gitleaks |
 | Container | Trivy; slim/distroless image, non-root, read-only filesystem |
-| Dynamic scan (staging) | OWASP ZAP |
 | Tests | pytest, including abuse cases |
 
 In the service:
 
 - Pydantic models mirror every frontend rule (`frontend/src/lib/validation.ts`, `application.ts`); unknown fields rejected; control characters stripped.
-- CV: PDF, Word (.docx) or older Word (.doc), up to 5 MB, enforced while streaming; type checked from the file's bytes; macro-enabled Word (.docm, even renamed) refused; malware scan by a ClamAV sidecar before upload (Safe Attachments, if licensed, is only a second layer: it scans after storage); stored under a readable name built from validated fields, e.g. `Jane Doe - Senior Backend Engineer - 2026-11-17 - 3f9c1a2b.pdf`, never the applicant's own file name.
+- CV: PDF, Word (.docx) or older Word (.doc), up to 5 MB, enforced while streaming; type checked from the file's bytes; macro-enabled Word (.docm, even renamed) refused; malware scan by a ClamAV sidecar before it is e-mailed, which also refuses any Office file with macros, including old .doc files (`AlertOLE2Macros`, `infra/clamav/Dockerfile`); attached under a readable name built from validated fields, e.g. `Jane Doe - Senior Backend Engineer - 2026-11-20.pdf`, never the applicant's own file name.
 - Abuse: Cloudflare Turnstile verified server-side, honeypot field, rate limit per IP, request size limits.
 - CORS restricted to the production domain; HTTPS only; security headers; generic errors, no stack traces.
 - No secrets in code or config; Managed Identity to Key Vault and Graph.
 - Logs hold request ID, outcome and timing only. No personal data.
-- If SharePoint is unavailable, return `503` so the user can retry; nothing is held in the API.
-- Before launch: independent penetration test; privacy notice updated (Legal).
+- If e-mail to BD or HR fails, return `503` so the visitor can retry; nothing is held in the API.
+- Before launch: independent penetration test.
 
 ## Build order
 
-1. Scaffold service, CI security gates. **Done, on main.** (Staging deploy moved to step 6.)
-2. Enquiry endpoint. **Done, on main.**
-3. Application endpoint and CV handling. **Done, on main.**
-4. Turnstile and rate limits. **Done, on main.**
-5. Wire frontend forms; add API and Turnstile origins to the CSP in `frontend/vercel.json`. **Done, on main.**
-6. Azure hosting, ZAP scan, penetration test, go live. Hosting steps for the admins: the hosting handover guide (PDF, shared privately, not in the repository).
-   Development side: Bicep templates in `infra/` and a manual, approval-gated deploy workflow (`.github/workflows/deploy.yml`) that reruns the backend CI before every release. Not used: Application Insights (Log Analytics holds the logs and the error alert) and an automated ZAP scan (the penetration test covers dynamic testing).
+1. Service scaffold and CI security gates. **Done.**
+2. Enquiry endpoint. **Done.**
+3. Application endpoint and CV handling. **Done.**
+4. Turnstile and rate limits. **Done.**
+5. Frontend forms wired; API and Turnstile origins in the CSP (`frontend/vercel.json`). **Done.**
+6. Azure hosting, penetration test, go live. **Next.** Bicep templates are in `infra/`, and the manual, approval-gated deploy workflow (`.github/workflows/deploy.yml`) reruns the backend CI before every release. Hosting steps for the admins are in the hosting handover guide (PDF, shared privately). Not used: Application Insights and an automated ZAP scan (the penetration test covers dynamic testing).
 
 ## Blockers
 
-- Retention period and data-protection contact, Legal.
-- SharePoint site, lists, CV library and Graph permissions, Microsoft 365 admin; Azure resources, Azure admin; Turnstile keys; `api.kiaratechs.com` DNS records.
+- noreply@kiaratech.ai mailbox and its Graph permissions (Microsoft 365 admin, in progress).
+- Azure resources (Azure admin), Turnstile keys, and DNS for `api.kiaratechs.com`.
+- 6-month retention policies on the BD@ and jobs@ inboxes and the noreply Sent Items (Microsoft 365 admin).

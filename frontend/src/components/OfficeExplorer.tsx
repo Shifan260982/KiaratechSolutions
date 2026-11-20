@@ -34,6 +34,8 @@ export function OfficeExplorer() {
   const [open, setOpen] = useState<Region | null>(null);
   // The last office opened stays the zoom origin after closing, so the world zooms back out from that city, not the centre.
   const [origin, setOrigin] = useState<Region>("India");
+  // Cities opened at least once keep their street image mounted, so it can fade out on the way back.
+  const [visited, setVisited] = useState<Region[]>([]);
   const backRef = useRef<HTMLButtonElement>(null);
   const countryRefs = useRef<Partial<Record<Region, HTMLButtonElement | null>>>({});
   const place = open ? places[open] : null;
@@ -41,6 +43,7 @@ export function OfficeExplorer() {
 
   const show = (r: Region) => {
     setOrigin(r);
+    setVisited((v) => (v.includes(r) ? v : [...v, r]));
     setOpen(r);
     // Focus follows the view so keyboard users land on the way back out.
     window.setTimeout(() => backRef.current?.focus({ preventScroll: true }), 50);
@@ -111,7 +114,7 @@ export function OfficeExplorer() {
               style={{ opacity: active ? 1 : 0, scale: active ? 1 : 1.35, transitionDelay: active ? "550ms" : "0ms" }}
             >
               {/* Loaded only when first opened, so the page does not fetch street maps nobody looks at. */}
-              {(active || open !== null) && (
+              {visited.includes(r) && (
                 // eslint-disable-next-line @next/next/no-img-element -- static SVG
                 <img src={p.streets} alt="" className="size-full object-cover" />
               )}

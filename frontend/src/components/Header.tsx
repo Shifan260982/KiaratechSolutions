@@ -99,7 +99,16 @@ function NavDropdown({
 
   return (
     // Not positioned: the panel positions against the sticky header, so it spans the full viewport width.
-    <div ref={ref} onPointerEnter={onEnter} onPointerLeave={onLeave}>
+    <div
+      ref={ref}
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
+      // Tabbing out of the panel closes it, so keyboard focus never sits hidden underneath. A null target (a click on a
+      // non-focusable part of the panel) is left to the outside-click handler.
+      onBlur={(e) => {
+        if (e.relatedTarget && !ref.current?.contains(e.relatedTarget as Node)) onOpenChange(false);
+      }}
+    >
       <button
         ref={buttonRef}
         type="button"
@@ -266,6 +275,7 @@ export function Header() {
   const pathname = usePathname();
   const [menu, setMenu] = useState<Menu>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileButtonRef = useRef<HTMLButtonElement>(null);
   const servicesButtonRef = useRef<HTMLButtonElement>(null);
   const arsenalButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -297,7 +307,11 @@ export function Header() {
 
   useEffect(() => {
     if (!mobileOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMobileOpen(false);
+      mobileButtonRef.current?.focus(); // the menu unmounts, so give focus a place to land
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
@@ -366,6 +380,7 @@ export function Header() {
             {ctas.discovery.short}
           </Link>
           <button
+            ref={mobileButtonRef}
             type="button"
             className="inline-flex size-11 items-center justify-center rounded-sm border border-line-strong text-navy lg:hidden"
             aria-expanded={mobileOpen}

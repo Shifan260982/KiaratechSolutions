@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { roleFamilies, type Job, type RoleFamily } from "@/content/jobs";
 import { inputClass } from "./FormParts";
 import { ArrowIcon, dividerShades } from "./ui";
@@ -16,6 +16,32 @@ export function JobBoard({ jobs, applyEmail }: { jobs: Job[]; applyEmail: string
   const [family, setFamily] = useState<RoleFamily | "all">("all");
   const [page, setPage] = useState(1);
   const listTop = useRef<HTMLParagraphElement>(null);
+  const restored = useRef(false);
+
+  // The search, filter and page live in the address (?q=&role=&page=), so Back from a job returns to the same list.
+  // Read once after hydration (the static HTML always renders the full list), then mirror every change.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = (params.get("q") ?? "").slice(0, 100);
+    const role = params.get("role");
+    const p = Number(params.get("page"));
+    /* eslint-disable react-hooks/set-state-in-effect -- one-off sync from the URL, an external source, after hydration */
+    if (q) setQuery(q);
+    if (role && (roleFamilies as readonly string[]).includes(role)) setFamily(role as RoleFamily);
+    if (Number.isInteger(p) && p > 1) setPage(p);
+    /* eslint-enable react-hooks/set-state-in-effect */
+    restored.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!restored.current) return;
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (family !== "all") params.set("role", family);
+    if (page > 1) params.set("page", String(page));
+    const search = params.toString();
+    window.history.replaceState(window.history.state, "", search ? `?${search}` : window.location.pathname);
+  }, [query, family, page]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();

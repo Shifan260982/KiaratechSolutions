@@ -3,7 +3,16 @@ import { test } from "node:test";
 
 process.env.NEXT_PUBLIC_API_URL = "https://api.example.com";
 process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "site-key";
-const { postToApi } = await import("./api.ts");
+const { apiOrigin, postToApi } = await import("./api.ts");
+
+test("accepts a trailing slash on the API address but nothing unsafe", () => {
+  assert.equal(apiOrigin("https://api.example.com/"), "https://api.example.com");
+  assert.equal(apiOrigin("https://api.example.com"), "https://api.example.com");
+  assert.equal(apiOrigin("http://localhost:8000/"), "http://localhost:8000");
+  assert.equal(apiOrigin("http://api.example.com"), undefined);
+  assert.equal(apiOrigin("https://api.example.com/v1"), undefined);
+  assert.equal(apiOrigin("javascript:alert(1)"), undefined);
+});
 
 function reply(status: number, body?: unknown): typeof fetch {
   return async () => new Response(body === undefined ? null : JSON.stringify(body), { status });

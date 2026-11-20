@@ -32,7 +32,7 @@ function AreconMockup() {
 
 function DigitalTwinMockup() {
   return (
-    <Frame title="FactoryCopilot · Factory floor (live)">
+    <Frame title="FactoryFlow · Factory floor (live)">
       <div className="relative h-full">
         <DigitalTwinScene />
         <div className="absolute left-0 top-0 rounded-md border border-line bg-paper px-2 py-1.5">
