@@ -64,13 +64,17 @@ def test_rejects_unsafe_origins_in_production(monkeypatch, origins):
         load_settings()
 
 
-GRAPH_VARIABLES = (
-    "GRAPH_SITE_ID",
+def test_drops_trailing_slashes_from_origins(monkeypatch):
+    monkeypatch.setenv("APP_ENV", "production")
+    monkeypatch.setenv("ALLOWED_ORIGINS", "https://kiaratechs.com/, https://www.kiaratechs.com")
+    for name in SETTING_VARIABLES:
+        monkeypatch.delenv(name, raising=False)
+    assert load_settings().allowed_origins == ("https://kiaratechs.com", "https://www.kiaratechs.com")
+
+
+SETTING_VARIABLES = (
     "MAIL_SENDER",
-    "ENQUIRIES_LIST_ID",
     "ENQUIRY_RECIPIENT",
-    "APPLICATIONS_LIST_ID",
-    "CV_DRIVE_ID",
     "APPLICATION_RECIPIENT",
     "CLAMAV_HOST",
     "TURNSTILE_SECRET_KEY",
@@ -80,40 +84,34 @@ GRAPH_VARIABLES = (
 
 @pytest.fixture
 def clean_env(monkeypatch):
-    for name in GRAPH_VARIABLES:
+    for name in SETTING_VARIABLES:
         monkeypatch.delenv(name, raising=False)
     return monkeypatch
 
 
-@pytest.mark.parametrize(
-    ("variables", "missing"),
-    [
-        ({"ENQUIRIES_LIST_ID": "l"}, "ENQUIRY_RECIPIENT"),
-        ({"APPLICATIONS_LIST_ID": "l", "CV_DRIVE_ID": "d"}, "APPLICATION_RECIPIENT"),
-        ({"ENQUIRIES_LIST_ID": "l", "ENQUIRY_RECIPIENT": "r"}, "GRAPH_SITE_ID"),
-        ({"GRAPH_SITE_ID": "s"}, "MAIL_SENDER"),
-    ],
-)
-def test_half_configured_settings_fail_at_startup(clean_env, variables, missing):
-    for name, value in variables.items():
-        clean_env.setenv(name, value)
-    with pytest.raises(ValueError, match=missing):
+@pytest.mark.parametrize("recipient", ["ENQUIRY_RECIPIENT", "APPLICATION_RECIPIENT"])
+def test_recipient_without_sender_fails_at_startup(clean_env, recipient):
+    clean_env.setenv(recipient, "team@kiaratech.ai")
+    with pytest.raises(ValueError, match="MAIL_SENDER"):
         load_settings()
 
 
-def test_unset_means_not_configured(clean_env):
+@pytest.mark.parametrize("variables", [{}, {"MAIL_SENDER": "noreply@kiaratech.ai"}])
+def test_no_recipient_means_mail_not_configured(clean_env, variables):
+    for name, value in variables.items():
+        clean_env.setenv(name, value)
     settings = load_settings()
-    assert settings.graph is None and settings.scanner is None
+    assert settings.mail is None and settings.scanner is None
 
 
 def test_applications_without_enquiries(clean_env):
-    for name, value in {"GRAPH_SITE_ID": "s", "MAIL_SENDER": "m", "APPLICATIONS_LIST_ID": "l", "CV_DRIVE_ID": "d"}.items():
-        clean_env.setenv(name, value)
+    clean_env.setenv("MAIL_SENDER", "noreply@kiaratech.ai")
     clean_env.setenv("APPLICATION_RECIPIENT", "jobs@kiaratech.ai")
     clean_env.setenv("CLAMAV_HOST", "localhost")
     settings = load_settings()
-    assert settings.graph.enquiries is None
-    assert settings.graph.applications.recipient == "jobs@kiaratech.ai"
+    assert settings.mail.sender == "noreply@kiaratech.ai"
+    assert settings.mail.enquiry_recipient is None
+    assert settings.mail.application_recipient == "jobs@kiaratech.ai"
     assert settings.scanner.port == 3310
 
 

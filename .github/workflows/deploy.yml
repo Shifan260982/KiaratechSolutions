@@ -31,12 +31,8 @@ jobs:
       # Values from Settings > Environments > production > Variables. None of them is a secret.
       RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
       ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
-      GRAPH_SITE_ID: ${{ vars.GRAPH_SITE_ID }}
       MAIL_SENDER: ${{ vars.MAIL_SENDER }}
-      ENQUIRIES_LIST_ID: ${{ vars.ENQUIRIES_LIST_ID }}
       ENQUIRY_RECIPIENT: ${{ vars.ENQUIRY_RECIPIENT }}
-      APPLICATIONS_LIST_ID: ${{ vars.APPLICATIONS_LIST_ID }}
-      CV_DRIVE_ID: ${{ vars.CV_DRIVE_ID }}
       APPLICATION_RECIPIENT: ${{ vars.APPLICATION_RECIPIENT }}
     steps:
       - uses: actions/checkout@v7
@@ -53,6 +49,12 @@ jobs:
             echo "::error::Missing environment variables:$missing (see the handover guide, section 6)"
             exit 1
           fi
+          # The API refuses to start with a recipient but no sender. Recipients may stay empty until the mailbox exists:
+          # the forms then answer "try again later" instead of sending.
+          if [ -z "$MAIL_SENDER" ] && [ -n "$ENQUIRY_RECIPIENT$APPLICATION_RECIPIENT" ]; then
+            echo "::error::MAIL_SENDER is required when ENQUIRY_RECIPIENT or APPLICATION_RECIPIENT is set"
+            exit 1
+          fi
 
       - uses: azure/login@v2
         with:
@@ -60,10 +62,12 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build the API image in the registry
+      - name: Build the API and ClamAV images in the registry
         run: |
           registry=$(az acr list --resource-group "$RESOURCE_GROUP" --query "[0].name" --output tsv)
           az acr build --registry "$registry" --image "kiaratech-api:$GITHUB_SHA" backend/
+          # ClamAV with macro detection switched on (infra/clamav/Dockerfile)
+          az acr build --registry "$registry" --image "kiaratech-clamav:$GITHUB_SHA" infra/clamav/
 
       - name: Deploy the Container App
         id: deploy
@@ -74,9 +78,7 @@ jobs:
             --template-file infra/app.bicep \
             --parameters imageTag="$GITHUB_SHA" \
               allowedOrigins="$ALLOWED_ORIGINS" \
-              graphSiteId="$GRAPH_SITE_ID" mailSender="$MAIL_SENDER" \
-              enquiriesListId="$ENQUIRIES_LIST_ID" enquiryRecipient="$ENQUIRY_RECIPIENT" \
-              applicationsListId="$APPLICATIONS_LIST_ID" cvDriveId="$CV_DRIVE_ID" \
+              mailSender="$MAIL_SENDER" enquiryRecipient="$ENQUIRY_RECIPIENT" \
               applicationRecipient="$APPLICATION_RECIPIENT" \
             --query properties.outputs.fqdn.value --output tsv)
           echo "fqdn=$fqdn" >> "$GITHUB_OUTPUT"

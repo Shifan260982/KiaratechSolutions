@@ -23,6 +23,9 @@ export type ApplicationFieldKey = keyof typeof applicationFields;
 export const cvRules = { maxBytes: 5 * 1024 * 1024, extensions: ["pdf", "doc", "docx"] } as const;
 export const applicationLimits = { location: 100, linkedIn: 200, coverNote: 2000 } as const;
 
+/** Length as the server counts it: browsers send each line break in a file upload as two characters (CR LF). */
+export const submittedLength = (value: string) => value.length + (value.match(/\n/g)?.length ?? 0);
+
 export type CvFile = { name: string; size: number };
 
 export type ApplicationInput = {
@@ -103,7 +106,8 @@ export function validateApplication(raw: ApplicationInput, asked: readonly Appli
     errors.linkedIn = "Enter the full profile address, starting with https://";
   for (const key of asked) set(key, detailError(key, input.details[key] ?? ""));
   set("cv", cvError(input.cv));
-  if (input.coverNote.length > applicationLimits.coverNote) errors.coverNote = `Keep this to ${applicationLimits.coverNote} characters or fewer.`;
+  if (submittedLength(input.coverNote) > applicationLimits.coverNote)
+    errors.coverNote = `Keep this to ${applicationLimits.coverNote} characters or fewer (each line break counts as two).`;
 
   return errors;
 }

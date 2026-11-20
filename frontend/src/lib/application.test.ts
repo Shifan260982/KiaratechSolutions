@@ -54,6 +54,12 @@ test("validates phone and LinkedIn formats", () => {
   assert.equal(validateApplication({ ...valid, linkedIn: "https://www.linkedin.com/in/example" }, ask).linkedIn, undefined);
 });
 
+test("counts cover note line breaks the way the server receives them", () => {
+  const atLimit = "a".repeat(995) + "\n".repeat(5) + "a".repeat(995); // 1995 typed characters, 2000 as sent
+  assert.equal(validateApplication({ ...valid, coverNote: atLimit }, ask).coverNote, undefined);
+  assert.ok(validateApplication({ ...valid, coverNote: atLimit + "\nb" }, ask).coverNote);
+});
+
 test("keeps the role it was opened for", () => {
   assert.ok(validateApplication({ ...valid, roleId: "" }, ask).roleId);
 });

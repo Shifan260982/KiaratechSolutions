@@ -10,8 +10,8 @@ from starlette.formparsers import MultiPartParser
 from app import captcha
 from app.application_rules import CV_MAX_BYTES, FORM_FIELDS, HONEYPOT, cv_error, validate_application
 from app.captcha import CaptchaUnavailable, captcha_passed
+from app.mailer import MailUnavailable
 from app.scanner import ScanUnavailable
-from app.sharepoint import StoreUnavailable
 
 logger = logging.getLogger("kiaratech.applications")
 
@@ -63,8 +63,8 @@ async def submit_application(request: Request) -> Response:
         extension = cv.filename.rsplit(".", 1)[-1].lower()
         token = str(form.get(captcha.FIELD, ""))
 
-    store, scanner = request.app.state.store, request.app.state.scanner
-    if store is None or scanner is None:
+    mailer, scanner = request.app.state.mailer, request.app.state.scanner
+    if mailer is None or scanner is None:
         return JSONResponse(UNAVAILABLE, status_code=503)
     try:
         # Captcha before the scan: scanning is the expensive step, so bots never reach it.
@@ -72,7 +72,7 @@ async def submit_application(request: Request) -> Response:
             return JSONResponse({"title": captcha.FAILED, "errors": {captcha.FIELD: captcha.FAILED}}, status_code=400)
         if not await scanner.is_clean(content):
             return _bad_request({"cv": REJECTED_FILE})
-        await store.save_application(application, content, extension)
-    except (CaptchaUnavailable, ScanUnavailable, StoreUnavailable):
+        await mailer.send_application(application, content, extension)
+    except (CaptchaUnavailable, ScanUnavailable, MailUnavailable):
         return JSONResponse(UNAVAILABLE, status_code=503)
     return Response(status_code=202)

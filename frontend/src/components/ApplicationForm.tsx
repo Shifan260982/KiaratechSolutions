@@ -36,7 +36,7 @@ export function ApplicationForm({
   ask: readonly ApplicationFieldKey[];
   applyEmail: string;
 }) {
-  const [values, setValues] = useState<ApplicationInput>({
+  const blank: ApplicationInput = {
     roleId,
     roleTitle,
     firstName: "",
@@ -48,7 +48,8 @@ export function ApplicationForm({
     coverNote: "",
     details: {},
     cv: null,
-  });
+  };
+  const [values, setValues] = useState<ApplicationInput>(blank);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<ApplicationErrors>({});
   const [attempted, setAttempted] = useState(false);
@@ -120,13 +121,21 @@ export function ApplicationForm({
   if (result?.status === "not-connected" || result?.status === "sent") {
     return (
       <NotConnected
-        title={result.status === "sent" ? "Thank you, your application has been sent" : "Thank you, your application is complete"}
+        title={result.status === "sent" ? "Thank you, your application has been sent" : "Sorry, your application could not be sent"}
         text={
           result.status === "sent"
             ? `We have received your application for ${roleTitle} and will be in touch.`
-            : "Online applications are not connected yet, so this application has not been sent. Until they are, please email us your CV and the details you entered here."
+            : "Our online application form is temporarily unavailable, so this application has not been sent. Please email us your CV and the details you entered here instead."
         }
-        onBack={() => setResult(null)}
+        onBack={() => {
+          if (result.status === "sent") {
+            setValues(blank);
+            setCvFile(null);
+            setErrors({});
+            setAttempted(false);
+          }
+          setResult(null);
+        }}
       >
         {result.status === "not-connected" && (
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">

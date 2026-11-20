@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app import captcha
 from app.captcha import CaptchaUnavailable, captcha_passed
-from app.sharepoint import StoreUnavailable
+from app.mailer import MailUnavailable
 from app.validation import EnquiryIn, validate_enquiry
 
 logger = logging.getLogger("kiaratech.enquiries")
@@ -28,14 +28,14 @@ async def submit_enquiry(body: EnquiryIn, request: Request) -> Response:
     if errors:
         return JSONResponse({"title": "Check the highlighted fields.", "errors": errors}, status_code=400)
 
-    store = request.app.state.store
-    if store is None:
+    mailer = request.app.state.mailer
+    if mailer is None:
         return JSONResponse(UNAVAILABLE, status_code=503)
     try:
         # After field checks, so a typo does not spend the visitor's single-use token.
         if not await captcha_passed(request, body.captchaToken, "enquiry"):
             return JSONResponse({"title": captcha.FAILED, "errors": {captcha.FIELD: captcha.FAILED}}, status_code=400)
-        await store.save_enquiry(enquiry)
-    except (CaptchaUnavailable, StoreUnavailable):
+        await mailer.send_enquiry(enquiry)
+    except (CaptchaUnavailable, MailUnavailable):
         return JSONResponse(UNAVAILABLE, status_code=503)
     return Response(status_code=202)

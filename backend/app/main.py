@@ -17,9 +17,9 @@ from app import applications, enquiries
 from app.captcha import CaptchaVerifier, TurnstileVerifier
 from app.config import Settings, load_settings
 from app.limits import BodySizeLimit
+from app.mailer import GraphMailer, Mailer, managed_identity_token
 from app.ratelimit import Limit, RateLimit
 from app.scanner import ClamAvScanner, Scanner
-from app.sharepoint import GraphStore, SubmissionStore, managed_identity_token
 
 logger = logging.getLogger("kiaratech.api")
 
@@ -45,7 +45,7 @@ SECURITY_HEADERS = {
 
 def create_app(
     settings: Settings | None = None,
-    store: SubmissionStore | None = None,
+    mailer: Mailer | None = None,
     scanner: Scanner | None = None,
     captcha: CaptchaVerifier | None = None,
     clock: Callable[[], float] = time.monotonic,
@@ -57,15 +57,14 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        async with httpx2.AsyncClient(timeout=30) as client:  # a CV chunk upload can take a while
-            if app.state.store is None and settings.graph is not None:
-                app.state.store = GraphStore(
+        async with httpx2.AsyncClient(timeout=30) as client:  # an e-mail with a 5 MB CV can take a while
+            if app.state.mailer is None and settings.mail is not None:
+                app.state.mailer = GraphMailer(
                     client,
-                    managed_identity_token(settings.graph.client_id),
-                    site_id=settings.graph.site_id,
-                    mail_sender=settings.graph.mail_sender,
-                    enquiries=settings.graph.enquiries,
-                    applications=settings.graph.applications,
+                    managed_identity_token(settings.mail.client_id),
+                    sender=settings.mail.sender,
+                    enquiry_recipient=settings.mail.enquiry_recipient,
+                    application_recipient=settings.mail.application_recipient,
                 )
             if app.state.captcha is None and settings.turnstile_secret:
                 app.state.captcha = TurnstileVerifier(client, settings.turnstile_secret, settings.captcha_hostnames)
@@ -79,7 +78,7 @@ def create_app(
         openapi_url=None if settings.is_production else "/openapi.json",
         lifespan=lifespan,
     )
-    app.state.store = store
+    app.state.mailer = mailer
     app.state.scanner = scanner
     app.state.captcha = captcha
     app.state.trusted_proxy_hops = settings.trusted_proxy_hops
