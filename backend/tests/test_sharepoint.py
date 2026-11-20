@@ -45,9 +45,9 @@ def make_store(handler) -> tuple[GraphStore, list[httpx2.Request]]:
         client,
         token,
         site_id="contoso.sharepoint.com,1111,2222",
-        mail_sender="noreply@kiaratechs.com",
-        enquiries=EnquiriesTarget("list-1", "bd@kiaratechs.com"),
-        applications=ApplicationsTarget("apps-list", "cv-drive", "jobs@kiaratechs.com"),
+        mail_sender="noreply@kiaratech.ai",
+        enquiries=EnquiriesTarget("list-1", "bd@kiaratech.ai"),
+        applications=ApplicationsTarget("apps-list", "cv-drive", "jobs@kiaratech.ai"),
     )
     return store, seen
 
@@ -69,9 +69,9 @@ async def test_creates_list_item_then_emails_a_link_only():
     assert fields["Email"] == "alex@example.com"
     assert fields["Status"] == "New"
 
-    assert mail.url.path == "/v1.0/users/noreply@kiaratechs.com/sendMail"
+    assert mail.url.path == "/v1.0/users/noreply@kiaratech.ai/sendMail"
     message = json.loads(mail.content)["message"]
-    assert message["toRecipients"] == [{"emailAddress": {"address": "bd@kiaratechs.com"}}]
+    assert message["toRecipients"] == [{"emailAddress": {"address": "bd@kiaratech.ai"}}]
     assert "https://contoso.sharepoint.com/item/7" in message["body"]["content"]
     # Personal data stays in SharePoint, never in the email.
     for value in ("Alex", "alex@example.com", "Example Ltd", ENQUIRY.message):
@@ -180,7 +180,7 @@ async def test_uploads_cv_under_descriptive_name_then_creates_item_and_emails_li
 
     (mail,) = by(seen, "POST", "sendMail")
     body = mail.content.decode()
-    assert "jobs@kiaratechs.com" in body and "https://contoso.sharepoint.com/apps/12" in body
+    assert "jobs@kiaratech.ai" in body and "https://contoso.sharepoint.com/apps/12" in body
     assert "priya@example.com" not in body and "Priya" not in body
 
 
@@ -213,7 +213,7 @@ async def test_refuses_when_applications_are_not_configured():
         httpx2.AsyncClient(transport=httpx2.MockTransport(lambda r: httpx2.Response(500))),
         token,
         site_id="s",
-        mail_sender="noreply@kiaratechs.com",
+        mail_sender="noreply@kiaratech.ai",
         enquiries=None,
         applications=None,
     )

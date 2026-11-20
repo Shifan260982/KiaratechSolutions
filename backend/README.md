@@ -22,7 +22,7 @@ APP_ENV=development .venv/Scripts/uvicorn app.main:app --reload   # docs at http
 | `ENQUIRY_RECIPIENT` | Who is told about new enquiries (requirement 8.6) |
 | `APPLICATIONS_LIST_ID` | ID of the `Applications` list |
 | `CV_DRIVE_ID` | Drive ID of the private `CVs` document library |
-| `APPLICATION_RECIPIENT` | Who is told about new applications (jobs@kiaratechs.com) |
+| `APPLICATION_RECIPIENT` | Who is told about new applications (jobs@kiaratech.ai) |
 | `CLAMAV_HOST`, `CLAMAV_PORT` | ClamAV sidecar (port defaults to 3310) |
 | `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret. **The only secret**: store it in Key Vault and expose it through a Container Apps secret reference |
 | `TRUSTED_PROXY_HOPS` | Proxies in front of the app that append to `X-Forwarded-For` (default 1: Container Apps ingress). Add one per extra proxy, such as Front Door |

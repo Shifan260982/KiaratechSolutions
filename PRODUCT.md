@@ -38,7 +38,7 @@ Success measures: qualified enquiries, booked discovery calls, proposal requests
 ## Capabilities and Constraints
 
 - CTAs: primary "Book an AI & Software Discovery Call"; secondary "Request a Proposal", "Explore Our AI Capabilities", "Hire Specialist Talent". All booking/submission is static in Phase 1.
-- Forms: validate client-side; they send to the Phase 2 backend once it is connected, and send nothing until then. Business enquiries go to BD@kiaratech.ai (confirmed in the content document). Careers applications go to jobs@kiaratechs.com.
+- Forms: validate client-side; they send to the Phase 2 backend once it is connected, and send nothing until then. Business enquiries go to BD@kiaratech.ai (confirmed in the content document). Careers applications go to jobs@kiaratech.ai.
 - WhatsApp and LinkedIn: required, but no verified number/URL yet. Hidden until set in site config.
 - Legal: Privacy Policy, Terms of Use, Cookie Policy and cookie-consent controls are required, reflecting UK GDPR, pending legal approval.
 - No leadership section in Phase 1.

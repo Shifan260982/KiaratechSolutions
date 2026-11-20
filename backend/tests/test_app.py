@@ -109,11 +109,11 @@ def test_unset_means_not_configured(clean_env):
 def test_applications_without_enquiries(clean_env):
     for name, value in {"GRAPH_SITE_ID": "s", "MAIL_SENDER": "m", "APPLICATIONS_LIST_ID": "l", "CV_DRIVE_ID": "d"}.items():
         clean_env.setenv(name, value)
-    clean_env.setenv("APPLICATION_RECIPIENT", "jobs@kiaratechs.com")
+    clean_env.setenv("APPLICATION_RECIPIENT", "jobs@kiaratech.ai")
     clean_env.setenv("CLAMAV_HOST", "localhost")
     settings = load_settings()
     assert settings.graph.enquiries is None
-    assert settings.graph.applications.recipient == "jobs@kiaratechs.com"
+    assert settings.graph.applications.recipient == "jobs@kiaratech.ai"
     assert settings.scanner.port == 3310
 
 

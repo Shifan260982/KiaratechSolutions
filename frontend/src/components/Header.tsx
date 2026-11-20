@@ -120,18 +120,19 @@ function NavDropdown({
   );
 }
 
-// One stroke family (24px grid, 1.5 stroke) for the four stack groups.
+// One stroke family (24px grid, 1.5 stroke) for the stack groups.
 const arsenalIcons: Record<(typeof arsenal)[number]["group"], ReactNode> = {
   AI: <path d="M12 3.5 13.9 8.6 19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9L12 3.5ZM18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />,
-  "Languages and frameworks": <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />,
-  Cloud: <path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96 6 6 0 0 1 11.47 1.47A3.75 3.75 0 0 1 17.25 18.5H7Z" />,
-  "Data and analytics": <path d="M4 20h16M7 16.5V11M12 16.5V6.5M17 16.5v-3.5" />,
-  "Engineering practice": (
-    <>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2.75v2.5M12 18.75v2.5M21.25 12h-2.5M5.25 12h-2.5M18.54 5.46l-1.77 1.77M7.23 16.77l-1.77 1.77M18.54 18.54l-1.77-1.77M7.23 7.23 5.46 5.46" />
-    </>
+  "Robotics and industrial automation": (
+    <path d="M4 20.5h9M6.5 20.5v-3h4v3M8.5 17.5l3-7.5M11.5 10l5.5-3M17 7l2.5 3M19.5 10l-1.5 1.5M11.5 10a1.5 1.5 0 1 0 0 .01M17 7a1.5 1.5 0 1 0 0 .01" />
   ),
+  "Cloud and infrastructure": <path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96 6 6 0 0 1 11.47 1.47A3.75 3.75 0 0 1 17.25 18.5H7Z" />,
+  "Data and analytics": <path d="M4 20h16M7 16.5V11M12 16.5V6.5M17 16.5v-3.5" />,
+  "Cybersecurity and compliance": <path d="M12 3.5 5 6.25v5.5c0 4.25 2.9 7.6 7 8.75 4.1-1.15 7-4.5 7-8.75v-5.5L12 3.5ZM9 12l2.25 2.25L15.5 10" />,
+  "Enterprise integration": (
+    <path d="M6 7.5a2.5 2.5 0 1 0 0-.01M18 7.5a2.5 2.5 0 1 0 0-.01M12 18.5a2.5 2.5 0 1 0 0-.01M8.5 7.5h7M7.3 9.7l3.4 6.6M16.7 9.7l-3.4 6.6" />
+  ),
+  "Languages and frameworks": <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />,
 };
 
 /** Stagger for items rising into a mega panel, after the intro. */
@@ -158,7 +159,7 @@ function MegaPanel({
   children: ReactNode;
 }) {
   return (
-    <div className="arsenal-sheet border-t-2 border-blue bg-navy/75 text-paper shadow-[0_28px_48px_-24px_rgb(2_33_98/0.55)] backdrop-blur-xl">
+    <div className="arsenal-sheet max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t-2 border-blue bg-navy/75 text-paper shadow-[0_28px_48px_-24px_rgb(2_33_98/0.55)] backdrop-blur-xl">
       {/* Below xl the intro sits above the content so the columns keep their room. */}
       <Container className={`grid gap-8 py-10 ${stacked ? "" : "xl:grid-cols-[minmax(0,15rem)_1fr] xl:gap-12"}`}>
         <div className="arsenal-rise" style={{ animationDelay: "60ms" }}>
@@ -211,19 +212,20 @@ function CapabilitiesPanel({ isActive }: { isActive: (href: string) => boolean }
 
 /**
  * Our Arsenal panel. Display only: nothing links anywhere.
- * The five groups run as open columns split by hairlines, each technology set as a chip so the whole stack scans in one pass.
+ * Seven groups in a grid (three across on laptops, four from xl), each opened by a hairline, its icon and title on one line,
+ * and its technologies as chips so the whole stack scans in one pass.
  */
 function ArsenalPanel() {
   return (
     <MegaPanel stacked title="Our Arsenal" intro="The languages, platforms and practices our teams build with, from the first prototype to production.">
-        {/* Three columns on laptops, all five in one row with hairline dividers from xl. */}
-        <ul className="grid grid-cols-3 gap-8 xl:grid-cols-5 xl:gap-0 xl:divide-x xl:divide-white/10">
-          {arsenal.map((a, i) => (
-            <li key={a.group} className="arsenal-rise xl:px-6 xl:first:pl-0 xl:last:pr-0" style={riseDelay(i)}>
+      <ul className="grid grid-cols-3 gap-x-8 gap-y-7 xl:grid-cols-4 xl:gap-x-10">
+        {arsenal.map((a, i) => (
+          <li key={a.group} className="arsenal-rise border-t border-white/10 pt-5" style={riseDelay(i)}>
+            <h3 className="flex items-start gap-2.5 font-semibold leading-snug text-paper">
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"
-                className="size-7 text-blue-soft"
+                className="-mt-0.5 size-6 shrink-0 text-blue-soft"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -232,20 +234,21 @@ function ArsenalPanel() {
               >
                 {arsenalIcons[a.group]}
               </svg>
-              <h3 className="mt-4 font-semibold leading-snug text-paper">{a.group}</h3>
-              <ul className="mt-3 flex flex-wrap gap-1.5">
-                {a.items.split(", ").map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-full border border-blue/40 bg-blue/15 px-2.5 py-1 text-[0.8125rem] font-medium leading-none whitespace-nowrap text-sky first-letter:uppercase"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+              {a.group}
+            </h3>
+            <ul className="mt-3 flex flex-wrap gap-1.5">
+              {a.items.split(", ").map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-blue/40 bg-blue/15 px-2.5 py-1 text-[0.8125rem] font-medium leading-none whitespace-nowrap text-sky"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
     </MegaPanel>
   );
 }

@@ -17,7 +17,7 @@ export const site = {
   dataProtectionEmail: "cybersecurity@kiaratech.ai",
   /** Business enquiries and the Let's Connect form. */
   businessEmail: "BD@kiaratech.ai",
-  careersEmail: "jobs@kiaratechs.com",
+  careersEmail: "jobs@kiaratech.ai",
   // Unverified until supplied: features that depend on these stay hidden while unset.
   linkedInUrl: httpsUrl(env(process.env.NEXT_PUBLIC_LINKEDIN_URL)) ?? "https://www.linkedin.com/company/kiaratechsolutions",
   whatsappNumber: env(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)?.replace(/\D/g, ""),
@@ -57,11 +57,34 @@ export const offices = [
 
 // "Our Arsenal" navbar menu: the engineering stack, display only (no pages behind it).
 export const arsenal = [
-  { group: "AI", items: "AI integration, AI/ML, AI consulting and strategy, LangChain, agentic AI, workflow automation, Gen AI" },
-  { group: "Languages and frameworks", items: "Python, .NET / C#, Java, Node.js, React, Angular, Vue.js" },
-  { group: "Cloud", items: "Microsoft Azure, AWS, Google Cloud" },
-  { group: "Data and analytics", items: "Power BI, Tableau, Looker" },
-  { group: "Engineering practice", items: "DevOps, APIs, databases, automated testing, cybersecurity tooling" },
+  {
+    group: "AI",
+    items: "AI Integration, AI/ML, Generative AI, Agentic AI, LangChain, RAG, LLMs, Hugging Face, AI Agents, Computer Vision, NLP, Workflow Automation",
+  },
+  {
+    group: "Robotics and industrial automation",
+    items: "Industrial Robotics, ROS/ROS2, Robotic Process Automation, PLC Programming, SCADA, HMI, AGV, AMR, Warehouse Automation, Digital Twin",
+  },
+  {
+    group: "Cloud and infrastructure",
+    items: "Microsoft Azure, AWS, Google Cloud, Kubernetes, Docker, Terraform, Azure DevOps, Serverless, Infrastructure as Code",
+  },
+  {
+    group: "Data and analytics",
+    items: "Power BI, Tableau, Looker, SQL, PostgreSQL, MongoDB, Data Engineering, ETL Pipelines, Data Warehousing, Real Time Analytics",
+  },
+  {
+    group: "Cybersecurity and compliance",
+    items: "Application Security, Cloud Security, DevSecOps, Identity and Access Management, SIEM, SOC, Vulnerability Management, Security Audits",
+  },
+  {
+    group: "Enterprise integration",
+    items: "REST APIs, GraphQL, Microservices, Event Driven Architecture, Kafka, RabbitMQ, ERP Integration, CRM Integration",
+  },
+  {
+    group: "Languages and frameworks",
+    items: "Python, .NET/C#, Java, Node.js, React, Angular, Vue.js, TypeScript, Go, FastAPI, Spring Boot",
+  },
 ] as const;
 
 export function whatsappHref(message?: string) {
