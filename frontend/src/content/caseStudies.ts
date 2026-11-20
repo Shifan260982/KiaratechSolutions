@@ -22,6 +22,8 @@ export type CaseStudy = {
   outcome?: string;
   /** Case study PDF in /public, shown in the in-page viewer on the portfolio page. */
   pdf?: string;
+  /** Background image for the case study card (AI-generated illustration supplied by the team). */
+  pdfCover?: string;
 };
 
 export const caseStudies: CaseStudy[] = [
@@ -47,6 +49,7 @@ export const caseStudies: CaseStudy[] = [
     outcome:
       "Designed to turn hundreds of pages read by hand into a bid / no-bid snapshot within 5 minutes and a full cited tender report within 30 minutes. Every fact links to the page it came from, and anything that cannot be proven is flagged rather than guessed. The platform is built for 1,000 users at once with 99.9% availability, and keeps each customer's data encrypted and separate.",
     pdf: "/docs/arecon-ai-case-study.pdf",
+    pdfCover: "/images/case-studies/arecon-ai.webp",
   },
   {
     slug: "factoryflow",
@@ -92,6 +95,7 @@ export const caseStudies: CaseStudy[] = [
     outcome:
       "Designed to replace downloading and reading every resume by hand: resumes are collected and read automatically every 2 minutes. Skills are matched by meaning, with a quoted resume line as evidence for each match, and the same checklist gives the same result every time. The AI never sees personal details, and no email is sent without HR approval.",
     pdf: "/docs/smart-hr-case-study.pdf",
+    pdfCover: "/images/case-studies/smart-hr.webp",
   },
 ];
 
