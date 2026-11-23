@@ -206,12 +206,6 @@ charset-normalizer==3.5.2 \
     # via
     #   -c requirements.txt
     #   requests
-colorama==0.4.6 \
-    --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
-    --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
-    # via
-    #   bandit
-    #   pytest
 cyclonedx-python-lib==11.12.0 \
     --hash=sha256:0e807521a921a5c3cb8ce1153f8a61d29eedfe76a46aac2796b7c6b573391a54 \
     --hash=sha256:16767c4039de90c04e9f03348f8f0ed4b8ff842eaa7eefcad3a95685f970dacf
@@ -230,15 +224,15 @@ h11==0.16.0 \
     # via
     #   -c requirements.txt
     #   httpcore2
-httpcore2==2.16.1 \
-    --hash=sha256:11f097034886b99d6f5829dde0a0f3bc0169c38935474ce1333bb10b3e4a0093 \
-    --hash=sha256:3daab6418ea53dd0f3de37bb6a5b15d8d334570d9781b9d64bc1fb8b6527a6df
+httpcore2==2.16.2 \
+    --hash=sha256:16051ae2a42f776007543f32de9349a317b23d2cbb4e1456b4bac0e88b87419a \
+    --hash=sha256:6c519d0f7b44f7269fa9bbb4d2763db395a4a2370f046d8e8e0a4b38227815d2
     # via
     #   -c requirements.txt
     #   httpx2
-httpx2==2.16.1 \
-    --hash=sha256:29e8566f8ab355075e7590643e04756361fcdb7d5f2be4d9cb959bde7d33d215 \
-    --hash=sha256:a344d3f2f1ee08990f69675d191e3213a25ec4bf1c5be9e6bb1b3960946747bc
+httpx2==2.16.2 \
+    --hash=sha256:748b615678f07d8e3b183efe81ad13b655ca88bfc56ce4589219b2d442860574 \
+    --hash=sha256:f05c13aade4c45dbf1c9060647a1058f0acad62398fad96e741269edb33d46f5
     # via
     #   -c requirements.txt
     #   -r requirements-dev.in
@@ -608,6 +602,8 @@ typing-extensions==4.16.0 \
     # via
     #   -c requirements.txt
     #   anyio
+    #   cyclonedx-python-lib
+    #   httpx2
 urllib3==2.8.0 \
     --hash=sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3 \
     --hash=sha256:63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63
